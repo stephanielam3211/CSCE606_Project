@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :applicants
   get "sessions/new"
   get "sessions/create"
   get "sessions/destroy"

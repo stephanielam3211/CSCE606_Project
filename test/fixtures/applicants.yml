@@ -1,0 +1,53 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  email: MyString
+  name: MyString
+  degree: MyString
+  positions: MyString
+  number: MyText
+  uin: 1
+  hours: 1
+  citizenship: MyString
+  cert: 1
+  prev_course: MyText
+  prev_uni: MyText
+  prev_ta: MyText
+  advisor: MyString
+  choice_1: 1
+  choice_2: 1
+  choice_3: 1
+  choice_4: 1
+  choice_5: 1
+  choice_6: 1
+  choice_7: 1
+  choice_8: 1
+  choice_9: 1
+  choice_10: 1
+  timestamp: 2025-02-07 01:20:30
+
+two:
+  email: MyString
+  name: MyString
+  degree: MyString
+  positions: MyString
+  number: MyText
+  uin: 1
+  hours: 1
+  citizenship: MyString
+  cert: 1
+  prev_course: MyText
+  prev_uni: MyText
+  prev_ta: MyText
+  advisor: MyString
+  choice_1: 1
+  choice_2: 1
+  choice_3: 1
+  choice_4: 1
+  choice_5: 1
+  choice_6: 1
+  choice_7: 1
+  choice_8: 1
+  choice_9: 1
+  choice_10: 1
+  timestamp: 2025-02-07 01:20:30

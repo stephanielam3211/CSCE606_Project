@@ -1,0 +1,132 @@
+<%= form_with(model: applicant) do |form| %>
+  <% if applicant.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(applicant.errors.count, "error") %> prohibited this applicant from being saved:</h2>
+
+      <ul>
+        <% applicant.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+   <div>
+    <%= form.label :email, "Email", style: "display: block" %>
+    <%= form.text_field :email %>
+  </div>
+  
+  <div>
+    <%= form.label "name", "First and Last Name", style: "display: block" %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div>
+    <%= form.label "degree_type", "Degree Type", style: "display: block" %>
+    <%= form.text_field :degree %>
+  </div>
+
+  <div>
+    <%= form.label "position", "Which position are you applying for?", style: "display: block" %>
+    <%= form.text_field :positions %>
+  </div>
+
+  <div>
+    <%= form.label "phone_number", "Phone Number", style: "display: block" %>
+    <%= form.text_field :number %>
+  </div>
+
+  <div>
+    <%= form.label :uin, "UIN", style: "display: block" %>
+    <%= form.text_field :uin %>
+  </div>
+
+  <div>
+    <%= form.label "hours_enrolled", "Hours Enrolled", style: "display: block" %>
+    <%= form.text_field :hours %>
+  </div>
+
+  <div>
+    <%= form.label "citizenship", "Country of Citizenship", style: "display: block" %>
+    <%= form.text_field :citizenship %>
+  </div>
+
+  <div>
+    <%= form.label "cert", "English Language Certification Level", style: "display: block" %>
+    <%= form.text_field :cert %>
+  </div>
+
+  <div>
+    <%= form.label "prev_course", "Previously Taken Courses", style: "display: block" %>
+    <%= form.text_field :prev_course %>
+  </div>
+
+  <div>
+    <%= form.label "prev_uni", "Previously Taken Courses at Other Universities", style: "display: block" %>
+    <%= form.text_field :prev_uni %>
+  </div>
+
+  <div>
+    <%= form.label "prev_ta", "Which Courses Have You TA’d for Previously?", style: "display: block" %>
+    <%= form.text_field :prev_ta %>
+  </div>
+
+  <div>
+    <%= form.label "advisor", "Who is Your Advisor?", style: "display: block" %>
+    <%= form.text_field :advisor %>
+  </div>
+
+  <div>
+    <%= form.label :choice_1, style: "display: block" %>
+    <%= form.text_field :choice_1 %>
+  </div>
+
+  <div>
+    <%= form.label :choice_2, style: "display: block" %>
+    <%= form.text_field :choice_2 %>
+  </div>
+
+  <div>
+    <%= form.label :choice_3, style: "display: block" %>
+    <%= form.text_field :choice_3 %>
+  </div>
+
+  <div>
+    <%= form.label :choice_4, style: "display: block" %>
+    <%= form.text_field :choice_4 %>
+  </div>
+
+  <div>
+    <%= form.label :choice_5, style: "display: block" %>
+    <%= form.text_field :choice_5 %>
+  </div>
+
+  <div>
+    <%= form.label :choice_6, style: "display: block" %>
+    <%= form.text_field :choice_6 %>
+  </div>
+
+  <div>
+    <%= form.label :choice_7, style: "display: block" %>
+    <%= form.text_field :choice_7 %>
+  </div>
+
+  <div>
+    <%= form.label :choice_8, style: "display: block" %>
+    <%= form.text_field :choice_8 %>
+  </div>
+
+  <div>
+    <%= form.label :choice_9, style: "display: block" %>
+    <%= form.text_field :choice_9 %>
+  </div>
+
+  <div>
+    <%= form.label :choice_10, style: "display: block" %>
+    <%= form.text_field :choice_10 %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>
