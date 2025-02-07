@@ -10,14 +10,23 @@ Things you may want to cover:
 * System dependencies
 
 * Configuration
+```sh
+  bundle install
+``` 
 
 * Database creation
 
 * Database initialization
 
 * How to run the test suite
+
 ```sh
-  rspec  
+  rspec
+``` 
+
+```sh 
+open coverage/index.html
+``` 
 
 * Services (job queues, cache servers, search engines, etc.)
 
