@@ -1,0 +1,130 @@
+﻿Project CSCE 606: TA/Grader Assignment
+Purpose
+The team is building an application to provide a solution that streamlines assigning TAs and graders for classes. We aim to establish clear communication and guidelines to help us work effectively and cohesive. We aim to develop a high-quality application that meets and exceeds the client’s expectations.
+
+
+People and Accountability
+
+
+Scrum Master: Stephanie Lam
+Product Owner (PO): Hannah Ifekoya
+Developer 1: Aaron Xu
+Developer 2: Neel Singh
+Developer 3: Yuvanesh Rajamani
+Developer 4: Hao Zhu
+
+
+Team Accountability
+
+
+Stand-Up Meetings
+* Frequency: Monday, Wednesday, Friday
+* Time: 15 minutes
+* Location: Hybrid(in-person or remote via Slack)
+* Agenda:
+   * What was done previously
+   * What will you work on currently
+   * Anything obstacles blocking a task completion
+
+
+Sprint Meeting
+* Frequency: Every 2 weeks
+* Sprint Activities
+   * Sprint Planning
+   * Backlog Improvement
+   * Sprint Review
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Documents
+* User stories: Descriptions of features and respective requirements
+* Test cases: Ensuring functionality of agreed criteria
+* Mock-ups: Wireframes or designs for UI/UX components
+* Design Documents: Technical details of overall design components
+* Meeting notes from sprint planning: Records from sprint planning and daily stand-ups
+Artifacts
+* Github Repository: Codebase and version control
+* Google Drive: Shared folder for documentation and assets between developers
+
+
+Team Approach to Work
+* Task Allocation:
+   * Team members will pull task from user stories to work on each sprint
+* Collaboration:
+   * Entire team is responsible for the project, if someone is overloaded or stuck, the team will offer capacity
+   * For complex features, two or more team members will pair and collaborate on the user story
+   * Straightforward tasks will be handled individually
+* Code Hours:
+   * Core hours are Monday, Wednesday, Friday from 3:00 PM to 8:00 PM
+* Code Reviews:
+   * Aim to review code and workflow within 24 hours
+   * Code reviews will be focused on clarity, conciseness and should create expected output.
+* Feedback and Communication:
+   * All progress, feedback and blockers will be shared and communicated during stand-ups
+   * Each sprint will have tickets that will take the full two week sprint
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Communication Channels
+* Slack
+* Email:
+Neel Singh: neel27@tamu.edu
+Hao Zhu: hz010627@tamu.edu 
+Stephanie Lam: stephanie.lam_3211@tamu.edu 
+        Aaron Xu: aaron_xu92@tamu.edu
+        Yuvanesh Rajamani: yuvi@tamu.edu
+           Hannah Ifekoya: oifekoya0@tamu.edu
+
+
+Response Times: Aim to respond to emails and other communication within 1 day.
+
+
+Tools
+* Github
+* Google drive
+
+
+Definition of Done
+* Code is written, and peer reviewed
+* Unit tests passes 
+* Documentations are updated and shared to github
+* Feature is deployed 
+* Meets performance criteria
+* User-ready
+* PO reviews functionality
+
+
+Backlog Transparency
+* Refine User stories as project progresses
+* Any major changes should be discussed with team at sprint planning meeting
+
+
+Work Environment
+* Hybrid setup: Members of the team are onsite and will meet up MWF
+* Slack communication and Weekly calls: Remote
