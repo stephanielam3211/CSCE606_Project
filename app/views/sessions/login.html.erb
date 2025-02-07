@@ -1,0 +1,21 @@
+<h2>Login</h2>
+
+<% if flash[:alert] %>
+    <p style="color: red;"><%= flash[:alert] %></p>
+<% end %>
+
+<%= form_with url: login_path, method: :post do %>
+  <div>
+    <label>Username</label>
+    <%= text_field_tag :username %>
+  </div>
+
+  <div>
+    <label>Password</label>
+    <%= password_field_tag :password %>
+  </div>
+
+  <div>
+    <%= submit_tag "Login" %>
+  </div>
+<% end %>

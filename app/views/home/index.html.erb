@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TA Assignment Home Page</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .header {
+            background-color: #500000;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 5px 20px;
+            width: 100%;
+            box-sizing: border-box;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+        .logo {
+            height: 200px;
+            width: auto;
+        }
+        .logout-button {
+            background-color: white;
+            color: #500000;
+            border: none;
+            padding: 5px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .logout-button:hover {
+            background-color: #700000;
+        }
+        .footer {
+            background-color: #500000;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            width: 100%;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+        }
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-top: 220px;
+            margin-bottom: 50px;
+        }
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+        }
+        .action-button {
+            background-color: #500000;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .action-button:hover {
+            background-color: #700000;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <% if session[:user] %>
+        <p>Hello, <%= session[:user] %>! You are logged in.</p>
+        <div class="header">
+            <img src="https://media.licdn.com/dms/image/v2/D5610AQEasMZFzV-vYg/image-shrink_800/B56ZSuttX5GsAU-/0/1738098006076?e=2147483647&v=beta&t=76NrsaJ-35PUROJc_yZhWrKq3kcRgHUzwZs3RROW7UM" alt="CSCE Logo" class="logo">
+            <%= link_to "logout", logout_path, method: :delete, class: "logout-button" %>
+        </div>
+
+        <div class="content">
+            <div class="button-container">
+                <button class="action-button" onclick="alert('Student TA Request Submitted')">Submit Request to be a TA (Student)</button>
+                <button class="action-button" onclick="alert('Professor TA Request Submitted')">Request Student to be a TA (Professor)</button>
+                <button class="action-button" onclick="alert('TA Assigned')">Assign TA</button>
+                <button class="action-button" onclick="alert('exportCSV()')">Export CSV</button>
+            </div>
+        </div>
+    <% else %>
+        <p>You need to <%= link_to "Login", login_path %> to access this page.</p>
+    <% end %>
+    <div class="footer">
+        &copy; 2025 Texas A&M University. All Rights Reserved.
+    </div>
+</body>
+</html>
