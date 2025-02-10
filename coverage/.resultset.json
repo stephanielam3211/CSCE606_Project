@@ -1,25 +1,25 @@
 {
   "RSpec": {
     "coverage": {
-      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/spec/tests/applicant_spec.rb": {
+      "C:/Users/aaron/CSCE606_Project/spec/tests/applicant_spec.rb": {
         "lines": [
           1,
           null,
           1,
           1,
-          1,
+          0,
+          null,
+          0,
+          null,
           null,
           1,
-          null,
-          null,
-          1,
-          1,
-          1,
+          0,
+          0,
           null,
           null
         ]
       },
-      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/spec/rails_helper.rb": {
+      "C:/Users/aaron/CSCE606_Project/spec/rails_helper.rb": {
         "lines": [
           null,
           1,
@@ -93,7 +93,7 @@
           null
         ]
       },
-      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/config/environment.rb": {
+      "C:/Users/aaron/CSCE606_Project/config/environment.rb": {
         "lines": [
           null,
           1,
@@ -102,7 +102,7 @@
           1
         ]
       },
-      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/config/application.rb": {
+      "C:/Users/aaron/CSCE606_Project/config/application.rb": {
         "lines": [
           1,
           null,
@@ -133,7 +133,7 @@
           null
         ]
       },
-      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/config/boot.rb": {
+      "C:/Users/aaron/CSCE606_Project/config/boot.rb": {
         "lines": [
           1,
           null,
@@ -141,7 +141,7 @@
           1
         ]
       },
-      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/config/environments/test.rb": {
+      "C:/Users/aaron/CSCE606_Project/config/environments/test.rb": {
         "lines": [
           1,
           null,
@@ -212,7 +212,7 @@
           null
         ]
       },
-      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/config/initializers/assets.rb": {
+      "C:/Users/aaron/CSCE606_Project/config/initializers/assets.rb": {
         "lines": [
           null,
           null,
@@ -228,7 +228,7 @@
           null
         ]
       },
-      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/config/initializers/content_security_policy.rb": {
+      "C:/Users/aaron/CSCE606_Project/config/initializers/content_security_policy.rb": {
         "lines": [
           null,
           null,
@@ -239,38 +239,6 @@
           null,
           null,
           null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null
-        ]
-      },
-      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/config/initializers/filter_parameter_logging.rb": {
-        "lines": [
-          null,
-          null,
-          null,
-          null,
-          null,
-          1,
-          null,
-          null
-        ]
-      },
-      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/config/initializers/inflections.rb": {
-        "lines": [
           null,
           null,
           null,
@@ -289,7 +257,39 @@
           null
         ]
       },
-      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/config/initializers/permissions_policy.rb": {
+      "C:/Users/aaron/CSCE606_Project/config/initializers/filter_parameter_logging.rb": {
+        "lines": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          1,
+          null,
+          null
+        ]
+      },
+      "C:/Users/aaron/CSCE606_Project/config/initializers/inflections.rb": {
+        "lines": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      "C:/Users/aaron/CSCE606_Project/config/initializers/permissions_policy.rb": {
         "lines": [
           null,
           null,
@@ -306,7 +306,7 @@
           null
         ]
       },
-      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/config/routes.rb": {
+      "C:/Users/aaron/CSCE606_Project/config/routes.rb": {
         "lines": [
           1,
           1,
@@ -334,31 +334,31 @@
           null
         ]
       },
-      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/app/helpers/applicants_helper.rb": {
+      "C:/Users/aaron/CSCE606_Project/app/helpers/applicants_helper.rb": {
         "lines": [
           1,
           null
         ]
       },
-      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/app/helpers/application_helper.rb": {
+      "C:/Users/aaron/CSCE606_Project/app/helpers/application_helper.rb": {
         "lines": [
           1,
           null
         ]
       },
-      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/app/helpers/home_helper.rb": {
+      "C:/Users/aaron/CSCE606_Project/app/helpers/home_helper.rb": {
         "lines": [
           1,
           null
         ]
       },
-      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/app/helpers/sessions_helper.rb": {
+      "C:/Users/aaron/CSCE606_Project/app/helpers/sessions_helper.rb": {
         "lines": [
           1,
           null
         ]
       },
-      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/app/models/applicant.rb": {
+      "C:/Users/aaron/CSCE606_Project/app/models/applicant.rb": {
         "lines": [
           1,
           1,
@@ -373,7 +373,7 @@
           null
         ]
       },
-      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/app/models/application_record.rb": {
+      "C:/Users/aaron/CSCE606_Project/app/models/application_record.rb": {
         "lines": [
           1,
           1,
@@ -381,6 +381,6 @@
         ]
       }
     },
-    "timestamp": 1738917975
+    "timestamp": 1739229014
   }
 }
