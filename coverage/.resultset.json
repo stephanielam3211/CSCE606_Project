@@ -411,14 +411,55 @@
           1,
           null,
           1,
+          2,
+          2,
+          2,
+          null,
+          null
+        ]
+      },
+      "/root/TA_Assignment_APP/spec/tests/login_spec.rb": {
+        "lines": [
           1,
           1,
           1,
+          1,
+          1,
+          1,
+          1,
+          null,
+          null,
+          null
+        ]
+      },
+      "/root/TA_Assignment_APP/app/controllers/sessions_controller.rb": {
+        "lines": [
+          1,
+          1,
+          null,
+          null,
+          1,
+          0,
+          0,
+          null,
+          null,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          null,
+          null,
+          null,
+          1,
+          0,
+          0,
           null,
           null
         ]
       }
     },
-    "timestamp": 1739229987
+    "timestamp": 1739231104
   }
 }

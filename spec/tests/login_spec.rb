@@ -1,11 +1,10 @@
 require "rails_helper"
-
-RSpec.describe HomeController, type: :request do
-  # 1. Page Load and Status Codes
-  describe "GET /" do
-    it "returns a successful response" do
-      get root_url
-      expect(response).to have_http_status(:success)
+RSpec.describe SessionsController, type: :request do
+    describe "GET /login" do
+      it "renders the login page successfully" do
+        get login_path
+        expect(response).to have_http_status(:success)
+        expect(response.body).to include("Login")
+      end
     end
-  end
 end
