@@ -16,14 +16,14 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.1 
+          ruby-version: .ruby-version
           bundler-cache: true
-          
-      - name: Update RubyGems to the latest version
-        run: gem update --system
+
+      - name: Install dependencies
+        run: bundle install --jobs 4 --retry 3
 
       - name: Scan for common Rails security vulnerabilities using static analysis
-        run: bin/brakeman --no-pager
+        run: bundle exec brakeman --no-pager
 
   scan_js:
     runs-on: ubuntu-latest
@@ -38,11 +38,15 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
+      - name: Install dependencies
+        run: bundle install --jobs 4 --retry 3
+
       - name: Scan for security vulnerabilities in JavaScript dependencies
-        run: bin/importmap audit
+        run: bundle exec importmap audit
 
   lint:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -53,18 +57,15 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
+      - name: Install dependencies
+        run: bundle install --jobs 4 --retry 3
+
       - name: Lint code for consistent style
-        run: bin/rubocop -f github
+        run: bundle exec rubocop -f github
 
   test:
     runs-on: ubuntu-latest
 
-    # services:
-    #  redis:
-    #    image: redis
-    #    ports:
-    #      - 6379:6379
-    #    options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
       - name: Install packages
         run: sudo apt-get update && sudo apt-get install --no-install-recommends -y google-chrome-stable curl libjemalloc2 libvips sqlite3
@@ -78,11 +79,22 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
+      - name: Cache Ruby gems
+        uses: actions/cache@v3
+        with:
+          path: vendor/bundle
+          key: setup-ruby-bundler-cache-v7-${{ runner.os }}-ruby-${{ steps.setup-ruby.outputs.ruby-version }}-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            setup-ruby-bundler-cache-v7-${{ runner.os }}-ruby-${{ steps.setup-ruby.outputs.ruby-version }}-
+            setup-ruby-bundler-cache-v7-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: bundle install --jobs 4 --retry 3
+
       - name: Run tests
         env:
           RAILS_ENV: test
-          # REDIS_URL: redis://localhost:6379/0
-        run: bin/rails db:test:prepare test test:system
+        run: bundle exec rails db:test:prepare && bundle exec rails test test:system
 
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4
@@ -91,11 +103,3 @@ jobs:
           name: screenshots
           path: ${{ github.workspace }}/tmp/screenshots
           if-no-files-found: ignore
-      - name: Cache Ruby gems
-        uses: actions/cache@v3
-        with:
-          path: vendor/bundle
-          key: setup-ruby-bundler-cache-v6-${{ runner.os }}-ruby-${{ matrix.ruby-version }}-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: |
-            setup-ruby-bundler-cache-v6-${{ runner.os }}-ruby-${{ matrix.ruby-version }}-
-            setup-ruby-bundler-cache-v6-${{ runner.os }}-
