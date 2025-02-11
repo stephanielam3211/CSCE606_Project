@@ -8,20 +8,26 @@ on:
 jobs:
   scan_ruby:
     runs-on: ubuntu-latest
-
+  
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
+  
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.3
+          ruby-version: 3.1.2
           bundler-cache: true
-
+  
+      - name: Clean Bundler Environment
+        run: bundle clean --force
+  
       - name: Install dependencies
         run: bundle install --jobs 4 --retry 3
-
+  
+      - name: Install error_highlight 0.7.0
+        run: gem install error_highlight -v 0.7.0
+  
       - name: Scan for common Rails security vulnerabilities using static analysis
         run: bundle exec brakeman --no-pager
 
