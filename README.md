@@ -5,6 +5,7 @@
 
 #Login info
 Username: admin
+
 Password: admin
 
 #https://codeclimate.com/github/stephanielam3211/CSCE606_Project
