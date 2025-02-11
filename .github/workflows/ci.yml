@@ -91,3 +91,11 @@ jobs:
           name: screenshots
           path: ${{ github.workspace }}/tmp/screenshots
           if-no-files-found: ignore
+      - name: Cache Ruby gems
+        uses: actions/cache@v3
+        with:
+          path: vendor/bundle
+          key: setup-ruby-bundler-cache-v6-${{ runner.os }}-ruby-${{ matrix.ruby-version }}-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            setup-ruby-bundler-cache-v6-${{ runner.os }}-ruby-${{ matrix.ruby-version }}-
+            setup-ruby-bundler-cache-v6-${{ runner.os }}-
