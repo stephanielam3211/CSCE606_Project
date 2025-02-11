@@ -458,7 +458,6 @@
           1,
           1,
           null,
-<<<<<<< HEAD
           null,
           null,
           1,
@@ -496,9 +495,6 @@
           1,
           1,
           null,
-          null,
-=======
->>>>>>> a50d6c785acdf97ab2888128da37e29f5227ffdf
           null
         ]
       },
@@ -523,22 +519,12 @@
           null,
           null,
           1,
-<<<<<<< HEAD
           2,
           2,
-          null,
-=======
-          0,
-          0,
->>>>>>> a50d6c785acdf97ab2888128da37e29f5227ffdf
           null
         ]
       }
     },
-<<<<<<< HEAD
-    "timestamp": 1739233568
-=======
-    "timestamp": 1739232040
->>>>>>> a50d6c785acdf97ab2888128da37e29f5227ffdf
+    "timestamp": 1739234317
   }
 }

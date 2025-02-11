@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SessionsController < ApplicationController
   def new
   end
@@ -6,7 +8,7 @@ class SessionsController < ApplicationController
     username = params[:username]
     password = params[:password]
 
-    #dummy login
+    # dummy login
     if username == "admin" && password == "admin"
       session[:user] = username
       redirect_to root_path, notice: "Logged in!"

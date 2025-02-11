@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
   resources :applicants
   get "sessions/new"
@@ -16,9 +18,8 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
-  root 'home#index' #home
-  get 'login', to: 'sessions#login' #login form
-  post 'login', to: 'sessions#create' #login
-  get '/logout', to: 'sessions#destroy', as: 'logout' #logout
-  
+  root "home#index" # home
+  get "login", to: "sessions#login" # login form
+  post "login", to: "sessions#create" # login
+  get "/logout", to: "sessions#destroy", as: "logout" # logout
 end
