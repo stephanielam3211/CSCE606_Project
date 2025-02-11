@@ -2,6 +2,8 @@
 
 #https://tamu-ta-ee36b085db2d.herokuapp.com/
 
+#https://codeclimate.com/github/stephanielam3211/CSCE606_Project
+
 Things you may want to cover:
 
 * Ruby version
