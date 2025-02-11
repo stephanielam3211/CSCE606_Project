@@ -4,13 +4,19 @@
 # instead of editing this one. Cucumber will automatically load all features/**/*.rb
 # files.
 
-
 require 'cucumber/rails'
 require 'capybara/cucumber'
 require 'selenium-webdriver'
 require 'rack_session_access/capybara'
+require 'database_cleaner-active_record'
 
 World(RackSessionAccess::Capybara)
+
+DatabaseCleaner.strategy = :truncation
+
+Before do
+  DatabaseCleaner.clean
+end
 
 
 # By default, any exception happening in your Rails application will bubble up
