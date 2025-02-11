@@ -1,7 +1,7 @@
 {
   "RSpec": {
     "coverage": {
-      "/root/TA_Assignment_APP/spec/tests/applicant_spec.rb": {
+      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/spec/tests/applicant_spec.rb": {
         "lines": [
           1,
           null,
@@ -16,10 +16,40 @@
           1,
           1,
           null,
+          null,
+          1,
+          1,
+          null,
+          1,
+          null,
+          null,
+          1,
+          1,
+          null,
+          1,
+          null,
+          null,
+          1,
+          1,
+          null,
+          1,
+          null,
+          null,
+          1,
+          1,
+          null,
+          1,
+          null,
+          null,
+          1,
+          1,
+          null,
+          1,
+          null,
           null
         ]
       },
-      "/root/TA_Assignment_APP/spec/rails_helper.rb": {
+      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/spec/rails_helper.rb": {
         "lines": [
           null,
           1,
@@ -93,7 +123,7 @@
           null
         ]
       },
-      "/root/TA_Assignment_APP/config/environment.rb": {
+      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/config/environment.rb": {
         "lines": [
           null,
           1,
@@ -102,7 +132,7 @@
           1
         ]
       },
-      "/root/TA_Assignment_APP/config/application.rb": {
+      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/config/application.rb": {
         "lines": [
           1,
           null,
@@ -133,7 +163,7 @@
           null
         ]
       },
-      "/root/TA_Assignment_APP/config/boot.rb": {
+      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/config/boot.rb": {
         "lines": [
           1,
           null,
@@ -141,7 +171,7 @@
           1
         ]
       },
-      "/root/TA_Assignment_APP/config/environments/test.rb": {
+      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/config/environments/test.rb": {
         "lines": [
           1,
           null,
@@ -212,7 +242,7 @@
           null
         ]
       },
-      "/root/TA_Assignment_APP/config/initializers/assets.rb": {
+      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/config/initializers/assets.rb": {
         "lines": [
           null,
           null,
@@ -228,7 +258,7 @@
           null
         ]
       },
-      "/root/TA_Assignment_APP/config/initializers/content_security_policy.rb": {
+      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/config/initializers/content_security_policy.rb": {
         "lines": [
           null,
           null,
@@ -239,38 +269,6 @@
           null,
           null,
           null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null
-        ]
-      },
-      "/root/TA_Assignment_APP/config/initializers/filter_parameter_logging.rb": {
-        "lines": [
-          null,
-          null,
-          null,
-          null,
-          null,
-          1,
-          null,
-          null
-        ]
-      },
-      "/root/TA_Assignment_APP/config/initializers/inflections.rb": {
-        "lines": [
           null,
           null,
           null,
@@ -289,7 +287,39 @@
           null
         ]
       },
-      "/root/TA_Assignment_APP/config/initializers/permissions_policy.rb": {
+      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/config/initializers/filter_parameter_logging.rb": {
+        "lines": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          1,
+          null,
+          null
+        ]
+      },
+      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/config/initializers/inflections.rb": {
+        "lines": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/config/initializers/permissions_policy.rb": {
         "lines": [
           null,
           null,
@@ -306,7 +336,7 @@
           null
         ]
       },
-      "/root/TA_Assignment_APP/config/routes.rb": {
+      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/config/routes.rb": {
         "lines": [
           1,
           1,
@@ -334,31 +364,31 @@
           null
         ]
       },
-      "/root/TA_Assignment_APP/app/helpers/applicants_helper.rb": {
+      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/app/helpers/applicants_helper.rb": {
         "lines": [
           1,
           null
         ]
       },
-      "/root/TA_Assignment_APP/app/helpers/application_helper.rb": {
+      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/app/helpers/application_helper.rb": {
         "lines": [
           1,
           null
         ]
       },
-      "/root/TA_Assignment_APP/app/helpers/home_helper.rb": {
+      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/app/helpers/home_helper.rb": {
         "lines": [
           1,
           null
         ]
       },
-      "/root/TA_Assignment_APP/app/helpers/sessions_helper.rb": {
+      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/app/helpers/sessions_helper.rb": {
         "lines": [
           1,
           null
         ]
       },
-      "/root/TA_Assignment_APP/app/models/applicant.rb": {
+      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/app/models/applicant.rb": {
         "lines": [
           1,
           1,
@@ -373,14 +403,14 @@
           null
         ]
       },
-      "/root/TA_Assignment_APP/app/models/application_record.rb": {
+      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/app/models/application_record.rb": {
         "lines": [
           1,
           1,
           null
         ]
       },
-      "/root/TA_Assignment_APP/spec/tests/home_spec.rb": {
+      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/spec/tests/home_spec.rb": {
         "lines": [
           1,
           null,
@@ -395,7 +425,7 @@
           null
         ]
       },
-      "/root/TA_Assignment_APP/app/controllers/home_controller.rb": {
+      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/app/controllers/home_controller.rb": {
         "lines": [
           1,
           1,
@@ -403,7 +433,7 @@
           null
         ]
       },
-      "/root/TA_Assignment_APP/app/controllers/application_controller.rb": {
+      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/app/controllers/application_controller.rb": {
         "lines": [
           1,
           1,
@@ -418,7 +448,7 @@
           null
         ]
       },
-      "/root/TA_Assignment_APP/spec/tests/login_spec.rb": {
+      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/spec/tests/login_spec.rb": {
         "lines": [
           1,
           1,
@@ -427,12 +457,11 @@
           1,
           1,
           1,
-          null,
           null,
           null
         ]
       },
-      "/root/TA_Assignment_APP/app/controllers/sessions_controller.rb": {
+      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/app/controllers/sessions_controller.rb": {
         "lines": [
           1,
           1,
@@ -455,11 +484,10 @@
           1,
           0,
           0,
-          null,
           null
         ]
       }
     },
-    "timestamp": 1739231104
+    "timestamp": 1739232040
   }
 }
