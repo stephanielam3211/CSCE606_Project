@@ -143,7 +143,6 @@ GEM
     diff-lcs (1.5.1)
     docile (1.4.1)
     drb (2.2.1)
-    error_highlight (0.7.0)
     erubi (1.13.1)
     ffi (1.17.1-aarch64-linux-gnu)
     ffi (1.17.1-aarch64-linux-musl)
@@ -405,7 +404,6 @@ DEPENDENCIES
   database_cleaner-active_record
   debug
   devise
-  error_highlight (>= 0.4.0)
   importmap-rails
   jbuilder
   puma (>= 5.0)
