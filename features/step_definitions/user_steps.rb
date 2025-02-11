@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 When('I visit the login page') do
   visit '/login'
 end
@@ -29,4 +31,3 @@ When('I click the login link {string}') do |link|
     click_link link
   end
 end
-

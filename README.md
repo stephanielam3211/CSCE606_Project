@@ -1,7 +1,6 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+#https://tamu-ta-ee36b085db2d.herokuapp.com/
 
 Things you may want to cover:
 
@@ -22,8 +21,13 @@ Things you may want to cover:
 
 ```sh
   rspec
-``` 
-
+```
+```sh 
+bundle exec cucumber
+```
+```sh 
+rubocop
+```
 ```sh 
 open coverage/index.html
 ``` 
