@@ -1,0 +1,12 @@
+venv/
+env/
+.idea/
+.vscode/
+**/.DS_Store
+.DS_Store
+._.DS_Store
+**/._.DS_Store
+*.pyc
+*.pyo
+TA_Matches.csv
+*.numbers

@@ -1,0 +1,1 @@
+OUTPUT_DIR = "/root/CSCE606_Project/app/Charizard/output"

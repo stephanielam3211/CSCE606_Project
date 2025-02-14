@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  get "ta_assignments/new"
+  get "ta_assignments/create"
   resources :applicants
   get "sessions/new"
   get "sessions/create"
@@ -22,4 +24,8 @@ Rails.application.routes.draw do
   get "login", to: "sessions#login" # login form
   post "login", to: "sessions#create" # login
   get "/logout", to: "sessions#destroy", as: "logout" # logout
+
+  # TA assignment
+  post 'ta_assignments/process_csvs', to: 'ta_assignments#process_csvs', as: 'process_csvs'
+  get 'ta_assignments/view_csv', to: 'ta_assignments#view_csv', as: 'view_csv'
 end

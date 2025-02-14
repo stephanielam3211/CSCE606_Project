@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module Scoring</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>Scoring</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/Users/adil/Documents/School/Computer%20Science/Charizard/util/Scoring.py">/Users/adil/Documents/School/Computer Science/Charizard/util/Scoring.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="Course.html">models.Course</a><br>
+</td><td width="25%" valign=top><a href="Student.html">models.Student</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-bucket_value"><strong>bucket_value</strong></a>(num_bucket: int) -&gt; int</dt><dd><tt>bucket_value:&nbsp;returns&nbsp;value&nbsp;for&nbsp;the&nbsp;bucket&nbsp;based&nbsp;on&nbsp;input<br>
+:param&nbsp;num_bucket:&nbsp;the&nbsp;bucket&nbsp;number.&nbsp;Range&nbsp;of&nbsp;1&nbsp;to&nbsp;5&nbsp;-&nbsp;Integer<br>
+:return:&nbsp;overall&nbsp;bucket&nbsp;value&nbsp;based&nbsp;on&nbsp;an&nbsp;inverse&nbsp;relation&nbsp;with&nbsp;num_bucket<br>
+bucket&nbsp;5&nbsp;=&nbsp;1<br>
+bucket&nbsp;4&nbsp;=&nbsp;10<br>
+bucket&nbsp;3&nbsp;=&nbsp;100<br>
+bucket&nbsp;2&nbsp;=&nbsp;1000<br>
+bucket&nbsp;1&nbsp;=&nbsp;10000</tt></dd></dl>
+ <dl><dt><a name="-is_avoidable_demotion"><strong>is_avoidable_demotion</strong></a>(student: &lt;module 'models.Student' from '/Users/adil/Documents/School/Computer Science/Charizard/models/Student.py'&gt;, _: &lt;module 'models.Course' from '/Users/adil/Documents/School/Computer Science/Charizard/models/Course.py'&gt;) -&gt; bool</dt><dd><tt>We&nbsp;consider&nbsp;a&nbsp;demotion&nbsp;avoidable&nbsp;if&nbsp;the&nbsp;applicant:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;has&nbsp;enough&nbsp;hours&nbsp;to&nbsp;be&nbsp;considered&nbsp;for&nbsp;a&nbsp;TA&nbsp;role<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;has&nbsp;TA'd&nbsp;at&nbsp;least&nbsp;1&nbsp;course&nbsp;before<br>
+&nbsp;<br>
+If&nbsp;they've&nbsp;been&nbsp;employed&nbsp;as&nbsp;a&nbsp;TA&nbsp;before,&nbsp;we&nbsp;do&nbsp;not&nbsp;want&nbsp;to&nbsp;demote&nbsp;them&nbsp;to&nbsp;grader&nbsp;unless&nbsp;they&nbsp;don't&nbsp;meet&nbsp;the&nbsp;hours<br>
+requirement&nbsp;to&nbsp;be&nbsp;a&nbsp;TA<br>
+&nbsp;<br>
+:param&nbsp;student:&nbsp;the&nbsp;student&nbsp;under&nbsp;consideration<br>
+:param&nbsp;_:&nbsp;Course&nbsp;object.&nbsp;Kept&nbsp;for&nbsp;compatibility&nbsp;with&nbsp;generic&nbsp;functions&nbsp;that&nbsp;expect&nbsp;student,course&nbsp;params<br>
+:return:&nbsp;True&nbsp;if&nbsp;the&nbsp;student's&nbsp;demotion&nbsp;is&nbsp;avoidable&nbsp;as&nbsp;described&nbsp;above,&nbsp;false&nbsp;otherwise.</tt></dd></dl>
+ <dl><dt><a name="-is_below_enrollment_requirement"><strong>is_below_enrollment_requirement</strong></a>(student: &lt;module 'models.Student' from '/Users/adil/Documents/School/Computer Science/Charizard/models/Student.py'&gt;, _: &lt;module 'models.Course' from '/Users/adil/Documents/School/Computer Science/Charizard/models/Course.py'&gt;) -&gt; bool</dt><dd><tt>Check&nbsp;If&nbsp;the&nbsp;student&nbsp;under&nbsp;consideration&nbsp;is&nbsp;below&nbsp;the&nbsp;minimum&nbsp;required&nbsp;hours<br>
+:param&nbsp;student:&nbsp;The&nbsp;student&nbsp;under&nbsp;consideration<br>
+:param&nbsp;_:&nbsp;Course&nbsp;object.&nbsp;Kept&nbsp;for&nbsp;compatibility&nbsp;with&nbsp;generic&nbsp;functions&nbsp;that&nbsp;expect&nbsp;student,course&nbsp;params<br>
+:return:&nbsp;True&nbsp;if&nbsp;the&nbsp;student&nbsp;fails&nbsp;to&nbsp;meet&nbsp;the&nbsp;minimum.&nbsp;False&nbsp;otherwise.</tt></dd></dl>
+ <dl><dt><a name="-is_instructor_and_ta_same"><strong>is_instructor_and_ta_same</strong></a>(student: &lt;module 'models.Student' from '/Users/adil/Documents/School/Computer Science/Charizard/models/Student.py'&gt;, course: &lt;module 'models.Course' from '/Users/adil/Documents/School/Computer Science/Charizard/models/Course.py'&gt;) -&gt; bool</dt><dd><tt>If&nbsp;the&nbsp;student&nbsp;under&nbsp;consideration&nbsp;is&nbsp;the&nbsp;instructor&nbsp;for&nbsp;the&nbsp;course,&nbsp;we&nbsp;want&nbsp;to&nbsp;avoid&nbsp;that&nbsp;matching<br>
+This&nbsp;happens&nbsp;when&nbsp;Grad&nbsp;students&nbsp;also&nbsp;teach&nbsp;a&nbsp;class&nbsp;themselves.&nbsp;This&nbsp;helper&nbsp;function&nbsp;uses<br>
+emails&nbsp;to&nbsp;determine&nbsp;if&nbsp;the&nbsp;TA&nbsp;under&nbsp;consideration&nbsp;is&nbsp;also&nbsp;the&nbsp;instructor&nbsp;for&nbsp;the&nbsp;course<br>
+:param&nbsp;student:&nbsp;the&nbsp;student&nbsp;under&nbsp;consideration<br>
+:param&nbsp;course:&nbsp;the&nbsp;course&nbsp;under&nbsp;consideration<br>
+:return:&nbsp;True&nbsp;if&nbsp;student&nbsp;and&nbsp;course&nbsp;instructor&nbsp;are&nbsp;the&nbsp;same,&nbsp;false&nbsp;otherwise</tt></dd></dl>
+ <dl><dt><a name="-is_unqualified_for_wc_course"><strong>is_unqualified_for_wc_course</strong></a>(student: &lt;module 'models.Student' from '/Users/adil/Documents/School/Computer Science/Charizard/models/Student.py'&gt;, course: &lt;module 'models.Course' from '/Users/adil/Documents/School/Computer Science/Charizard/models/Course.py'&gt;) -&gt; bool</dt><dd><tt>For&nbsp;Writing&nbsp;or&nbsp;Comms&nbsp;intensive&nbsp;courses,&nbsp;we&nbsp;require&nbsp;english&nbsp;level&nbsp;1&nbsp;or&nbsp;lower&nbsp;to&nbsp;be&nbsp;considered&nbsp;for&nbsp;a&nbsp;grading&nbsp;role<br>
+:param&nbsp;student:&nbsp;the&nbsp;student&nbsp;under&nbsp;consideration<br>
+:param&nbsp;course:&nbsp;the&nbsp;course&nbsp;under&nbsp;consideration<br>
+:return:&nbsp;True&nbsp;if&nbsp;the&nbsp;course&nbsp;is&nbsp;a&nbsp;writing&nbsp;course,&nbsp;and&nbsp;the&nbsp;student&nbsp;is&nbsp;unqualified.&nbsp;False&nbsp;otherwise</tt></dd></dl>
+ <dl><dt><a name="-score_based_on_priority_and_deny_list"><strong>score_based_on_priority_and_deny_list</strong></a>(student, course)</dt><dd><tt>#&nbsp;computer&nbsp;score&nbsp;override&nbsp;for&nbsp;priority&nbsp;and&nbsp;deny&nbsp;list</tt></dd></dl>
+ <dl><dt><a name="-score_courses_taken_at_tamu"><strong>score_courses_taken_at_tamu</strong></a>(student: &lt;module 'models.Student' from '/Users/adil/Documents/School/Computer Science/Charizard/models/Student.py'&gt;, course: &lt;module 'models.Course' from '/Users/adil/Documents/School/Computer Science/Charizard/models/Course.py'&gt;) -&gt; int</dt><dd><tt>Determines&nbsp;score&nbsp;based&nbsp;on&nbsp;if&nbsp;student&nbsp;previously&nbsp;taken&nbsp;course&nbsp;at&nbsp;TAMU.<br>
+:param&nbsp;student:&nbsp;Student&nbsp;obj&nbsp;with&nbsp;courses&nbsp;the&nbsp;student&nbsp;has&nbsp;taken<br>
+:param&nbsp;course:&nbsp;Course&nbsp;obj&nbsp;that&nbsp;is&nbsp;used&nbsp;to&nbsp;compare&nbsp;with&nbsp;the&nbsp;courses&nbsp;the&nbsp;student&nbsp;has&nbsp;taken<br>
+:return:&nbsp;Bucket&nbsp;value&nbsp;based&nbsp;on&nbsp;student's&nbsp;previous&nbsp;courses.&nbsp;If&nbsp;course&nbsp;is&nbsp;taken,&nbsp;return<br>
+appropriate&nbsp;bucket&nbsp;value,&nbsp;or&nbsp;no&nbsp;effect&nbsp;if&nbsp;course&nbsp;is&nbsp;not&nbsp;taken</tt></dd></dl>
+ <dl><dt><a name="-score_degree_type"><strong>score_degree_type</strong></a>(student: &lt;module 'models.Student' from '/Users/adil/Documents/School/Computer Science/Charizard/models/Student.py'&gt;, _: &lt;module 'models.Course' from '/Users/adil/Documents/School/Computer Science/Charizard/models/Course.py'&gt; = None) -&gt; int</dt><dd><tt>Determines&nbsp;degree&nbsp;type&nbsp;to&nbsp;ensure&nbsp;preference&nbsp;is&nbsp;given&nbsp;to&nbsp;Phd&nbsp;Students<br>
+:param&nbsp;student:&nbsp;Student&nbsp;obj&nbsp;that&nbsp;is&nbsp;used&nbsp;to&nbsp;get&nbsp;Student&nbsp;degree&nbsp;type<br>
+:param&nbsp;_:&nbsp;Unused&nbsp;Course&nbsp;obj&nbsp;for&nbsp;compatibility&nbsp;with&nbsp;generics<br>
+:return:&nbsp;Bucket&nbsp;value&nbsp;if&nbsp;PhD.&nbsp;Otherwise,&nbsp;return&nbsp;no&nbsp;effect&nbsp;to&nbsp;the&nbsp;weight</tt></dd></dl>
+ <dl><dt><a name="-score_english_certification"><strong>score_english_certification</strong></a>(student: &lt;module 'models.Student' from '/Users/adil/Documents/School/Computer Science/Charizard/models/Student.py'&gt;, course: &lt;module 'models.Course' from '/Users/adil/Documents/School/Computer Science/Charizard/models/Course.py'&gt;) -&gt; int</dt><dd><tt>Determines&nbsp;bucket&nbsp;based&nbsp;on&nbsp;Students&nbsp;English&nbsp;Certification&nbsp;level.&nbsp;If&nbsp;1&nbsp;or&nbsp;2,&nbsp;then&nbsp;delivers<br>
+appropriate&nbsp;bucket.&nbsp;If&nbsp;Level&nbsp;3,&nbsp;it&nbsp;determines&nbsp;if&nbsp;the&nbsp;course&nbsp;is&nbsp;being&nbsp;taught&nbsp;by&nbsp;the&nbsp;student's&nbsp;advisor.<br>
+If&nbsp;it&nbsp;is,&nbsp;it&nbsp;returns&nbsp;infinity.&nbsp;If&nbsp;it&nbsp;is&nbsp;not,&nbsp;it&nbsp;returns&nbsp;negative&nbsp;infinity<br>
+:param&nbsp;student:&nbsp;Student&nbsp;obj&nbsp;that&nbsp;is&nbsp;used&nbsp;to&nbsp;get&nbsp;English&nbsp;Certification<br>
+:param&nbsp;course:&nbsp;Course&nbsp;obj&nbsp;to&nbsp;determine&nbsp;if&nbsp;the&nbsp;course&nbsp;is&nbsp;taught&nbsp;by&nbsp;advisor<br>
+:return:&nbsp;Bucket&nbsp;value&nbsp;based&nbsp;on&nbsp;English&nbsp;certification.&nbsp;Otherwise&nbsp;determine&nbsp;if&nbsp;advisor</tt></dd></dl>
+ <dl><dt><a name="-score_gpa"><strong>score_gpa</strong></a>(student: &lt;module 'models.Student' from '/Users/adil/Documents/School/Computer Science/Charizard/models/Student.py'&gt;, _: &lt;module 'models.Course' from '/Users/adil/Documents/School/Computer Science/Charizard/models/Course.py'&gt; = None) -&gt; int</dt><dd><tt>Determines&nbsp;bucket&nbsp;based&nbsp;on&nbsp;student&nbsp;GPA.&nbsp;If&nbsp;GPA&nbsp;is&nbsp;higher&nbsp;than&nbsp;or&nbsp;equal&nbsp;to&nbsp;a&nbsp;3.5,<br>
+then&nbsp;higher&nbsp;bucket<br>
+:param&nbsp;student:&nbsp;Student&nbsp;obj&nbsp;that&nbsp;is&nbsp;used&nbsp;to&nbsp;get&nbsp;GPA<br>
+:param&nbsp;_:&nbsp;unused&nbsp;Course&nbsp;obj&nbsp;added&nbsp;for&nbsp;compatibility&nbsp;with&nbsp;generic&nbsp;functions.<br>
+:return:&nbsp;Bucket&nbsp;int&nbsp;value&nbsp;based&nbsp;on&nbsp;GPA,&nbsp;if&nbsp;lower&nbsp;than&nbsp;3.5&nbsp;then&nbsp;no&nbsp;effect.</tt></dd></dl>
+ <dl><dt><a name="-score_prereqs"><strong>score_prereqs</strong></a>(student: &lt;module 'models.Student' from '/Users/adil/Documents/School/Computer Science/Charizard/models/Student.py'&gt;, course: &lt;module 'models.Course' from '/Users/adil/Documents/School/Computer Science/Charizard/models/Course.py'&gt;) -&gt; int</dt><dd><tt>Determine&nbsp;if&nbsp;the&nbsp;student&nbsp;meets&nbsp;the&nbsp;prereqs&nbsp;for&nbsp;a&nbsp;given&nbsp;course.<br>
+If&nbsp;they&nbsp;meet&nbsp;the&nbsp;prereqs&nbsp;with&nbsp;courses&nbsp;they've&nbsp;taken&nbsp;at&nbsp;TAMU&nbsp;alone,&nbsp;they&nbsp;get&nbsp;the&nbsp;highest&nbsp;weight&nbsp;for&nbsp;this&nbsp;function<br>
+If&nbsp;they&nbsp;meet&nbsp;the&nbsp;prereqs&nbsp;with&nbsp;some&nbsp;combo&nbsp;of&nbsp;tamu&nbsp;courses&nbsp;and&nbsp;outside&nbsp;courses,&nbsp;they&nbsp;get&nbsp;the&nbsp;next&nbsp;highest&nbsp;weight<br>
+Else&nbsp;the&nbsp;prereqs&nbsp;are&nbsp;not&nbsp;met,&nbsp;so&nbsp;they&nbsp;get&nbsp;no&nbsp;weight&nbsp;from&nbsp;this&nbsp;function<br>
+:param&nbsp;student:&nbsp;Student<br>
+:param&nbsp;course:&nbsp;Course<br>
+:return:&nbsp;Weight&nbsp;as&nbsp;described&nbsp;above.</tt></dd></dl>
+ <dl><dt><a name="-score_previous_ta_for_course"><strong>score_previous_ta_for_course</strong></a>(student: &lt;module 'models.Student' from '/Users/adil/Documents/School/Computer Science/Charizard/models/Student.py'&gt;, course: &lt;module 'models.Course' from '/Users/adil/Documents/School/Computer Science/Charizard/models/Course.py'&gt;) -&gt; int</dt><dd><tt>Determines&nbsp;score&nbsp;based&nbsp;on&nbsp;if&nbsp;student&nbsp;previously&nbsp;TA'd&nbsp;for&nbsp;course.<br>
+:param&nbsp;student:&nbsp;Student&nbsp;obj&nbsp;with&nbsp;courses&nbsp;the&nbsp;student&nbsp;has&nbsp;TA'd&nbsp;for<br>
+:param&nbsp;course:&nbsp;Course&nbsp;obj&nbsp;that&nbsp;is&nbsp;used&nbsp;to&nbsp;compare&nbsp;with&nbsp;the&nbsp;courses&nbsp;the&nbsp;student&nbsp;has<br>
+TA'd&nbsp;for<br>
+:return:&nbsp;Value&nbsp;for&nbsp;bucket&nbsp;based&nbsp;on&nbsp;Student&nbsp;experience.&nbsp;Bucket&nbsp;valued&nbsp;higher&nbsp;if&nbsp;TA&nbsp;has&nbsp;experience<br>
+in&nbsp;course,&nbsp;otherwise&nbsp;no&nbsp;effect&nbsp;added&nbsp;to&nbsp;weight.</tt></dd></dl>
+ <dl><dt><a name="-score_ranked_ta_preference"><strong>score_ranked_ta_preference</strong></a>(student: &lt;module 'models.Student' from '/Users/adil/Documents/School/Computer Science/Charizard/models/Student.py'&gt;, course: &lt;module 'models.Course' from '/Users/adil/Documents/School/Computer Science/Charizard/models/Course.py'&gt;) -&gt; int</dt><dd><tt>Computes&nbsp;Course&nbsp;preferences&nbsp;based&nbsp;on&nbsp;student&nbsp;input<br>
+:param&nbsp;student:&nbsp;Student&nbsp;object&nbsp;that&nbsp;is&nbsp;used&nbsp;to&nbsp;take&nbsp;into&nbsp;account&nbsp;preferences<br>
+:param&nbsp;course:&nbsp;Course&nbsp;object&nbsp;that&nbsp;holds&nbsp;course&nbsp;numbers&nbsp;to&nbsp;compare&nbsp;with&nbsp;student&nbsp;preferences<br>
+:return:&nbsp;Returns&nbsp;bucket&nbsp;number&nbsp;based&nbsp;on&nbsp;student&nbsp;preference.&nbsp;If&nbsp;course&nbsp;is&nbsp;ranked&nbsp;highly,&nbsp;it&nbsp;is&nbsp;placed&nbsp;in<br>
+higher&nbsp;bucket.&nbsp;If&nbsp;not,&nbsp;then&nbsp;placed&nbsp;in&nbsp;lower&nbsp;bucker&nbsp;or&nbsp;given&nbsp;no&nbsp;effect.</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>BASE</strong> = 10<br>
+<strong>MINIMUM_REQUIRED_HOURS</strong> = 9<br>
+<strong>NUM_BUCKETS</strong> = 5</td></tr></table>
+</body></html>

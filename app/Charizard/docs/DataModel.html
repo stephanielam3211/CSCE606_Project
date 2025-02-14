@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module DataModel</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>DataModel</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/Users/adil/Documents/School/Computer%20Science/Charizard/models/DataModel.py">/Users/adil/Documents/School/Computer Science/Charizard/models/DataModel.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="abc.html">abc</a><br>
+</td><td width="25%" valign=top><a href="numbers.html">numbers</a><br>
+</td><td width="25%" valign=top><a href="numpy.html">numpy</a><br>
+</td><td width="25%" valign=top><a href="pandas.html">pandas</a><br>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="abc.html#ABC">abc.ABC</a>(<a href="builtins.html#object">builtins.object</a>)
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="DataModel.html#DataModel">DataModel</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="DataModel">class <strong>DataModel</strong></a>(<a href="abc.html#ABC">abc.ABC</a>)</font></td></tr>
+    
+<tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="DataModel.html#DataModel">DataModel</a></dd>
+<dd><a href="abc.html#ABC">abc.ABC</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="DataModel-set_by_column"><strong>set_by_column</strong></a>(self, field_title: 'str', value)</dt><dd><tt>Given&nbsp;a&nbsp;value&nbsp;and&nbsp;a&nbsp;column&nbsp;name&nbsp;from&nbsp;the&nbsp;set&nbsp;of&nbsp;columns&nbsp;expected&nbsp;in&nbsp;the&nbsp;dataframe&nbsp;for&nbsp;this&nbsp;Model,<br>
+set&nbsp;the&nbsp;corresponding&nbsp;value&nbsp;in&nbsp;the&nbsp;model&nbsp;object.<br>
+:param&nbsp;field_title:&nbsp;The&nbsp;column&nbsp;name&nbsp;associated&nbsp;with&nbsp;the&nbsp;given&nbsp;value&nbsp;in&nbsp;the&nbsp;dataframe<br>
+:param&nbsp;value:&nbsp;The&nbsp;value&nbsp;to&nbsp;set.<br>
+:return:&nbsp;None</tt></dd></dl>
+
+<hr>
+Class methods defined here:<br>
+<dl><dt><a name="DataModel-cleanup_input_frame"><strong>cleanup_input_frame</strong></a>(df: 'pd.DataFrame') -&gt; 'pd.DataFrame'<font color="#909090"><font face="helvetica, arial"> from <a href="abc.html#ABCMeta">abc.ABCMeta</a></font></font></dt><dd><tt>Cleanup&nbsp;the&nbsp;dataframe&nbsp;to&nbsp;allow&nbsp;for&nbsp;consistent&nbsp;parsing<br>
+(for&nbsp;example,&nbsp;remove&nbsp;newline&nbsp;characters&nbsp;in&nbsp;the&nbsp;column&nbsp;names)<br>
+:param&nbsp;df:&nbsp;the&nbsp;dataframe&nbsp;to&nbsp;clean<br>
+:return:&nbsp;cleaned&nbsp;dataframe</tt></dd></dl>
+
+<dl><dt><a name="DataModel-get_empty_model"><strong>get_empty_model</strong></a>() -&gt; 'DataModel'<font color="#909090"><font face="helvetica, arial"> from <a href="abc.html#ABCMeta">abc.ABCMeta</a></font></font></dt><dd><tt>Function&nbsp;to&nbsp;construct&nbsp;an&nbsp;empty&nbsp;instance&nbsp;of&nbsp;this&nbsp;class.<br>
+:return:&nbsp;an&nbsp;object&nbsp;constructed&nbsp;with&nbsp;the&nbsp;default&nbsp;values&nbsp;for&nbsp;each&nbsp;field</tt></dd></dl>
+
+<dl><dt><a name="DataModel-parse_from_dataframe"><strong>parse_from_dataframe</strong></a>(df: 'pd.DataFrame', get_empty_model: 'Callable[[], DataModel]', columns: 'List[str]') -&gt; 'List[DataModel]'<font color="#909090"><font face="helvetica, arial"> from <a href="abc.html#ABCMeta">abc.ABCMeta</a></font></font></dt><dd><tt>Parse&nbsp;Instances&nbsp;of&nbsp;this&nbsp;class&nbsp;from&nbsp;rows&nbsp;of&nbsp;a&nbsp;DataFrame<br>
+:param&nbsp;columns:&nbsp;list&nbsp;of&nbsp;columns&nbsp;expected&nbsp;in&nbsp;the&nbsp;dataframe<br>
+:param&nbsp;get_empty_model:&nbsp;Callable&nbsp;implementation&nbsp;of&nbsp;<a href="#DataModel">DataModel</a>.<a href="#DataModel-get_empty_model">get_empty_model</a>()<br>
+:param&nbsp;df:&nbsp;the&nbsp;dataframe&nbsp;to&nbsp;parse<br>
+:return&nbsp;list[<a href="#DataModel">DataModel</a>]:&nbsp;List&nbsp;of&nbsp;objects&nbsp;parsed&nbsp;from&nbsp;the&nbsp;dataframe</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<hr>
+Data and other attributes defined here:<br>
+<dl><dt><strong>__abstractmethods__</strong> = frozenset()</dl>
+
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>Callable</strong> = typing.Callable<br>
+<strong>List</strong> = typing.List<br>
+<strong>annotations</strong> = _Feature((3, 7, 0, 'beta', 1), (3, 10, 0, 'alpha', 0), 16777216)</td></tr></table>
+</body></html>
