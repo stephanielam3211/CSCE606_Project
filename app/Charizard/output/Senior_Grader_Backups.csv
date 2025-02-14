@@ -1,19 +1,19 @@
 Course Number,Section ID,Instructor Name,Instructor Email,Student Name,Student Email,Calculated Score
-110,500-503,Ki Hwan K. Yum,yum@cse.tamu.edu,Suman Kumari,sumank@tamu.edu,2200
-110,504-507,Ki Hwan K. Yum,yum@cse.tamu.edu,Suman Kumari,sumank@tamu.edu,2200
-110,508-511,Adrita Anika,adrita.anika@tamu.edu,Suman Kumari,sumank@tamu.edu,2200
-111,500-503,Robert H. Lightfoot,rob.light@tamu.edu,Suman Kumari,sumank@tamu.edu,2000
-120,500-503,Christiana S. Chamon,cschamon@tamu.edu,Shyam Prasad Nagulavancha,shyam.prasad@tamu.edu,2200
-120,504-507,Christiana S. Chamon,cschamon@tamu.edu,Shyam Prasad Nagulavancha,shyam.prasad@tamu.edu,2200
-120,550-GV,Alpaslan Duysak,aduysak03@tamu.edu,Shyam Prasad Nagulavancha,shyam.prasad@tamu.edu,2200
-120,299,John M. Moore,jmichael@cse.tamu.edu,Shyam Prasad Nagulavancha,shyam.prasad@tamu.edu,3200
-121,500-502,Maristela Holanda,mholanda@tamu.edu,Shreya Reddy Kalwa,shreya@tamu.edu,3200
-121,503-505,Maristela Holanda,mholanda@tamu.edu,Shreya Reddy Kalwa,shreya@tamu.edu,3200
-121,506-508,Maristela Holanda,mholanda@tamu.edu,Shreya Reddy Kalwa,shreya@tamu.edu,3200
-121,509-512,Qin Huang,huangqin@tamu.edu,Shreya Reddy Kalwa,shreya@tamu.edu,3200
-121,595-598,John M. Moore,jmichael@cse.tamu.edu,Shreya Reddy Kalwa,shreya@tamu.edu,3200
-181,599,Aakash Tyagi,tyagi@cse.tamu.edu,Sravya Gopireddy,sravyagopireddy@tamu.edu,2200
-206,500-502,Christiana S. Chamon,cschamon@tamu.edu,Akiri Venkata Prabhanda Sahithi,sahithiakiri@tamu.edu,2200
+110,500-503,Ki Hwan K. Yum,yum@cse.tamu.edu,Ashish Kumar,ashishdu@tamu.edu,2200
+110,504-507,Ki Hwan K. Yum,yum@cse.tamu.edu,Ashish Kumar,ashishdu@tamu.edu,2200
+110,508-511,Adrita Anika,adrita.anika@tamu.edu,Ashish Kumar,ashishdu@tamu.edu,2200
+111,500-503,Robert H. Lightfoot,rob.light@tamu.edu,Junru Liu,junru.liu@tamu.edu,2000
+120,500-503,Christiana S. Chamon,cschamon@tamu.edu,Anu Deepika Devara,anudevara@tamu.edu,2200
+120,504-507,Christiana S. Chamon,cschamon@tamu.edu,Anu Deepika Devara,anudevara@tamu.edu,2200
+120,550-GV,Alpaslan Duysak,aduysak03@tamu.edu,Anu Deepika Devara,anudevara@tamu.edu,2200
+120,299,John M. Moore,jmichael@cse.tamu.edu,Sushmita Pattanaik,sushmita09@tamu.edu,3200
+121,500-502,Maristela Holanda,mholanda@tamu.edu,Sushmita Pattanaik,sushmita09@tamu.edu,3200
+121,503-505,Maristela Holanda,mholanda@tamu.edu,Sushmita Pattanaik,sushmita09@tamu.edu,3200
+121,506-508,Maristela Holanda,mholanda@tamu.edu,Sushmita Pattanaik,sushmita09@tamu.edu,3200
+121,509-512,Qin Huang,huangqin@tamu.edu,Sushmita Pattanaik,sushmita09@tamu.edu,3200
+121,595-598,John M. Moore,jmichael@cse.tamu.edu,Sushmita Pattanaik,sushmita09@tamu.edu,3200
+181,599,Aakash Tyagi,tyagi@cse.tamu.edu,Saishrawan Vutharkar,saishrawan.vutharkar@tamu.edu,2200
+206,500-502,Christiana S. Chamon,cschamon@tamu.edu,Junru Liu,junru.liu@tamu.edu,2200
 221,200,Roger A. Pearce,rpearce@tamu.edu,Shou-Fang Wu,sfwu@tamu.edu,2200
 221,500-502,Teresa Leyk,teresa19@tamu.edu,Shou-Fang Wu,sfwu@tamu.edu,2200
 221,503-505,Teresa Leyk,teresa19@tamu.edu,Shou-Fang Wu,sfwu@tamu.edu,2200
@@ -21,91 +21,91 @@ Course Number,Section ID,Instructor Name,Instructor Email,Student Name,Student E
 221,510-513,Qin Huang,huangqin@tamu.edu,Shou-Fang Wu,sfwu@tamu.edu,2200
 221,514-517,Qin Huang,huangqin@tamu.edu,Shou-Fang Wu,sfwu@tamu.edu,2200
 221,551-GV,Alpaslan Duysak,aduysak03@tamu.edu,Shou-Fang Wu,sfwu@tamu.edu,2200
-222,500,Martin Carlisle,carlislem@tamu.edu,Rishabh Bassi,rbassi@tamu.edu,2100
-222,501,Sandeep Kumar,sandeep.kumar@tamu.edu,Rishabh Bassi,rbassi@tamu.edu,2100
-222,502,Sandeep Kumar,sandeep.kumar@tamu.edu,Rishabh Bassi,rbassi@tamu.edu,2100
-222,503,Sandeep Kumar,sandeep.kumar@tamu.edu,Rishabh Bassi,rbassi@tamu.edu,2100
-222,551-GV,Zoran Budimlic,zoran@tamu.edu,Rishabh Bassi,rbassi@tamu.edu,2100
-310,500,Christopher Lanclos,cilanclos@tamu.edu,Prajwal Iyer,prajwaliyer@tamu.edu,2200
-312,200,Eun Kim,ejkim@cse.tamu.edu,VARSHANI REDDY PATLOLLA,varshanipreddy@tamu.edu,2100
-312,504-507,Rabinarayan Mahapatra,rabi@tamu.edu,VARSHANI REDDY PATLOLLA,varshanipreddy@tamu.edu,2100
-312,551-GV,Alpaslan Duysak,aduysak03@tamu.edu,VARSHANI REDDY PATLOLLA,varshanipreddy@tamu.edu,2100
-312,299,Aakash Tyagi,tyagi@cse.tamu.edu,VARSHANI REDDY PATLOLLA,varshanipreddy@tamu.edu,2100
-312,597-599,Aakash Tyagi,tyagi@cse.tamu.edu,VARSHANI REDDY PATLOLLA,varshanipreddy@tamu.edu,2100
-313,200,Dmitri Loguinov,dmitri@cse.tamu.edu,Rishabh Bassi,rbassi@tamu.edu,2010
-313,500-503,David K. Houngninou,davidkebo@tamu.edu,Rishabh Bassi,rbassi@tamu.edu,2010
-313,504-507,David K. Houngninou,davidkebo@tamu.edu,Rishabh Bassi,rbassi@tamu.edu,2010
-313,508-511,David K. Houngninou,davidkebo@tamu.edu,Rishabh Bassi,rbassi@tamu.edu,2010
+222,500,Martin Carlisle,carlislem@tamu.edu,Ashish Singh,ashish.singh@tamu.edu,2100
+222,501,Sandeep Kumar,sandeep.kumar@tamu.edu,Ashish Singh,ashish.singh@tamu.edu,2100
+222,502,Sandeep Kumar,sandeep.kumar@tamu.edu,Ashish Singh,ashish.singh@tamu.edu,2100
+222,503,Sandeep Kumar,sandeep.kumar@tamu.edu,Ashish Singh,ashish.singh@tamu.edu,2100
+222,551-GV,Zoran Budimlic,zoran@tamu.edu,Sunayna Ray,sunayna@tamu.edu,12000
+310,500,Christopher Lanclos,cilanclos@tamu.edu,Xiangrong Li,xiangrongli@tamu.edu,2200
+312,200,Eun Kim,ejkim@cse.tamu.edu,Sushmita Pattanaik,sushmita09@tamu.edu,2100
+312,504-507,Rabinarayan Mahapatra,rabi@tamu.edu,Sushmita Pattanaik,sushmita09@tamu.edu,2100
+312,551-GV,Alpaslan Duysak,aduysak03@tamu.edu,Sushmita Pattanaik,sushmita09@tamu.edu,2100
+312,299,Aakash Tyagi,tyagi@cse.tamu.edu,Sushmita Pattanaik,sushmita09@tamu.edu,2100
+312,597-599,Aakash Tyagi,tyagi@cse.tamu.edu,Sushmita Pattanaik,sushmita09@tamu.edu,2100
+313,200,Dmitri Loguinov,dmitri@cse.tamu.edu,Kalvakuntla Sreesh Reddy,ksreesh@tamu.edu,2010
+313,500-503,David K. Houngninou,davidkebo@tamu.edu,Kalvakuntla Sreesh Reddy,ksreesh@tamu.edu,2010
+313,504-507,David K. Houngninou,davidkebo@tamu.edu,Kalvakuntla Sreesh Reddy,ksreesh@tamu.edu,2010
+313,508-511,David K. Houngninou,davidkebo@tamu.edu,Kalvakuntla Sreesh Reddy,ksreesh@tamu.edu,2010
 314,550-GV,Zoran Budimlic,zoran@tamu.edu,Shou-Fang Wu,sfwu@tamu.edu,2100
 314,595,Hyunyoung Lee,hlee@cse.tamu.edu,Alekhya Duba,alekhya.duba@tamu.edu,12000
 314,596,Hyunyoung Lee,hlee@cse.tamu.edu,Alekhya Duba,alekhya.duba@tamu.edu,12000
 314,597,Hyunyoung Lee,hlee@cse.tamu.edu,Alekhya Duba,alekhya.duba@tamu.edu,12000
 314,598,Shawn V. Lupoli,slupoli@cse.tamu.edu,Shou-Fang Wu,sfwu@tamu.edu,2100
 314,599,Shawn V. Lupoli,slupoli@cse.tamu.edu,Shou-Fang Wu,sfwu@tamu.edu,2100
-315,900-901,Robert H. Lightfoot,rob.light@tamu.edu,Rohit Vaidyula,rvaidyul@tamu.edu,1000
-315,902-903,Robert H. Lightfoot,rob.light@tamu.edu,Rohit Vaidyula,rvaidyul@tamu.edu,1000
-315,904-905,Robert H. Lightfoot,rob.light@tamu.edu,Rohit Vaidyula,rvaidyul@tamu.edu,1000
-315,906-907,Robert H. Lightfoot,rob.light@tamu.edu,Rohit Vaidyula,rvaidyul@tamu.edu,1000
-331,900-901,Philip C. Ritchey,ritchey@cse.tamu.edu,Rohit Vaidyula,rvaidyul@tamu.edu,1000
-331,902-903,Philip C. Ritchey,ritchey@cse.tamu.edu,Rohit Vaidyula,rvaidyul@tamu.edu,1000
+315,900-901,Robert H. Lightfoot,rob.light@tamu.edu,Jackson Cummins,jac822@tamu.edu,2000
+315,902-903,Robert H. Lightfoot,rob.light@tamu.edu,Jackson Cummins,jac822@tamu.edu,2000
+315,904-905,Robert H. Lightfoot,rob.light@tamu.edu,Jackson Cummins,jac822@tamu.edu,2000
+315,906-907,Robert H. Lightfoot,rob.light@tamu.edu,Jackson Cummins,jac822@tamu.edu,2000
+331,900-901,Philip C. Ritchey,ritchey@cse.tamu.edu,Jackson Cummins,jac822@tamu.edu,2000
+331,902-903,Philip C. Ritchey,ritchey@cse.tamu.edu,Jackson Cummins,jac822@tamu.edu,2000
 402,500,Paula S. Dewitte,paula.dewitte@tamu.edu,Sindhuja Reddy Kamidi,sindhujareddykamidi@tamu.edu,2010
-410,200,Chia-Che Tsai,chiache@tamu.edu,Suman Kumari,sumank@tamu.edu,2000
-410,599,Riccardo Bettati,bettati@cse.tamu.edu,Suman Kumari,sumank@tamu.edu,2000
+410,200,Chia-Che Tsai,chiache@tamu.edu,Junru Liu,junru.liu@tamu.edu,2000
+410,599,Riccardo Bettati,bettati@cse.tamu.edu,Junru Liu,junru.liu@tamu.edu,2000
 411,500,Timothy A. Davis,davis@tamu.edu,MOUNIKA BALIVADA,mounikabalivada@tamu.edu,2100
 411,501,Luke N. Veldt,nveldt@tamu.edu,MOUNIKA BALIVADA,mounikabalivada@tamu.edu,2100
 411,502,Sing Sze,shsze@cse.tamu.edu,MOUNIKA BALIVADA,mounikabalivada@tamu.edu,2100
 411,503,Andreas Klappenecker,klappi@cse.tamu.edu,Millennium Bismay,mbismay@tamu.edu,12000
-420,500,Thomas Ioerger,ioerger@cse.tamu.edu,MOUNIKA BALIVADA,mounikabalivada@tamu.edu,2010
-420,501,Dylan A. Shell,dshell@cse.tamu.edu,MOUNIKA BALIVADA,mounikabalivada@tamu.edu,2010
-421,200,Bobak Mortazavi,bobakm@tamu.edu,Shyam Prasad Nagulavancha,shyam.prasad@tamu.edu,2010
-421,501,Ryan C. King,kingrc15@email.tamu.edu,Shyam Prasad Nagulavancha,shyam.prasad@tamu.edu,2010
-430,200,John Keyser,keyser@cse.tamu.edu,Akiri Venkata Prabhanda Sahithi,sahithiakiri@tamu.edu,2100
+420,500,Thomas Ioerger,ioerger@cse.tamu.edu,Debajoy Mukherjee,debajoym98@tamu.edu,2010
+420,501,Dylan A. Shell,dshell@cse.tamu.edu,Debajoy Mukherjee,debajoym98@tamu.edu,2010
+421,200,Bobak Mortazavi,bobakm@tamu.edu,Debajoy Mukherjee,debajoym98@tamu.edu,2010
+421,501,Ryan C. King,kingrc15@email.tamu.edu,Debajoy Mukherjee,debajoym98@tamu.edu,2010
+430,200,John Keyser,keyser@cse.tamu.edu,Mesbaul Alam Khan,mesba98@tamu.edu,2100
 431,500-502,Pauline C. Wade,paulinewade@tamu.edu,Anushka Garg,anushkagarg@tamu.edu,12010
-432,500,John M. Moore,jmichael@cse.tamu.edu,Prajwal Iyer,prajwaliyer@tamu.edu,2010
-435,500,Vivek Sarin,sarin@cse.tamu.edu,Akiri Venkata Prabhanda Sahithi,sahithiakiri@tamu.edu,2010
+432,500,John M. Moore,jmichael@cse.tamu.edu,Pranav Anand Taukari,pranav.taukari@tamu.edu,2010
+435,500,Vivek Sarin,sarin@cse.tamu.edu,Sai Ramya Kamali Bandla,bandla_kamali@tamu.edu,2010
 436,200,Jeeeun Kim,jeeeun.kim@cse.tamu.edu,Ashish Singh,ashish.singh@tamu.edu,2010
 436,500,Jeeeun Kim,jeeeun.kim@cse.tamu.edu,Ashish Singh,ashish.singh@tamu.edu,2010
 438,500,Radu Stoleru,stoleru@cse.tamu.edu,Shreya Reddy Kalwa,shreya@tamu.edu,12000
-440,500,Andreas Klappenecker,klappi@cse.tamu.edu,Suman Kumari,sumank@tamu.edu,2000
-441,200,Shinjiro Sueda,sueda@tamu.edu,Suman Kumari,sumank@tamu.edu,2000
-442,200,Wenping Wang,wenping@tamu.edu,Suman Kumari,sumank@tamu.edu,2000
+440,500,Andreas Klappenecker,klappi@cse.tamu.edu,Junru Liu,junru.liu@tamu.edu,2000
+441,200,Shinjiro Sueda,sueda@tamu.edu,Junru Liu,junru.liu@tamu.edu,2000
+442,200,Wenping Wang,wenping@tamu.edu,Junru Liu,junru.liu@tamu.edu,2000
 445,500,Frank Shipman,shipman@cse.tamu.edu,Sruti Patnaik,sruti15@tamu.edu,2010
-448,500,Nima Khademi Kalantari,nimak@tamu.edu,Suman Kumari,sumank@tamu.edu,2000
-451,500,Jyh Liu,liu@cse.tamu.edu,NFN Asees,asees@tamu.edu,2010
-452,500,Jason M. O'Kane,jokane@tamu.edu,Suman Kumari,sumank@tamu.edu,2000
+448,500,Nima Khademi Kalantari,nimak@tamu.edu,Ranjana Seshadri,ranjana.seshadri@tamu.edu,2010
+451,500,Jyh Liu,liu@cse.tamu.edu,Saishrawan Vutharkar,saishrawan.vutharkar@tamu.edu,2010
+452,500,Jason M. O'Kane,jokane@tamu.edu,Junru Liu,junru.liu@tamu.edu,2000
 462,500,Jyh Liu,liu@cse.tamu.edu,Donguk Kim,kdu1113@tamu.edu,2200
-463,500,Dmitri Loguinov,dmitri@cse.tamu.edu,Akiri Venkata Prabhanda Sahithi,sahithiakiri@tamu.edu,2010
-464,500,Radu Stoleru,stoleru@cse.tamu.edu,Jayashree Mallipudi,jayashree@tamu.edu,2010
+463,500,Dmitri Loguinov,dmitri@cse.tamu.edu,Sunayna Ray,sunayna@tamu.edu,2100
+464,500,Radu Stoleru,stoleru@cse.tamu.edu,Junru Liu,junru.liu@tamu.edu,2000
 465,200,Martin Carlisle,carlislem@tamu.edu,Sidharth Anil,sid.anil@tamu.edu,2010
-477,500,Paula S. Dewitte,paula.dewitte@tamu.edu,Sai Harini Voruganti,saiharini@tamu.edu,2010
-481,599,Ricardo Gutierrez-Osuna,rgutier@cse.tamu.edu,Prajwal Iyer,prajwaliyer@tamu.edu,2010
-482,931,Dezhen Song,dzsong@cse.tamu.edu,Rohit Vaidyula,rvaidyul@tamu.edu,1000
-482,932,Paul P. Taele,ptaele@cse.tamu.edu,Rohit Vaidyula,rvaidyul@tamu.edu,1000
-482,933,Shawna Thomas,sthomas@cse.tamu.edu,Rohit Vaidyula,rvaidyul@tamu.edu,1000
-482,934,Shawna Thomas,sthomas@cse.tamu.edu,Rohit Vaidyula,rvaidyul@tamu.edu,1000
-482,935,Pauline C. Wade,paulinewade@tamu.edu,Rohit Vaidyula,rvaidyul@tamu.edu,1000
-482,936,Pauline C. Wade,paulinewade@tamu.edu,Rohit Vaidyula,rvaidyul@tamu.edu,1000
-482,937,Paul P. Taele,ptaele@cse.tamu.edu,Rohit Vaidyula,rvaidyul@tamu.edu,1000
-482,938,Di Wang,ivanwang@tamu.edu,Rohit Vaidyula,rvaidyul@tamu.edu,1000
-482,939,Seth? - may cancel,,Rohit Vaidyula,rvaidyul@tamu.edu,1000
-483,932,Tracy Hammond,hammond@cse.tamu.edu,Rohit Vaidyula,rvaidyul@tamu.edu,1000
-483,933,Rabinarayan Mahapatra,rabi@tamu.edu,Rohit Vaidyula,rvaidyul@tamu.edu,1000
-489,500,Juan Garay,garay@cse.tamu.edu,Suman Kumari,sumank@tamu.edu,2000
+477,500,Paula S. Dewitte,paula.dewitte@tamu.edu,Dushyant Rathore,drathore@tamu.edu,2010
+481,599,Ricardo Gutierrez-Osuna,rgutier@cse.tamu.edu,Sreeja Govardhana,sreeja_govardhana@tamu.edu,2010
+482,931,Dezhen Song,dzsong@cse.tamu.edu,Jackson Cummins,jac822@tamu.edu,2000
+482,932,Paul P. Taele,ptaele@cse.tamu.edu,Jackson Cummins,jac822@tamu.edu,2000
+482,933,Shawna Thomas,sthomas@cse.tamu.edu,Jackson Cummins,jac822@tamu.edu,2000
+482,934,Shawna Thomas,sthomas@cse.tamu.edu,Jackson Cummins,jac822@tamu.edu,2000
+482,935,Pauline C. Wade,paulinewade@tamu.edu,Jackson Cummins,jac822@tamu.edu,2000
+482,936,Pauline C. Wade,paulinewade@tamu.edu,Jackson Cummins,jac822@tamu.edu,2000
+482,937,Paul P. Taele,ptaele@cse.tamu.edu,Jackson Cummins,jac822@tamu.edu,2000
+482,938,Di Wang,ivanwang@tamu.edu,Jackson Cummins,jac822@tamu.edu,2000
+482,939,Seth? - may cancel,,Jackson Cummins,jac822@tamu.edu,2000
+483,932,Tracy Hammond,hammond@cse.tamu.edu,Jackson Cummins,jac822@tamu.edu,2000
+483,933,Rabinarayan Mahapatra,rabi@tamu.edu,Jackson Cummins,jac822@tamu.edu,2000
+489,500,Juan Garay,garay@cse.tamu.edu,Vijay Anand Raghava Kanakagiri,vijay7anand@tamu.edu,2010
 606,600,Philip C. Ritchey,ritchey@cse.tamu.edu,Siri Pranitha Namburi,siri@tamu.edu,2200
 606,601,Philip C. Ritchey,ritchey@cse.tamu.edu,Siri Pranitha Namburi,siri@tamu.edu,2200
-608,600,Jianer Chen,chen@cse.tamu.edu,Millennium Bismay,mbismay@tamu.edu,2010
-614,600,Abdullah Muzahid,abdullah.muzahid@cse.tamu.edu,Suman Kumari,sumank@tamu.edu,2000
-620,600,Jianer Chen,chen@cse.tamu.edu,Suman Kumari,sumank@tamu.edu,2000
+608,600,Jianer Chen,chen@cse.tamu.edu,Sunayna Ray,sunayna@tamu.edu,2010
+614,600,Abdullah Muzahid,abdullah.muzahid@cse.tamu.edu,Junru Liu,junru.liu@tamu.edu,2000
+620,600,Jianer Chen,chen@cse.tamu.edu,Junru Liu,junru.liu@tamu.edu,2000
 625,600,Yoonsuck Choe,choe@tamu.edu,Siri Pranitha Namburi,siri@tamu.edu,2100
-629,601,Anxiao Jiang,ajiang@cse.tamu.edu,MOUNIKA BALIVADA,mounikabalivada@tamu.edu,2010
-633,600,Tianbao Yang,tianbao-yang@tamu.edu,Kushagra Jain,kushagra.jain07@tamu.edu,2010
-633,700,Theodora Chaspari,chaspari@tamu.edu,Kushagra Jain,kushagra.jain07@tamu.edu,2010
-634,600,Frank Shipman,shipman@cse.tamu.edu,Suman Kumari,sumank@tamu.edu,2000
+629,601,Anxiao Jiang,ajiang@cse.tamu.edu,Ashish Kumar,ashishdu@tamu.edu,2010
+633,600,Tianbao Yang,tianbao-yang@tamu.edu,Ashish Kumar,ashishdu@tamu.edu,2010
+633,700,Theodora Chaspari,chaspari@tamu.edu,Ashish Kumar,ashishdu@tamu.edu,2010
+634,600,Frank Shipman,shipman@cse.tamu.edu,Junru Liu,junru.liu@tamu.edu,2000
 635,600,Robin Murphy,murphy@cse.tamu.edu,Siri Pranitha Namburi,siri@tamu.edu,2010
-636,600,Anxiao Jiang,ajiang@cse.tamu.edu,Anshul Sharma,anshul_sharma@tamu.edu,2010
-665,600,Guofei Gu,guofei@cse.tamu.edu,Suman Kumari,sumank@tamu.edu,2000
-670,600,James Caverlee,caverlee@cse.tamu.edu,Piyush Nayak,kayan_piyush@tamu.edu,2010
+636,600,Anxiao Jiang,ajiang@cse.tamu.edu,Sai Ramya Kamali Bandla,bandla_kamali@tamu.edu,2010
+665,600,Guofei Gu,guofei@cse.tamu.edu,Junru Liu,junru.liu@tamu.edu,2000
+670,600,James Caverlee,caverlee@cse.tamu.edu,Siri Pranitha Namburi,siri@tamu.edu,2010
 681,600,Ricardo Gutierrez-Osuna,rgutier@cse.tamu.edu,Shreya Reddy Kalwa,shreya@tamu.edu,2010
-709,600-601,Alpaslan Duysak,aduysak03@tamu.edu,Suman Kumari,sumank@tamu.edu,2000
-714,700,Michael D. Quinn,m.d.quinn@tamu.edu,Suman Kumari,sumank@tamu.edu,2000
-789,690,Aakash Tim,tim@cse.tamu.edu,Suman Kumari,sumank@tamu.edu,2000
+709,600-601,Alpaslan Duysak,aduysak03@tamu.edu,Junru Liu,junru.liu@tamu.edu,2000
+714,700,Michael D. Quinn,m.d.quinn@tamu.edu,Junru Liu,junru.liu@tamu.edu,2000
+789,690,Aakash Tim,tim@cse.tamu.edu,Junru Liu,junru.liu@tamu.edu,2000
