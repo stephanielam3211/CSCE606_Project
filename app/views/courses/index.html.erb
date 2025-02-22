@@ -1,0 +1,47 @@
+
+<h1>All Courses</h1>
+<%= form_with(url: import_courses_path, method: :post, local: true, enctype: "multipart/form-data") do |form| %>
+  <div>
+    <%= form.label :csv_file, "Choose CSV file to import" %>
+    <%= form.file_field :csv_file %>
+  </div>
+  <div>
+    <%= form.submit "Import CSV", class: "action-button" %>
+  </div>
+<% end %>
+
+<%= button_to "Clear All Courses", clear_courses_path, method: :delete, data: { turbo: false }, onclick: "return confirmClear();" %>
+
+
+
+
+<table>
+  <thead>
+    <tr>
+      <th>Course Name</th>
+      <th>Course Number</th>
+      <th>Section</th>
+      <th>Instructor</th>
+      <th>Faculty Email</th>
+      <th>TA</th>
+      <th>Senior Grader</th>
+      <th>Grader</th>
+      <th>Pre-requisites</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @courses.each do |course| %>
+      <tr>
+        <td><%= course.course_name %></td>
+        <td><%= course.course_number %></td>
+        <td><%= course.section %></td>
+        <td><%= course.instructor %></td>
+        <td><%= course.faculty_email %></td>
+        <td><%= course.ta %></td>
+        <td><%= course.senior_grader %></td>
+        <td><%= course.grader %></td>
+        <td><%= course.pre_reqs %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

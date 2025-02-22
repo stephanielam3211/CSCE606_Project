@@ -97,7 +97,7 @@
                 <%= link_to "Submit Request to be a TA (Student)", new_applicant_path, class: "action-button" %>
                 <button class="action-button" onclick="alert('Professor TA Request Submitted')">Request Student to be a TA (Professor)</button>
                 <%= link_to "View Applicants", applicants_path, class: "action-button" %>
-                <button class="action-button" onclick="alert('TA Assigned')">Assign TA</button>
+                <%= link_to "View Classes", courses_path, class: "action-button" %>
                 <button class="action-button" onclick="alert('exportCSV()')">Export CSV</button>
             </div>
         </div>
