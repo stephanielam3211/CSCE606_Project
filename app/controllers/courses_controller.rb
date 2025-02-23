@@ -3,6 +3,9 @@ class CoursesController < ApplicationController
   
     def index
       @courses = Course.all
+      sort_column = params[:sort] || "course_name" 
+      sort_direction = params[:direction] == "desc" ? "desc" : "asc" 
+      @courses = Course.order("#{sort_column} #{sort_direction}")
     end
   
     def import

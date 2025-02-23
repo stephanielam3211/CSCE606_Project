@@ -16,14 +16,14 @@
 <table>
   <thead>
     <tr>
-      <th>Course Name</th>
-      <th>Course Number</th>
-      <th>Section</th>
-      <th>Instructor</th>
-      <th>Faculty Email</th>
-      <th>TA</th>
-      <th>Senior Grader</th>
-      <th>Grader</th>
+      <th><%= link_to "Course Name", courses_path(sort: "course_name", direction: toggle_direction) %></th>
+      <th><%= link_to "Course Number", courses_path(sort: "course_number", direction: toggle_direction) %></th>
+      <th><%= link_to "Section", courses_path(sort: "section", direction: toggle_direction) %></th>
+      <th><%= link_to "Instructor", courses_path(sort: "instructor", direction: toggle_direction) %></th>
+      <th><%= link_to "Faculty Email Number", courses_path(sort: "faculty_email", direction: toggle_direction) %></th>
+      <th><%= link_to "TA", courses_path(sort: "ta", direction: toggle_direction) %></th>
+      <th><%= link_to "Senior Grader", courses_path(sort: "senior_grader", direction: toggle_direction) %></th>
+      <th><%= link_to "Grader", courses_path(sort: "grader", direction: toggle_direction) %></th>
       <th>Pre-requisites</th>
     </tr>
   </thead>
