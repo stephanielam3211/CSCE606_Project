@@ -11,7 +11,16 @@
 <% end %>
 
 <%= button_to "Clear All Courses", clear_courses_path, method: :delete, data: { turbo: false }, onclick: "return confirmClear();" %>
+<%= search_form_for @q, url: courses_path, method: :get do |f| %>
+  <div>
+   <%= f.label :course_name_or_course_number_or_section_or_instructor_cont, "Search by Course Details" %>
+   <%= f.text_field :course_name_or_course_number_or_section_or_instructor_cont, placeholder: "Enter Course Name, Number, Section, or Instructor" %>
 
+
+    <%= f.submit "Search" %>
+    <%= link_to "Clear", courses_path, class: "btn" %>
+  </div>
+<% end %>
 
 <div style="max-height: 600px; overflow-y: auto;">
 <table>

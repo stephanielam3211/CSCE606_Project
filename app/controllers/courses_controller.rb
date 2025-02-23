@@ -6,6 +6,9 @@ class CoursesController < ApplicationController
       sort_column = params[:sort] || "course_name" 
       sort_direction = params[:direction] == "desc" ? "desc" : "asc" 
       @courses = Course.order("#{sort_column} #{sort_direction}")
+
+      @q = Course.ransack(params[:q])  
+      @courses = @q.result(distinct: true) 
     end
   
     def import

@@ -3,6 +3,16 @@
 <% content_for :title, "Applicants" %>
 
 <h1><%= link_to "Applicants", root_path, class: "action-button" %></h1>
+<%= search_form_for @q, url: applicants_path, method: :get do |f| %>
+  <div>
+    <%= f.label :name_or_email_or_uin_cont, "Search by Name, Email, or UIN" %>
+    <%= f.text_field :name_or_email_or_uin_cont, placeholder: "Enter Name, Email, or UIN" %>
+
+    <%= f.submit "Search" %>
+    <%= link_to "Clear", applicants_path, class: "btn" %>
+  </div>
+<% end %>
+
 <div style="max-height: 600px; overflow-y: auto;">
 <table border="1">
   <thead style="position: sticky; top: 0; background-color: white; z-index: 100;">

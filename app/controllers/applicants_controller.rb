@@ -9,6 +9,8 @@ class ApplicantsController < ApplicationController
     sort_column = params[:sort] || "name" 
       sort_direction = params[:direction] == "desc" ? "desc" : "asc" 
       @applicants = Applicant.order("#{sort_column} #{sort_direction}")
+      @q = Applicant.ransack(params[:q])  
+      @applicants = @q.result(distinct: true) 
   end
 
   # GET /applicants/1 or /applicants/1.json
