@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Applicant < ApplicationRecord
+    has_many :recommendations
     validates :name, presence: true
     validates :email, presence: true,
 format: { with: URI::MailTo::EMAIL_REGEXP }
