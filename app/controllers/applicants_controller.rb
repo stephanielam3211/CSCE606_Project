@@ -6,11 +6,11 @@ class ApplicantsController < ApplicationController
   # GET /applicants or /applicants.json
   def index
     @applicants = Applicant.all
-    sort_column = params[:sort] || "name" 
-      sort_direction = params[:direction] == "desc" ? "desc" : "asc" 
-      @applicants = Applicant.order("#{sort_column} #{sort_direction}")
-      @q = Applicant.ransack(params[:q])  
-      @applicants = @q.result(distinct: true) 
+    sort_column = params[:sort] || "name"
+    sort_direction = params[:direction] == "desc" ? "desc" : "asc"
+    @applicants = Applicant.order("#{sort_column} #{sort_direction}")
+    @q = Applicant.ransack(params[:q])
+    @applicants = @q.result(distinct: true).order("#{sort_column} #{sort_direction}")
   end
 
   # GET /applicants/1 or /applicants/1.json

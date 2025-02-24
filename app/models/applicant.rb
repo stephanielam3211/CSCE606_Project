@@ -12,7 +12,7 @@ format: { with: URI::MailTo::EMAIL_REGEXP }
     validates :citizenship, presence: true
     validates :cert, presence: true
     def self.ransackable_attributes(auth_object = nil)
-        super + ["name", "email", "uin"]
+        super + [ "name", "email", "uin" ]
     end
     def self.ransackable_associations(auth_object = nil)
         []

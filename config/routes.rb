@@ -2,7 +2,7 @@
 
 Rails.application.routes.draw do
   resources :applicants
-  resources :courses, only: [:index] do
+  resources :courses, only: [ :index ] do
     collection do
       post :import
       delete :clear
