@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RecommendationsController < ApplicationController
   def new
     @recommendation = Recommendation.new

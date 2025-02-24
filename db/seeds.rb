@@ -10,21 +10,3 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 require 'csv'
-
-csv_file = Rails.root.join('db', 'courses.csv')
-
-CSV.foreach(csv_file, headers: true) do |row|
-  Course.create!(
-    course_name: row['course_name'],
-    course_number: row['course_number'],
-    section: row['section'],
-    instructor: row['instructor'],
-    faculty_email: row['faculty_email'],
-    ta: row['ta'].to_i,
-    senior_grader: row['senior_grader'].to_i,
-    grader: row['grader'].to_i,
-    pre_reqs: row['pre_reqs']&.strip.presence || ""
-  )
-end
-
-puts "Seeded #{Course.count} courses"

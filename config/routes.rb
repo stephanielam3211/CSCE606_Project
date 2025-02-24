@@ -3,7 +3,7 @@
 Rails.application.routes.draw do
   get "recommendations/new"
   resources :applicants
-  resources :courses, only: [:index] do
+  resources :courses, only: [ :index ] do
     collection do
       post :import
       delete :clear

@@ -11,10 +11,20 @@
 <% end %>
 
 <%= button_to "Clear All Courses", clear_courses_path, method: :delete, data: { turbo: false }, onclick: "return confirmClear();" %>
+<%= search_form_for @q, url: courses_path, method: :get do |f| %>
+  <div>
+   <%= f.label :course_name_or_course_number_or_section_or_instructor_cont, "Search by Course Details" %>
+   <%= f.text_field :course_name_or_course_number_or_section_or_instructor_cont, placeholder: "Enter Course Name, Number, Section, or Instructor" %>
+
+
+    <%= f.submit "Search" %>
+    <%= link_to "Clear", courses_path, class: "btn" %>
+  </div>
+<% end %>
 
 <div style="max-height: 600px; overflow-y: auto;">
 <table>
-  <thead>
+  <thead style="position: sticky; top: 0; background-color: white; z-index: 100;">
     <tr>
       <th><%= link_to "Course Name", courses_path(sort: "course_name", direction: toggle_direction) %></th>
       <th><%= link_to "Course Number", courses_path(sort: "course_number", direction: toggle_direction) %></th>
