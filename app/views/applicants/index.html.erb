@@ -2,14 +2,24 @@
 
 <% content_for :title, "Applicants" %>
 
-<h1>Applicants</h1>
+<h1><%= link_to "Applicants", root_path, class: "action-button" %></h1>
+<%= search_form_for @q, url: applicants_path, method: :get do |f| %>
+  <div>
+    <%= f.label :name_or_email_or_uin_cont, "Search by Name, Email, or UIN" %>
+    <%= f.text_field :name_or_email_or_uin_cont, placeholder: "Enter Name, Email, or UIN" %>
 
+    <%= f.submit "Search" %>
+    <%= link_to "Clear", applicants_path, class: "btn" %>
+  </div>
+<% end %>
+
+<div style="max-height: 600px; overflow-y: auto;">
 <table border="1">
-  <thead>
+  <thead style="position: sticky; top: 0; background-color: white; z-index: 100;">
     <tr>
-      <th>Name</th>
-      <th>Email</th>
-      <th>Degree</th>
+      <th><%= link_to "Name", applicants_path(sort: "name", direction: toggle_direction) %></th>
+      <th><%= link_to "Email", applicants_path(sort: "email", direction: toggle_direction) %></th>
+      <th><%= link_to "Degree", applicants_path(sort: "degree", direction: toggle_direction) %></th>
       <th>Actions</th>
     </tr>
   </thead>
@@ -24,6 +34,7 @@
     <% end %>
   </tbody>
 </table>
+</div>
 
 <%= link_to "Back to Main Page", root_path, class: "action-button" %>
 

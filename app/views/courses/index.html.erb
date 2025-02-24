@@ -1,0 +1,56 @@
+
+<h1><%= link_to "All Courses", root_path, class: "action-button", style: "text-decoration: none; color: inherit;" %></h1> 
+<%= form_with(url: import_courses_path, method: :post, local: true, enctype: "multipart/form-data") do |form| %>
+  <div>
+    <%= form.label :csv_file, "Choose CSV file to import" %>
+    <%= form.file_field :csv_file %>
+  </div>
+  <div>
+    <%= form.submit "Import CSV", class: "action-button" %>
+  </div>
+<% end %>
+
+<%= button_to "Clear All Courses", clear_courses_path, method: :delete, data: { turbo: false }, onclick: "return confirmClear();" %>
+<%= search_form_for @q, url: courses_path, method: :get do |f| %>
+  <div>
+   <%= f.label :course_name_or_course_number_or_section_or_instructor_cont, "Search by Course Details" %>
+   <%= f.text_field :course_name_or_course_number_or_section_or_instructor_cont, placeholder: "Enter Course Name, Number, Section, or Instructor" %>
+
+
+    <%= f.submit "Search" %>
+    <%= link_to "Clear", courses_path, class: "btn" %>
+  </div>
+<% end %>
+
+<div style="max-height: 600px; overflow-y: auto;">
+<table>
+  <thead style="position: sticky; top: 0; background-color: white; z-index: 100;">
+    <tr>
+      <th><%= link_to "Course Name", courses_path(sort: "course_name", direction: toggle_direction) %></th>
+      <th><%= link_to "Course Number", courses_path(sort: "course_number", direction: toggle_direction) %></th>
+      <th><%= link_to "Section", courses_path(sort: "section", direction: toggle_direction) %></th>
+      <th><%= link_to "Instructor", courses_path(sort: "instructor", direction: toggle_direction) %></th>
+      <th><%= link_to "Faculty Email Number", courses_path(sort: "faculty_email", direction: toggle_direction) %></th>
+      <th><%= link_to "TA", courses_path(sort: "ta", direction: toggle_direction) %></th>
+      <th><%= link_to "Senior Grader", courses_path(sort: "senior_grader", direction: toggle_direction) %></th>
+      <th><%= link_to "Grader", courses_path(sort: "grader", direction: toggle_direction) %></th>
+      <th>Pre-requisites</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @courses.each do |course|%>
+      <tr> 
+        <td><%= course.course_name %></td>
+        <td><%= course.course_number %></td>
+        <td><%= course.section %></td>
+        <td><%= course.instructor %></td>
+        <td><%= course.faculty_email %></td>
+        <td><%= course.ta %></td>
+        <td><%= course.senior_grader %></td>
+        <td><%= course.grader %></td>
+        <td><%= course.pre_reqs %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+</div>
