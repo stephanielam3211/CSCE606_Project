@@ -1,4 +1,4 @@
-course_name,course_number,section,instructor,faculty_email,ta,senior_grader,grader,pre-reqs
+Course_Name,Course_Number,Section,Instructor,Faculty_Email,TA,Senior_Grader,Grader,Professor Pre-Reqs
 PROGRAMMING I,110,500-503,Ki Hwan K. Yum,yum@cse.tamu.edu,1,0,1,
 PROGRAMMING I,110,504-507,Ki Hwan K. Yum,yum@cse.tamu.edu,1,0,1,
 PROGRAMMING I,110,508-511,Adrita Anika,adrita.anika@tamu.edu,1,0,1,
@@ -87,6 +87,7 @@ SR CAPSTONE DESIGN,482C,935,Pauline C. Wade,paulinewade@tamu.edu,1,0,0,
 SR CAPSTONE DESIGN,482C,936,Pauline C. Wade,paulinewade@tamu.edu,0,1,1,
 SR CAPSTONE DESIGN,482C,937,Paul P. Taele,ptaele@cse.tamu.edu,1,0,0,
 SR CAPSTONE DESIGN,482C,938,Di Wang,ivanwang@tamu.edu,1,0,0,
+SR CAPSTONE DESIGN,482C,939,Seth? - may cancel,#N/A,0,0,0,
 COMPUTER SYS DESIGN,483C,932,Tracy Hammond,hammond@cse.tamu.edu,1,0,0,
 COMPUTER SYS DESIGN,483C,933,Rabinarayan Mahapatra,rabi@tamu.edu,1,0,0,
 BLOCKCHAIN,489/689,500/600,Juan Garay,garay@cse.tamu.edu,1,0,0,
