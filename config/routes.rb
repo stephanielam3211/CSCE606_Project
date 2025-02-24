@@ -3,6 +3,13 @@
 Rails.application.routes.draw do
   get "recommendations/new"
   resources :applicants
+  resources :courses, only: [:index] do
+    collection do
+      post :import
+      delete :clear
+    end
+  end
+
   get "sessions/new"
   get "sessions/create"
   get "sessions/destroy"

@@ -1,0 +1,46 @@
+
+<h1>All Courses</h1>
+<%= form_with(url: import_courses_path, method: :post, local: true, enctype: "multipart/form-data") do |form| %>
+  <div>
+    <%= form.label :csv_file, "Choose CSV file to import" %>
+    <%= form.file_field :csv_file %>
+  </div>
+  <div>
+    <%= form.submit "Import CSV", class: "action-button" %>
+  </div>
+<% end %>
+
+<%= button_to "Clear All Courses", clear_courses_path, method: :delete, data: { turbo: false }, onclick: "return confirmClear();" %>
+
+<div style="max-height: 600px; overflow-y: auto;">
+<table>
+  <thead>
+    <tr>
+      <th><%= link_to "Course Name", courses_path(sort: "course_name", direction: toggle_direction) %></th>
+      <th><%= link_to "Course Number", courses_path(sort: "course_number", direction: toggle_direction) %></th>
+      <th><%= link_to "Section", courses_path(sort: "section", direction: toggle_direction) %></th>
+      <th><%= link_to "Instructor", courses_path(sort: "instructor", direction: toggle_direction) %></th>
+      <th><%= link_to "Faculty Email Number", courses_path(sort: "faculty_email", direction: toggle_direction) %></th>
+      <th><%= link_to "TA", courses_path(sort: "ta", direction: toggle_direction) %></th>
+      <th><%= link_to "Senior Grader", courses_path(sort: "senior_grader", direction: toggle_direction) %></th>
+      <th><%= link_to "Grader", courses_path(sort: "grader", direction: toggle_direction) %></th>
+      <th>Pre-requisites</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @courses.each do |course|%>
+      <tr> 
+        <td><%= course.course_name %></td>
+        <td><%= course.course_number %></td>
+        <td><%= course.section %></td>
+        <td><%= course.instructor %></td>
+        <td><%= course.faculty_email %></td>
+        <td><%= course.ta %></td>
+        <td><%= course.senior_grader %></td>
+        <td><%= course.grader %></td>
+        <td><%= course.pre_reqs %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+</div>

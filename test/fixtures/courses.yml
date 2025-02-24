@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  course_name: MyString
+  course_number: MyString
+  section: MyString
+  instructor: MyString
+  faculty_email: MyString
+  ta: 1.5
+  senior_grader: 1.5
+  grader: 1.5
+  pre_reqs: MyText
+
+two:
+  course_name: MyString
+  course_number: MyString
+  section: MyString
+  instructor: MyString
+  faculty_email: MyString
+  ta: 1.5
+  senior_grader: 1.5
+  grader: 1.5
+  pre_reqs: MyText
