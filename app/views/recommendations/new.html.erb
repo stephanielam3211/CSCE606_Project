@@ -1,0 +1,37 @@
+<h1>Recommend TA</h1>
+<p>Find me in app/views/recommendations/new.html.erb</p>
+<%= link_to "Back to Home", root_path, class: "action-button" %>
+<h1>Recommend TA</h1>
+
+<div class="container">
+  <%= form_with model: @recommendation, local: true do |form| %>
+    <div>
+      <%= form.label :email, "Student Email" %>
+      <%= form.text_field :email %>
+    </div>
+
+    <div>
+      <%= form.label :name, "Student Name" %>
+      <%= form.text_field :name %>
+    </div>
+
+    <div>
+      <%= form.label :selectionTA, "TA Selection" %>
+      <%= form.select :selectionTA, [["Yes", "yes"], ["No", "no"]] %>
+    </div>
+
+    <div>
+      <%= form.label :feedback, "Feedback" %>
+      <%= form.text_area :feedback %>
+    </div>
+
+    <div>
+      <%= form.label :additionalfeedback, "Additional Feedback" %>
+      <%= form.text_area :additionalfeedback %>
+    </div>
+
+    <%= form.submit "Submit Recommendation" %>
+  <% end %>
+
+  <%= link_to "Back to Home", root_path, class: "action-button" %>
+</div>

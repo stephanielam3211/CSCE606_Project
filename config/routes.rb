@@ -3,7 +3,15 @@
 Rails.application.routes.draw do
   get "ta_assignments/new"
   get "ta_assignments/create"
+  get "recommendations/new"
   resources :applicants
+  resources :courses, only: [ :index ] do
+    collection do
+      post :import
+      delete :clear
+    end
+  end
+
   get "sessions/new"
   get "sessions/create"
   get "sessions/destroy"
@@ -28,4 +36,9 @@ Rails.application.routes.draw do
   # TA assignment
   post 'ta_assignments/process_csvs', to: 'ta_assignments#process_csvs', as: 'process_csvs'
   get 'ta_assignments/view_csv', to: 'ta_assignments#view_csv', as: 'view_csv'
+  # Recommendation system
+  get "recommendations/new", to: "recommendations#new", as: "recommendation_view"
+  post "recommendations", to: "recommendations#create"
+  # blacklist
+  resources :blacklists, only: [:index, :create, :destroy]
 end

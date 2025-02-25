@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_07_072030) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_25_000658) do
   create_table "applicants", force: :cascade do |t|
     t.string "email"
     t.string "name"
@@ -36,6 +36,38 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_07_072030) do
     t.integer "choice_9"
     t.integer "choice_10"
     t.time "timestamp"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.float "gpa"
+  end
+
+  create_table "courses", force: :cascade do |t|
+    t.string "course_name"
+    t.string "course_number"
+    t.string "section"
+    t.string "instructor"
+    t.string "faculty_email"
+    t.float "ta"
+    t.float "senior_grader"
+    t.float "grader"
+    t.text "pre_reqs"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "blacklists", force: :cascade do |t|
+    t.string "student_name"
+    t.string "student_email"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "recommendations", force: :cascade do |t|
+    t.string "email"
+    t.string "name"
+    t.string "selectionsTA"
+    t.text "feedback"
+    t.text "additionalfeedback"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
