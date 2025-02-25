@@ -26,12 +26,12 @@ Given('I am logged in') do
     fill_in field_name, with: ""
   end
 
-  When('I press {string}') do |button_text|
+  When('I press {string} button') do |button_text|
     expect(page).to have_button(button_text, wait: 5)
     click_button button_text
   end
 
-  Then('I should see {string}') do |confirmation_message|
+  Then('I should see {string} button') do |confirmation_message|
     expect(page).to have_content(confirmation_message)
   end
 
