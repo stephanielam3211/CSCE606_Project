@@ -1,9 +1,8 @@
-<h1>Upload CSV</h1>
-<p>Welcome! You can upload a CSV below.</p>
+<h2>Assign TA</h2>
 
-<%= form_with url: import_csv_assignments_path, local: true, multipart: true do |f| %>
+<%= form_with url: assign_ta_assignments_path, method: :post,  local: true, multipart: true do |f| %>
   <%= f.file_field :file %>
-  <%= f.submit "Upload CSV" %>
+  <%= f.submit "Assign TA" %>
 <% end %>
 
 
