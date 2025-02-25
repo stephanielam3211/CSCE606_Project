@@ -217,6 +217,7 @@ GEM
     parser (3.3.7.1)
       ast (~> 2.4.1)
       racc
+    pg (1.5.9)
     pp (0.6.2)
       prettyprint
     prettyprint (0.2.0)
@@ -412,6 +413,7 @@ DEPENDENCIES
   devise
   importmap-rails
   jbuilder
+  pg
   puma (>= 5.0)
   rack_session_access
   rails (~> 7.2.2, >= 7.2.2.1)
@@ -421,11 +423,14 @@ DEPENDENCIES
   selenium-webdriver
   simplecov
   sprockets-rails
-  sqlite3 (>= 1.4)
+  sqlite3
   stimulus-rails
   turbo-rails
   tzinfo-data
   web-console
+
+RUBY VERSION
+   ruby 3.4.1p0
 
 BUNDLED WITH
    2.6.3
