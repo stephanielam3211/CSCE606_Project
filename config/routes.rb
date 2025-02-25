@@ -26,4 +26,6 @@ Rails.application.routes.draw do
   # Recommendation system
   get "recommendations/new", to: "recommendations#new", as: "recommendation_view"
   post "recommendations", to: "recommendations#create"
+  # blacklist
+  resources :blacklists, only: [:index, :create, :destroy]
 end
