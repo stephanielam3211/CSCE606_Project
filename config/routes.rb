@@ -16,6 +16,13 @@ Rails.application.routes.draw do
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
+
+resources :assignments, only: [:index] do
+    collection do
+      post :import_csv   # POST /assignments/import_csv
+    end
+  end
+
   # Defines the root path route ("/")
   # root "posts#index"
   root "home#index" # home

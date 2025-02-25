@@ -1,0 +1,10 @@
+<h1>Upload CSV</h1>
+<p>Welcome! You can upload a CSV below.</p>
+
+<%= form_with url: import_csv_assignments_path, local: true, multipart: true do |f| %>
+  <%= f.file_field :file %>
+  <%= f.submit "Upload CSV" %>
+<% end %>
+
+
+
