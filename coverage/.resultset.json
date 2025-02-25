@@ -372,6 +372,14 @@
           1,
           1,
           1,
+          1,
+          null,
+          null,
+          null,
+          1,
+          1,
+          1,
+          1,
           null,
           null,
           null,
@@ -386,6 +394,9 @@
           null,
           1,
           1,
+          1,
+          1,
+          null,
           1,
           1,
           null
@@ -404,10 +415,29 @@
           null,
           null,
           1,
+          1,
+          64,
+          null,
+          null
+        ]
+      },
+      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/app/helpers/courses_helper.rb": {
+        "lines": [
+          null,
+          null,
+          1,
           null
         ]
       },
       "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/app/helpers/home_helper.rb": {
+        "lines": [
+          null,
+          null,
+          1,
+          null
+        ]
+      },
+      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/app/helpers/recommendations_helper.rb": {
         "lines": [
           null,
           null,
@@ -430,6 +460,7 @@
           1,
           1,
           1,
+          1,
           null,
           1,
           1,
@@ -445,6 +476,50 @@
         "lines": [
           null,
           null,
+          1,
+          1,
+          null
+        ]
+      },
+      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/spec/tests/course_spec.rb": {
+        "lines": [
+          1,
+          null,
+          1,
+          5,
+          null,
+          1,
+          1,
+          1,
+          null,
+          1,
+          1,
+          1,
+          null,
+          null,
+          1,
+          1,
+          1,
+          null,
+          1,
+          1,
+          1,
+          null,
+          null,
+          1,
+          1,
+          1,
+          null,
+          1,
+          1,
+          1,
+          null,
+          null,
+          1,
+          1,
+          1,
+          null,
+          1,
           1,
           1,
           null
@@ -487,10 +562,10 @@
           1,
           null,
           1,
-          9,
+          17,
           null,
-          9,
-          9,
+          17,
+          17,
           null,
           null
         ]
@@ -578,8 +653,76 @@
           null,
           null
         ]
+      },
+      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/app/models/course.rb": {
+        "lines": [
+          null,
+          null,
+          1,
+          1,
+          1,
+          1,
+          264,
+          null,
+          1,
+          440,
+          null,
+          null
+        ]
+      },
+      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/app/controllers/courses_controller.rb": {
+        "lines": [
+          null,
+          null,
+          1,
+          1,
+          null,
+          1,
+          8,
+          8,
+          8,
+          null,
+          8,
+          null,
+          null,
+          1,
+          0,
+          null,
+          0,
+          0,
+          0,
+          null,
+          null,
+          0,
+          0,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          0,
+          null,
+          0,
+          null,
+          null,
+          1,
+          0,
+          0,
+          0,
+          null,
+          0,
+          null,
+          null,
+          null
+        ]
       }
     },
-    "timestamp": 1739240104
+    "timestamp": 1740445493
   }
 }
