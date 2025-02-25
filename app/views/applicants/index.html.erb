@@ -26,7 +26,9 @@
   <tbody>
     <% @applicants.each do |applicant| %>
       <tr id="<%= dom_id applicant %>">
-        <td><%= applicant.name %></td>
+        <td style="<%= applicant.name.start_with?('*') ? 'color: red; font-weight: bold;' : '' %>">
+          <%= applicant.name %>
+        </td>
         <td><%= applicant.email %></td>
         <td><%= applicant.degree %></td>
         <td><%= link_to "Show this applicant",applicant_path(applicant)%></td>
