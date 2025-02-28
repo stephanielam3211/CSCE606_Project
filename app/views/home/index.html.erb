@@ -95,10 +95,11 @@
         <div class="content">
             <div class="button-container">
                 <%= link_to "Submit Request to be a TA (Student)", new_applicant_path, class: "action-button" %>
-                <button class="action-button" onclick="alert('Professor TA Request Submitted')">Request Student to be a TA (Professor)</button>
+                <%= link_to "Recomend Student to be a TA", recommendation_view_path, class: "action-button" %>
                 <%= link_to "View Applicants", applicants_path, class: "action-button" %>
-                <button class="action-button" onclick="alert('TA Assigned')">Assign TA</button>
+                <%= link_to "View Classes", courses_path, class: "action-button" %>
                 <button class="action-button" onclick="alert('exportCSV()')">Export CSV</button>
+                <%= link_to "View Blacklisted Students", blacklists_path, class: "action-button" %>
             </div>
         </div>
     <% else %>

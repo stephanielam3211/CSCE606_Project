@@ -23,7 +23,13 @@ class ApplicantsController < ApplicationController
 
   # POST /applicants or /applicants.json
   def create
-    @applicant = Applicant.new(applicant_params)
+    if Blacklist.exists?(student_email: applicant_params[:email])
+      modified_params = applicant_params.merge(name: "*#{applicant_params[:name]}")
+    else
+      modified_params = applicant_params
+    end
+
+    @applicant = Applicant.new(modified_params)
 
     respond_to do |format|
       if @applicant.save

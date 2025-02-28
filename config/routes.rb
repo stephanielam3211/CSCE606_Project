@@ -1,7 +1,15 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  get "recommendations/new"
   resources :applicants
+  resources :courses, only: [ :index ] do
+    collection do
+      post :import
+      delete :clear
+    end
+  end
+
   get "sessions/new"
   get "sessions/create"
   get "sessions/destroy"
@@ -30,4 +38,9 @@ resources :assignments, only: [:index] do
   get "login", to: "sessions#login" # login form
   post "login", to: "sessions#create" # login
   get "/logout", to: "sessions#destroy", as: "logout" # logout
+  # Recommendation system
+  get "recommendations/new", to: "recommendations#new", as: "recommendation_view"
+  post "recommendations", to: "recommendations#create"
+  # blacklist
+  resources :blacklists, only: [ :index, :create, :destroy ]
 end
