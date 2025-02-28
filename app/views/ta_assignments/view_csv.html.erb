@@ -8,6 +8,9 @@
 
   <% if @csv_content.present? %>
     <h2>Showing: <%= @selected_csv %></h2>
+    <p>
+      <%= link_to "Download CSV", download_csv_ta_assignments_path(file: @selected_csv), class: "button", data: { turbo: false } %>
+    </p>
     <%= form_with url: view_csv_path, method: :get, local: true do %>
       <input type="hidden" name="file" value="<%= @selected_csv %>">
       <label for="per_page">Rows per page:</label>

@@ -25,9 +25,17 @@ class TaAssignmentsController < ApplicationController
       @csv_content = read_csv(File.join(csv_directory, @selected_csv))
     end
   end
+  def download_csv
+    file_name = params[:file]
+    file_path = Rails.root.join('app', 'Charizard', 'output', file_name)
+    if File.exist?(file_path)
+      send_file file_path, filename: file_name, type: 'text/csv', disposition: 'attachment'
+    else
+      redirect_to root_path, alert: "File not found."
+    end
+  end
 
   private
-
   def save_uploaded_file(file)
     path = Rails.root.join('tmp', file.original_filename)
     File.open(path, 'wb') { |f| f.write(file.read) }
