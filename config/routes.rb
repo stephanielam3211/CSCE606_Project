@@ -41,4 +41,6 @@ Rails.application.routes.draw do
   post "recommendations", to: "recommendations#create"
   # blacklist
   resources :blacklists, only: [:index, :create, :destroy]
+  #export
+  get 'export_courses', to: 'courses#export', as: :export_courses
 end

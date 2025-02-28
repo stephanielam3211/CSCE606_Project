@@ -22,6 +22,8 @@
   </div>
 <% end %>
 
+<%= link_to "Export CSV", export_courses_path(format: :csv), class: "action-button" %>
+
 <div style="max-height: 600px; overflow-y: auto;">
 <table>
   <thead style="position: sticky; top: 0; background-color: white; z-index: 100;">
