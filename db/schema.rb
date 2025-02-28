@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_24_234044) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_25_000658) do
   create_table "applicants", force: :cascade do |t|
     t.string "email"
     t.string "name"
@@ -38,14 +38,17 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_24_234044) do
     t.time "timestamp"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.float "gpa"
   end
 
   create_table "assignments", force: :cascade do |t|
     t.integer "applicant_id", null: false
     t.string "course_id"
     t.integer "weighting_score"
-    
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["applicant_id"], name: "index_assignments_on_applicant_id"
+  end
+
   create_table "blacklists", force: :cascade do |t|
     t.string "student_name"
     t.string "student_email"
@@ -75,7 +78,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_24_234044) do
     t.text "additionalfeedback"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["applicant_id"], name: "index_assignments_on_applicant_id"
   end
 
   add_foreign_key "assignments", "applicants"
