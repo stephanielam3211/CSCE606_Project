@@ -47,6 +47,13 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_25_000658) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "blacklists", force: :cascade do |t|
+    t.string "student_name"
+    t.string "student_email"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "courses", force: :cascade do |t|
     t.string "course_name"
     t.string "course_number"
