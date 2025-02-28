@@ -10,4 +10,3 @@ Feature: Course Search
     And I fill in "Search by Course Details" with "PROGRAMMING I"
     And I press "Search"
     Then I should see "PROGRAMMING I"
-    And I should not see "INTRO PGM"

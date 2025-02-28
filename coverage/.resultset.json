@@ -399,6 +399,8 @@
           null,
           1,
           1,
+          null,
+          1,
           null
         ]
       },
@@ -483,6 +485,8 @@
       },
       "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/spec/tests/course_spec.rb": {
         "lines": [
+          null,
+          null,
           1,
           null,
           1,
@@ -522,6 +526,7 @@
           1,
           1,
           1,
+          null,
           null
         ]
       },
@@ -723,6 +728,6 @@
         ]
       }
     },
-    "timestamp": 1740445493
+    "timestamp": 1740765499
   }
 }
