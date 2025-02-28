@@ -1,0 +1,14 @@
+<h1>Welcome to Assignments!</h1>
+<p>Upload your CSV files here.</p>
+
+<h2>Import CSV</h2>
+<%= form_with url: import_csv_assignments_path, local: true, multipart: true do |f| %>
+  <%= f.file_field :file %>
+  <%= f.submit "Upload CSV" %>
+<% end %>
+
+<hr>
+
+<h2>Export CSV</h2>
+<%= link_to "Download Assignments CSV", export_csv_assignments_path, class: "btn btn-primary" %>
+

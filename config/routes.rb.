@@ -1,0 +1,10 @@
+Rails.application.routes.draw do
+
+
+    resources :assignments, only: [:index] do
+     collection  do
+      post :import_csv
+      get :export_csv
+     end
+   end
+end
