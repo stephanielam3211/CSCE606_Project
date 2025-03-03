@@ -25,7 +25,7 @@ class TaAssignmentsController < ApplicationController
   end
 
   def view_csv
-    csv_directory = Rails.root.join('app', 'Charizard', 'output')
+    csv_directory = Rails.root.join('app', 'Charizard', 'util','public','output' )
     @csv_files = Dir.entries(csv_directory).select { |f| f.end_with?('.csv') }
     
     if params[:file].present? && @csv_files.include?(params[:file])
