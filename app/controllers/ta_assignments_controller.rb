@@ -1,12 +1,16 @@
 class TaAssignmentsController < ApplicationController
   require 'csv'
   def process_csvs
-    if params[:file1].present? && params[:file2].present? && params[:file3].present?
+    if params[:file1].present? && params[:file3].present?
       file1_path = save_uploaded_file(params[:file1])
-      file2_path = save_uploaded_file(params[:file2])
+  
       file3_path = save_uploaded_file(params[:file3])
 
-      system("python3 app/Charizard/main.py #{file1_path} #{file2_path} #{file3_path}")
+      needs_csv = generate_csv(Course.all)
+      needs_csv_path = Rails.root.join('tmp', 'TA_Needs.csv')
+      File.write(needs_csv_path, needs_csv)
+
+      system("python3 app/Charizard/main.py #{file1_path} #{needs_csv_path} #{file3_path}")
 
       flash[:notice] = "CSV processing complete"
       redirect_to view_csv_path
@@ -48,5 +52,24 @@ class TaAssignmentsController < ApplicationController
       csv_data << row.to_h
     end
     csv_data
+  end
+
+  def generate_csv(records)
+    CSV.generate(headers: true) do |csv|
+    csv << ["Course_Name", "Course_Number", "Section", "Instructor", "Faculty_Email", "TA", "Senior_Grader", "Grader", "Professor_Pre_Reqs"]
+    records.each do |record|
+      csv << [
+        record.course_name, 
+        record.course_number, 
+        record.section, 
+        record.instructor, 
+        record.faculty_email, 
+        record.ta.to_f, 
+        record.senior_grader.to_f, 
+        record.grader.to_f, 
+        record.pre_reqs
+      ]
+    end
+  end
   end
 end
