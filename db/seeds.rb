@@ -11,7 +11,7 @@
 #   end
 require 'csv'
 
-csv_file2 = Rails.root.join('documentation', 'TA_data.csv')
+csv_file2 = Rails.root.join('db', 'seeds', 'TA_data.csv')
 
 CSV.foreach(csv_file2, headers: true, col_sep: ",") do |row|
   timestamp = DateTime.strptime(row['Timestamp'], "%m/%d/%Y %H:%M") rescue nil
