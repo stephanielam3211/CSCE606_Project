@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateTaBackups < ActiveRecord::Migration[7.2]
   def change
     create_table :ta_backups do |t|

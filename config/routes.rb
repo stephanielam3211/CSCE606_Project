@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  get 'all_records', to: 'records#index'
+  get "all_records", to: "records#index"
   get "ta_assignments/new"
   get "ta_assignments/create"
-  get 'download_csv', to: 'ta_assignments#download_csv', as: :download_csv_ta_assignments
+  get "download_csv", to: "ta_assignments#download_csv", as: :download_csv_ta_assignments
   get "recommendations/new"
   resources :applicants
   resources :courses, only: [ :index ] do
@@ -29,7 +29,7 @@ Rails.application.routes.draw do
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
 
-resources :assignments, only: [:index] do
+resources :assignments, only: [ :index ] do
     collection do
       post :import_csv   # POST /assignments/import_csv
       post :assign_ta
@@ -45,13 +45,13 @@ resources :assignments, only: [:index] do
   get "/logout", to: "sessions#destroy", as: "logout" # logout
 
   # TA assignment
-  post 'ta_assignments/process_csvs', to: 'ta_assignments#process_csvs', as: 'process_csvs'
-  get 'ta_assignments/view_csv', to: 'ta_assignments#view_csv', as: 'view_csv'
+  post "ta_assignments/process_csvs", to: "ta_assignments#process_csvs", as: "process_csvs"
+  get "ta_assignments/view_csv", to: "ta_assignments#view_csv", as: "view_csv"
   # Recommendation system
   get "recommendations/new", to: "recommendations#new", as: "recommendation_view"
   post "recommendations", to: "recommendations#create"
   # blacklist
   resources :blacklists, only: [ :index, :create, :destroy ]
-  #export
-  get 'export_courses', to: 'courses#export', as: :export_courses
+  # export
+  get "export_courses", to: "courses#export", as: :export_courses
 end

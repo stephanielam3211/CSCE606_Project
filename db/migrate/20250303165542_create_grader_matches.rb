@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateGraderMatches < ActiveRecord::Migration[7.2]
   def change
     create_table :grader_matches do |t|

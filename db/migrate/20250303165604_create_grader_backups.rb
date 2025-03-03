@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateGraderBackups < ActiveRecord::Migration[7.2]
   def change
     create_table :grader_backups do |t|

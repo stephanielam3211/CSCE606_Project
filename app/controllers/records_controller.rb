@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class RecordsController < ApplicationController
   def index
-    @table_name = params[:table] 
+    @table_name = params[:table]
     case @table_name
     when "grader_backups"
       @records = GraderBackup.all
@@ -17,8 +19,7 @@ class RecordsController < ApplicationController
     when "ta_matches"
       @records = TaMatch.all
     else
-      @records = [] 
+      @records = []
     end
   end
 end
-

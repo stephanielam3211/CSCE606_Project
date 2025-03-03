@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateTaMatches < ActiveRecord::Migration[7.2]
   def change
     create_table :ta_matches do |t|
