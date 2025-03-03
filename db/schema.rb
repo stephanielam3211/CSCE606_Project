@@ -46,6 +46,14 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_25_000658) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+  create_table "assignments", force: :cascade do |t|
+    t.integer "applicant_id", null: false
+    t.string "course_id"
+    t.integer "weighting_score"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["applicant_id"], name: "index_assignments_on_applicant_id"
+  end
 
   create_table "blacklists", force: :cascade do |t|
     t.string "student_name"
@@ -77,4 +85,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_25_000658) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  add_foreign_key "assignments", "applicants"
 end
