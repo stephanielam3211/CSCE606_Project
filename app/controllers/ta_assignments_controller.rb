@@ -1,16 +1,20 @@
 class TaAssignmentsController < ApplicationController
   require 'csv'
   def process_csvs
-    if params[:file1].present? && params[:file3].present?
-      file1_path = save_uploaded_file(params[:file1])
-  
-      file3_path = save_uploaded_file(params[:file3])
+    if params[:file3].present?
 
-      needs_csv = generate_csv(Course.all)
+
+      apps_csv = generate_csv_apps(Applicant.all)
+      apps_csv_path = Rails.root.join('tmp', 'TA_Applicants.csv')
+      File.write(apps_csv_path, apps_csv)
+
+      needs_csv = generate_csv_needs(Course.all)
       needs_csv_path = Rails.root.join('tmp', 'TA_Needs.csv')
       File.write(needs_csv_path, needs_csv)
 
-      system("python3 app/Charizard/main.py #{file1_path} #{needs_csv_path} #{file3_path}")
+      file3_path = save_uploaded_file(params[:file3])
+
+      system("python3 app/Charizard/main.py #{apps_csv_path} #{needs_csv_path} #{file3_path}")
 
       flash[:notice] = "CSV processing complete"
       redirect_to view_csv_path
@@ -54,7 +58,7 @@ class TaAssignmentsController < ApplicationController
     csv_data
   end
 
-  def generate_csv(records)
+  def generate_csv_needs(records)
     CSV.generate(headers: true) do |csv|
     csv << ["Course_Name", "Course_Number", "Section", "Instructor", "Faculty_Email", "TA", "Senior_Grader", "Grader", "Professor_Pre_Reqs"]
     records.each do |record|
@@ -68,6 +72,41 @@ class TaAssignmentsController < ApplicationController
         record.senior_grader.to_f, 
         record.grader.to_f, 
         record.pre_reqs
+      ]
+    end
+  end
+  end
+
+  def generate_csv_apps(records)
+    CSV.generate(headers: true) do |csv|
+    csv << ["Timestamp","Email Address","First and Last Name","UIN","Phone Number","How many hours do you plan to be enrolled in?","Degree Type?","1st Choice Course","2nd Choice Course","3rd Choice Course","4th Choice Course","5th Choice Course","6th Choice Course","7th Choice Course","8th Choice Course","9th Choice Course","10th Choice Course","GPA,Country of Citizenship?","English language certification level?","Which courses have you taken at TAMU?","Which courses have you taken at another university?","Which courses have you TAd for?","Who is your advisor (if applicable)?","What position are you applying for?"]
+    records.each do |record|
+      csv << [
+        record.timestamp, 
+        record.email, 
+        record.name, 
+        record.uin.to_i, 
+        record.number, 
+        record.hours.to_i, 
+        record.degree, 
+        record.choice_1.to_i, 
+        record.choice_2.to_i,
+        record.choice_3.to_i, 
+        record.choice_4.to_i, 
+        record.choice_5.to_i, 
+        record.choice_6.to_i, 
+        record.choice_7.to_i, 
+        record.choice_8.to_i, 
+        record.choice_9.to_i, 
+        record.choice_10.to_i, 
+        record.gpa.to_f,
+        record.citizenship, 
+        record.cert.to_i, 
+        record.prev_course, 
+        record.prev_uni, 
+        record.prev_ta, 
+        record.advisor, 
+        record.positions
       ]
     end
   end
