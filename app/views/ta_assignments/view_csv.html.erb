@@ -1,4 +1,5 @@
-<h1>Processed CSV Files</h1>
+
+<h1><%= link_to "Processed CSV Files", ta_assignments_new_path, class: "action-button" %></h1>
 
 <% if @csv_files.present? %>
   <%= form_with url: view_csv_path, method: :get, local: true do %>
