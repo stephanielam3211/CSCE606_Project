@@ -32,6 +32,7 @@ resources :assignments, only: [:index] do
     collection do
       post :import_csv   # POST /assignments/import_csv
       post :assign_ta
+      get :assign_ta
     end
   end
 
