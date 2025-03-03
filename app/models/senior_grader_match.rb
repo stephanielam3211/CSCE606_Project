@@ -1,0 +1,2 @@
+class SeniorGraderMatch < ApplicationRecord
+end

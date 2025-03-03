@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  get 'all_records', to: 'records#index'
   get "ta_assignments/new"
   get "ta_assignments/create"
   get 'download_csv', to: 'ta_assignments#download_csv', as: :download_csv_ta_assignments

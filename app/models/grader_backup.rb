@@ -1,0 +1,2 @@
+class  GraderBackup < ApplicationRecord
+end

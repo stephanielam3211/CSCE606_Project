@@ -1,0 +1,2 @@
+class SeniorGraderBackup < ApplicationRecord
+end

@@ -1,0 +1,2 @@
+class TaMatch < ApplicationRecord
+end

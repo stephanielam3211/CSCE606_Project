@@ -1,0 +1,2 @@
+class TaBackup < ApplicationRecord
+end

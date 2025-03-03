@@ -1,0 +1,2 @@
+class GraderMatch < ApplicationRecord
+end
