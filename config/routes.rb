@@ -44,4 +44,6 @@ Rails.application.routes.draw do
   resources :blacklists, only: [ :index, :create, :destroy ]
   #export
   get 'export_courses', to: 'courses#export', as: :export_courses
+  #withdrawer
+  resources :withdrawal_requests, only: [:new, :create, :index]
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_25_000658) do
+ActiveRecord::Schema[7.2].define(version: 2025_03_02_012403) do
   create_table "applicants", force: :cascade do |t|
     t.string "email"
     t.string "name"
@@ -47,13 +47,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_25_000658) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "blacklists", force: :cascade do |t|
-    t.string "student_name"
-    t.string "student_email"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "courses", force: :cascade do |t|
     t.string "course_name"
     t.string "course_number"
@@ -74,6 +67,17 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_25_000658) do
     t.string "selectionsTA"
     t.text "feedback"
     t.text "additionalfeedback"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "withdrawal_requests", force: :cascade do |t|
+    t.string "course_number"
+    t.string "section_id"
+    t.string "instructor_name"
+    t.string "instructor_email"
+    t.string "student_name"
+    t.string "student_email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

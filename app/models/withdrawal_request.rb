@@ -1,0 +1,2 @@
+class WithdrawalRequest < ApplicationRecord
+end

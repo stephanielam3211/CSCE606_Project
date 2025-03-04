@@ -1,0 +1,26 @@
+<h2>Withdrawal Requests</h2>
+
+<table border="1">
+  <thead>
+    <tr>
+      <th>Course Number</th>
+      <th>Section ID</th>
+      <th>Instructor Name</th>
+      <th>Instructor Email</th>
+      <th>Student Name</th>
+      <th>Student Email</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @withdrawal_requests.each do |request| %>
+      <tr>
+        <td><%= request.course_number %></td>
+        <td><%= request.section_id %></td>
+        <td><%= request.instructor_name %></td>
+        <td><%= request.instructor_email %></td>
+        <td><%= request.student_name %></td>
+        <td><%= request.student_email %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
