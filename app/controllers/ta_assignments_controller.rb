@@ -4,8 +4,7 @@ class TaAssignmentsController < ApplicationController
   require "csv"
   def process_csvs
     if params[:file3].present?
-
-
+      
       apps_csv = generate_csv_apps(Applicant.all)
       apps_csv_path = Rails.root.join("tmp", "TA_Applicants.csv")
       File.write(apps_csv_path, apps_csv)
