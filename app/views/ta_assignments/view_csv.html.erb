@@ -1,6 +1,6 @@
-
+<div class="aux-container">
 <h1><%= link_to "Processed CSV Files", ta_assignments_new_path, class: "action-button" %></h1>
-<h1>Select a Table to View</h1>
+<h2>Select a Table to View</h2>
 
 <form method="get" action="<%= all_records_path %>">
   <label for="table">Choose a table:</label>
@@ -72,3 +72,4 @@
 <% else %>
   <p>No CSV files found. Please process CSVs first.</p>
 <% end %>
+</div>

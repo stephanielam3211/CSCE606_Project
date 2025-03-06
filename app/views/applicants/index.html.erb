@@ -1,3 +1,4 @@
+<div class="aux-container">
 <p style="color: green"><%= notice %></p>
 
 <% content_for :title, "Applicants" %>
@@ -5,13 +6,27 @@
 
 <h1><%= link_to "Applicants", root_path, class: "action-button" %></h1>
 
+<div class="search search--slim">
+  <%= search_form_for @q, url: applicants_path, method: :get do |f| %>
+    <div class="search-container">
+      <%= f.label :name_or_email_or_uin_cont, "Search by Name, Email, or UIN" %>
+      <%= f.text_field :name_or_email_or_uin_cont, placeholder: "Enter Name, Email, or UIN" %>
+      <%= f.submit "Search", class: "btn search-btn" %>
+      <%= link_to "Clear", applicants_path, class: "btn search-btn" %>
+    </div>
+  <% end %>
+</div>
+<div style="max-height: 800px; overflow-y: auto;">
 <table border="1">
-  <thead>
+  <thead style="position: sticky; top: 0; background-color: white; z-index: 100;">
     <tr>
-      <th>Name</th>
-      <th>Email</th>
-      <th>Degree</th>
-      <th>Actions</th>
+      <th><%= link_to "Name", applicants_path(sort: "name", direction: toggle_direction) %></th>
+      <th><%= link_to "Email", applicants_path(sort: "email", direction: toggle_direction) %></th>
+      <th><%= link_to "Degree", applicants_path(sort: "degree", direction: toggle_direction) %></th>
+      <th><%= link_to "Applied Positions", applicants_path(sort: "positions", direction: toggle_direction) %></th>
+      <th><%= link_to "Previous Courses", applicants_path(sort: "prev_course", direction: toggle_direction) %></th>
+      <th><%= link_to "Previous TA Postitions", applicants_path(sort: "prev_ta", direction: toggle_direction) %></th>
+      <th>More</th>
     </tr>
   </thead>
   <tbody>
@@ -22,11 +37,29 @@
         </td>
         <td><%= applicant.email %></td>
         <td><%= applicant.degree %></td>
+        <td><%= applicant.positions %></td>
+        <td><%= applicant.prev_course %></td>
+        <td><%= applicant.prev_ta %></td>
         <td><%= link_to "Show this applicant",applicant_path(applicant)%></td>
       </tr>
     <% end %>
   </tbody>
 </table>
+</div>
 
 <%= link_to "Back to Main Page", root_path, class: "action-button" %>
 
+</div>
+
+<style>
+  .search-container {
+    display: flex;
+    align-items: center;
+
+  }
+
+  .search-container input[type="text"] {
+  }
+  .search-btn { 
+  }
+</style>

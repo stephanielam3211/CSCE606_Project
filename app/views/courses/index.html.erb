@@ -1,30 +1,27 @@
-
+<div class="aux-container">
 <h1><%= link_to "All Courses", root_path, class: "action-button" %></h1>
 <%= form_with(url: import_courses_path, method: :post, local: true, enctype: "multipart/form-data") do |form| %>
-  <div>
-    <%= form.label :csv_file, "Choose CSV file to import" %>
-    <%= form.file_field :csv_file %>
-  </div>
-  <div>
+  <div class="form-inline">
+    <%= form.label :csv_file, "Choose CSV file to import", class: "form-label" %>
+    <%= form.file_field :csv_file, class: "file-input" %>
     <%= form.submit "Import CSV", class: "action-button" %>
+    <%= button_to "Clear All Courses", clear_courses_path, method: :delete, data: { turbo: false }, onclick: "return confirmClear();" %>
   </div>
 <% end %>
 
-<%= button_to "Clear All Courses", clear_courses_path, method: :delete, data: { turbo: false }, onclick: "return confirmClear();" %>
-<%= search_form_for @q, url: courses_path, method: :get do |f| %>
-  <div>
-   <%= f.label :course_name_or_course_number_or_section_or_instructor_cont, "Search by Course Details" %>
-   <%= f.text_field :course_name_or_course_number_or_section_or_instructor_cont, placeholder: "Enter Course Name, Number, Section, or Instructor" %>
+<div class="search search--slim">
+  <%= search_form_for @q, url: courses_path, method: :get do |f| %>
+    <div class="search-container">
+      <%= f.text_field :course_name_or_course_number_or_section_or_instructor_cont, placeholder: "Enter Course Name, Number, Section, or Instructor" %>
+      <%= f.submit "Search", class: "btn search-btn" %>
+      <%= link_to "Clear", courses_path, class: "btn search-btn" %>
+    </div>
+  <% end %>
+</div>
 
+<!-- <%= link_to "Export CSV", export_courses_path(format: :csv), class: "action-button" %> -->
 
-    <%= f.submit "Search" %>
-    <%= link_to "Clear", courses_path, class: "btn" %>
-  </div>
-<% end %>
-
-<%= link_to "Export CSV", export_courses_path(format: :csv), class: "action-button" %>
-
-<div style="max-height: 600px; overflow-y: auto;">
+<div style="max-height: 800px; overflow-y: auto;">
 <table>
   <thead style="position: sticky; top: 0; background-color: white; z-index: 100;">
     <tr>
@@ -56,3 +53,34 @@
   </tbody>
 </table>
 </div>
+</div>
+<style>
+.form-inline {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .form-label {
+    margin-right: 10px;
+  }
+
+  .file-input {
+    padding: 5px;
+  }
+
+  .action-button {
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  .search-container {
+    display: flex;
+    align-items: center;
+
+  }
+
+  .search-container input[type="text"] {
+  }
+  .search-btn { 
+  }
+</style>

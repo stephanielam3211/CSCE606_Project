@@ -54,4 +54,5 @@ resources :assignments, only: [ :index ] do
   resources :blacklists, only: [ :index, :create, :destroy ]
   # export
   get "export_courses", to: "courses#export", as: :export_courses
+  get 'export_final_csv', to: 'ta_assignments#export_final_csv', as: 'export_final_csv'
 end

@@ -1,6 +1,6 @@
-<% content_for :title, "New applicant" %>
+<div class="aux-container">
 
-<h1>New applicant</h1>
+<h1><%= link_to "New Applicant", root_path, class: "action-button" %></h1>
 
 <%= render "form", applicant: @applicant %>
 
@@ -8,4 +8,5 @@
 
 <div>
   <%= link_to "Back to Main Page", root_path, class: "action-button" %>
+</div>
 </div>
