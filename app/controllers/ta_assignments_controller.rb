@@ -15,7 +15,8 @@ class TaAssignmentsController < ApplicationController
 
       file3_path = save_uploaded_file(params[:file3])
 
-      system("python3 app/Charizard/main.py '#{apps_csv_path}' '#{needs_csv_path}' '#{file3_path}'")
+      python_path = `which python3`.strip  # Find Python path dynamically
+      system("#{python_path} app/Charizard/main.py '#{apps_csv_path}' '#{needs_csv_path}' '#{file3_path}'")
 
       flash[:notice] = "CSV processing complete"
       redirect_to view_csv_path
