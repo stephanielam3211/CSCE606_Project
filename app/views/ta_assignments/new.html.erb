@@ -1,51 +1,13 @@
-<div class="aux-container">
-<h1><%= link_to "Upload CSV Files", root_path %></h1>
+<h2>Upload CSV Files</h2>
+<%= link_to "View Assignments", view_csv_path %>
 
-<section class="section-wrap aux-bg-light aux-py-8">
-  <div class="collection aux-container">
-    <div class="collection__intro aux-flex aux-flex-col aux-items-center aux-mb-6">
-      <div class="slab-heading aux-bg-white aux-rounded aux-shadow-md aux-py-6 aux-px-8 aux-text-center aux-max-w-2xl">
-        <div class="heading-group">
-          <h2 class="aux-text-3xl aux-font-bold aux-text-primary">
-            <%= link_to "View Assignments", view_csv_path, class: "aux-link aux-text-primary" %>
-          </h2>
-        </div>
+<%= form_with url: process_csvs_path, method: :post, multipart: true do |form| %>
 
-        <span class="divider-hash gray-300 divider--mini aux-mt-2 aux-block"></span>
 
-        <p class="slab-heading__description aux-text-gray-600 aux-text-lg aux-mt-3">
-          Already Processed TA Assignments
-        </p>
-        <%= link_to 'Export Final CSV', export_final_csv_path, class: 'btn btn--primary' %>
-      </div>
-    </div>
+  <label for="file3">Upload Professor Preference File:</label>
+  <%= form.file_field :file3 %>
 
-   <div class="collection__feature-container aux-flex aux-justify-center">
-      <div class="collection__feature aux-card aux-shadow-lg aux-p-6 aux-rounded-lg aux-bg-white aux-w-full aux-max-w-lg aux-text-center aux-flex aux-flex-col aux-items-center">
-        <div class="factoid-collection">
-          <div class="factoid-collection__wrapper">
-            <div class="factoid">
-              <div class="factoid__heading aux-text-xl aux-font-semibold aux-text-primary aux-mb-4">
-                <span class="heading">Upload TA Preferences</span>
-              </div>
-              <div class="aux-flex aux-flex-col aux-items-center aux-w-full">
-                <%= form_with url: process_csvs_path, method: :post, multipart: true, class: "aux-form aux-space-y-4 aux-w-full aux-max-w-md" do |form| %>
-                  <div class="aux-form-group aux-text-left aux-w-full">
-                    <%= form.file_field :file3, class: "aux-form-control aux-mt-2 aux-w-full" %>
-                  </div>
-                  <div class="aux-mt-4 aux-flex aux-justify-center aux-w-full">
-                    <%= form.submit "Process Files", class: "aux-button aux-button-primary aux-text-lg aux-font-bold aux-px-6 aux-py-3 aux-w-1/2", style: "margin-left: 18%;" %>
-                  </div>
-                <% end %>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+  <%= form.submit "Process Files" %>
+<% end %>
 
-  </div>
-</section>
 <%= link_to "Back to Home", root_path %>
-
-</div>
