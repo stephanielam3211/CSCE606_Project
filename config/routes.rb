@@ -57,5 +57,8 @@ resources :assignments, only: [ :index ] do
   # export
   get "export_courses", to: "courses#export", as: :export_courses
   post 'export_final_csv', to: 'ta_assignments#export_final_csv', as: 'export_final_csv'
+  #import
+  post 'import_csv', to: 'csv_imports#import', as: 'import_csv'
+
 
 end

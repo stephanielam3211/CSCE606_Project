@@ -2,6 +2,7 @@
 <h1><%= link_to "Processed CSV Files", ta_assignments_new_path, class: "action-button" %></h1>
 
 <%= button_to 'Delete All CSV Files and Models', delete_all_csvs_path, method: :delete, class: 'btn btn--danger', data: { confirm: 'Are you sure you want to delete all CSV files and models?' } %>
+<%= button_to "Import CSV Files", import_csv_path, method: :post, class: "btn btn-danger" %>
 
 <h2>Select a Table to View</h2>
 <form method="get" action="<%= all_records_path %>">
