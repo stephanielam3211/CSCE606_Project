@@ -46,6 +46,20 @@ class TaAssignmentsController < ApplicationController
     end
   end
 
+  def delete_all_csvs
+    Dir[Rails.root.join('app/Charizard/util/public/output/*.csv')].each do |file|
+      File.delete(file)
+    end
+    GraderBackup.delete_all
+    GraderMatch.delete_all
+    SeniorGraderBackup.delete_all
+    SeniorGraderMatch.delete_all
+    TaBackup.delete_all
+    TaMatch.delete_all
+
+    redirect_to view_csv_path, notice: 'All CSV files and models have been deleted.'
+  end
+
   def export_final_csv
     headers = ['Course Number', 'Section ID', 'Instructor Name', 'Instructor Email', 'Student Name', 'Student Email', 'Calculated Score']
     final_csv_path = Rails.root.join("app", "Charizard", "util", "public", "output", "Assignments.csv")
@@ -65,7 +79,7 @@ class TaAssignmentsController < ApplicationController
     end
 
     flash[:notice] = "Assignments.csv has been successfully created!"
-    redirect_to root_path  
+    redirect_to view_csv_path 
   end
   end
 

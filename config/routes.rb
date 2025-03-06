@@ -47,6 +47,8 @@ resources :assignments, only: [ :index ] do
   # TA assignment
   post "ta_assignments/process_csvs", to: "ta_assignments#process_csvs", as: "process_csvs"
   get "ta_assignments/view_csv", to: "ta_assignments#view_csv", as: "view_csv"
+  delete 'delete_all_csvs', to: 'ta_assignments#delete_all_csvs', as: 'delete_all_csvs'
+
   # Recommendation system
   get "recommendations/new", to: "recommendations#new", as: "recommendation_view"
   post "recommendations", to: "recommendations#create"
@@ -54,5 +56,6 @@ resources :assignments, only: [ :index ] do
   resources :blacklists, only: [ :index, :create, :destroy ]
   # export
   get "export_courses", to: "courses#export", as: :export_courses
-  get 'export_final_csv', to: 'ta_assignments#export_final_csv', as: 'export_final_csv'
+  post 'export_final_csv', to: 'ta_assignments#export_final_csv', as: 'export_final_csv'
+
 end
