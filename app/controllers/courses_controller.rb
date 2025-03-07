@@ -48,7 +48,7 @@ class CoursesController < ApplicationController
 
     def export
       @courses = Course.all
-  
+
       respond_to do |format|
         format.csv do
           send_data generate_csv(@courses), filename: "courses-#{Date.today}.csv"
@@ -59,10 +59,10 @@ class CoursesController < ApplicationController
 
     def generate_csv(courses)
       CSV.generate(headers: true) do |csv|
-        csv << ["Course Name", "Course Number", "Section", "Instructor", "Faculty Email", "TA", "Senior Grader", "Grader", "Pre-requisites"]
+        csv << [ "Course Name", "Course Number", "Section", "Instructor", "Faculty Email", "TA", "Senior Grader", "Grader", "Pre-requisites" ]
 
         courses.each do |course|
-          csv << [course.course_name, course.course_number, course.section, course.instructor, course.faculty_email, course.ta, course.senior_grader, course.grader, course.pre_reqs]
+          csv << [ course.course_name, course.course_number, course.section, course.instructor, course.faculty_email, course.ta, course.senior_grader, course.grader, course.pre_reqs ]
         end
       end
     end

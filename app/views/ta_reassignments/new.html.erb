@@ -1,0 +1,8 @@
+<h2>Upload CSV Files</h2>
+<%= link_to "View Assignments", review_csv_path %>
+
+<%= form_with url: reprocess_csvs_path, method: :post, multipart: true do |form| %>
+  <%= form.submit "Process Files" %>
+<% end %>
+
+<%= link_to "Back to Home", root_path %>

@@ -1,11 +1,8 @@
 <h2>Upload CSV Files</h2>
+<%= link_to "View Assignments", view_csv_path %>
 
 <%= form_with url: process_csvs_path, method: :post, multipart: true do |form| %>
-  <label for="file1">Upload TA Applicants File:</label>
-  <%= form.file_field :file1 %>
 
-  <label for="file2">Upload TA Need File:</label>
-  <%= form.file_field :file2 %>
 
   <label for="file3">Upload Professor Preference File:</label>
   <%= form.file_field :file3 %>

@@ -110,6 +110,8 @@
             <%= link_to "logout", logout_path, method: :delete, class: "logout-button" %>
         </div>
 
+        
+
         <div class="content">
             <div class="role-selector">
                 <button class="role-button" onclick="showButtons('student')">Student</button>
@@ -125,6 +127,7 @@
                 <%= link_to "Recomend Student to be a TA", recommendation_view_path, class: "action-button" %>
             </div>
             <div id="organizer-buttons" class="button-container hidden">
+                <%= link_to "Reassign TA", ta_reassignments_new_path, class: "action-button" %>
                 <%= link_to "Assign TA", ta_assignments_new_path, class: "action-button" %>
                 <%= link_to "View Applicants", applicants_path, class: "action-button" %>
                 <%= link_to "View Classes", courses_path, class: "action-button" %>

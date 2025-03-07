@@ -122,7 +122,6 @@ def compute_ta_matches(students_np, courses_np):
         header = 'Course Number,Section ID,Instructor Name,Instructor Email,Student Name,Student Email,Calculated Score\n'
         ta_matches.write(header)
         for student_idx, course_idx in zip(matched_rows, matched_cols):
-            print("✅ writing...")
             student = students_np[students_that_want_ta][student_idx]
             student.matched = True
             course = courses_np[courses_that_need_ta][course_idx]
@@ -231,52 +230,74 @@ def compute_backups(students: List[Student], courses: List[Course], config: Matc
 
 
 def export_backups(students_np: np.array, courses_np: np.array):
-    courses: List[Course] = [course for course in courses_np]
+    export_unassigned_applicants(students_np)
 
-    unmatched_ta_applicants = list(
-        filter(
-            lambda student: not student.matched and student.ta_applied,
-            students_np
-        )
+def ordinal(n):
+    """Returns the ordinal string of a number (1st, 2nd, 3rd, 4th, etc.)."""
+    if 10 <= n % 100 <= 20:
+        suffix = "th"
+    else:
+        suffix = {1: "st", 2: "nd", 3: "rd"}.get(n % 10, "th")
+    return f"{n}{suffix}"
+
+def export_unassigned_applicants(students_np: np.array):
+    unassigned_applicants = list(
+        filter(lambda student: not student.matched, students_np)
     )
 
-    unmatched_senior_grader_applicants = list(
-        filter(
-            lambda student: not student.matched and student.senior_grader_applied,
-            students_np
-        )
-    )
+    columns = [
+        "Timestamp",
+        "Email Address",
+        "First and Last Name",
+        "UIN",
+        "Phone Number",
+        "How many hours do you plan to be enrolled in?",
+        "Degree Type?",
+    ] + [f"{ordinal(i+1)} Choice Course" for i in range(10)] + [
+        "GPA",
+        "Country of Citizenship?",
+        "English language certification level?",
+        "Which courses have you taken at TAMU?",
+        "Which courses have you taken at another university?",
+        "Which courses have you TAd for?",
+        "Who is your advisor (if applicable)?",
+        "What position are you applying for?"
+    ]
 
-    unmatched_grader_applicants = list(
-        filter(
-            lambda student: not student.matched and student.grader_applied,
-            students_np
-        )
-    )
+    df_dict: Dict[str, List] = {col: [] for col in columns}
 
-    ta_backups = compute_backups(
-        unmatched_ta_applicants,
-        courses,
-        TA_MATCH_CONFIG
-    )
+    for student in unassigned_applicants:
+        df_dict["Timestamp"].append(student.timestamp)
+        df_dict["Email Address"].append(student.email)
+        df_dict["First and Last Name"].append(f"{student.first_name} {student.last_name}")
+        df_dict["UIN"].append(student.uin)
+        df_dict["Phone Number"].append(student.phone_number)
+        df_dict["How many hours do you plan to be enrolled in?"].append(student.hours_enrolled)
+        df_dict["Degree Type?"].append(student.degree_type.name if student.degree_type else "Unknown")
 
-    senior_grader_backups = compute_backups(
-        unmatched_senior_grader_applicants,
-        courses,
-        SENIOR_GRADER_MATCH_CONFIG
-    )
+        # Handling TA preferences (ensure at most 10 choices, pad with empty if less)
+        ta_choices = student.ranked_ta_preference[:10] + [""] * (10 - len(student.ranked_ta_preference))
+        for i in range(10):
+            df_dict[f"{ordinal(i+1)} Choice Course"].append(ta_choices[i])
 
-    grader_backups = compute_backups(
-        unmatched_grader_applicants,
-        courses,
-        GRADER_MATCH_CONFIG
-    )
+        df_dict["GPA"].append(student.gpa)
+        df_dict["Country of Citizenship?"].append(student.country_of_citizenship)
+        df_dict["English language certification level?"].append(student.english_certification_level)
+        df_dict["Which courses have you taken at TAMU?"].append(", ".join(student.courses_taken_tamu))
+        df_dict["Which courses have you taken at another university?"].append(", ".join(student.courses_taken_other_university))
+        df_dict["Which courses have you TAd for?"].append(", ".join(student.courses_ta))
+        df_dict["Who is your advisor (if applicable)?"].append(student.advisor)
 
-    # Ensure the output directory exists!
+        # Setting applied position based on application fields
+        positions = []
+        if student.ta_applied:
+            positions.append("TA")
+        if student.senior_grader_applied:
+            positions.append("Senior Grader")
+        if student.grader_applied:
+            positions.append("Grader")
+        df_dict["What position are you applying for?"].append(", ".join(positions))
+
+    unassigned_df: pd.DataFrame = pd.DataFrame(df_dict)
     Path(Config.OUTPUT_DIR).mkdir(parents=True, exist_ok=True)
-
-    # Output the files :D
-    ta_backups.to_csv(f"{Config.OUTPUT_DIR}/TA_Backups.csv", index=False)
-    senior_grader_backups.to_csv(f"{Config.OUTPUT_DIR}/Senior_Grader_Backups.csv", index=False)
-    grader_backups.to_csv(f"{Config.OUTPUT_DIR}/Grader_Backups.csv", index=False)
-
+    unassigned_df.to_csv(f"{Config.OUTPUT_DIR}/Unassigned_Applicants.csv", index=False)

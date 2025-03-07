@@ -1,0 +1,33 @@
+<h1><%= link_to "Assignments", view_csv_path, class: "action-button" %></h1>
+<!-- Display selected table data -->
+<% if @table_name.present? %>
+  <h2>Showing: <%= @table_name.titleize %></h2>
+  <table border="1">
+    <thead>
+      <tr>
+        <% if @records.any? %>
+          <th>Course Number</th>
+          <th>Section</th>
+          <th>Instructor</th>
+          <th>Instructor Email</th>
+          <th>Student</th>
+          <th>Student Email</th>
+        <% else %>
+          <th>No records found</th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody>
+      <% @records.each do |record| %>
+        <tr> 
+          <td><%= record.course_number %></td>
+          <td><%= record.section %></td>
+          <td><%= record.ins_name %></td>
+          <td><%= record.ins_email %></td>
+          <td><%= record.stu_name %></td>
+          <td><%= record.stu_email %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
