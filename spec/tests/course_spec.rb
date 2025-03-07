@@ -9,7 +9,7 @@ RSpec.feature "Course Search", type: :feature do
       visit courses_path
       expect(Course.count).to be > 0
 
-      fill_in "Search by Course Details", with: "CSCE 606"
+      fill_in "Enter Course Name, Number, Section, or Instructor", with: "CSCE 606"
       click_button "Search"
       expect(page).to have_css("td", text: "CSCE 606")
     end
@@ -18,7 +18,7 @@ RSpec.feature "Course Search", type: :feature do
       visit courses_path
       expect(Course.count).to be > 0
 
-      fill_in "Search by Course Details", with: "606"
+      fill_in "Enter Course Name, Number, Section, or Instructor", with: "606"
       click_button "Search"
       expect(page).to have_css("td", text: "606")
     end
@@ -27,7 +27,7 @@ RSpec.feature "Course Search", type: :feature do
       visit courses_path
       expect(Course.count).to be > 0
 
-      fill_in "Search by Course Details", with: "500"
+      fill_in "Enter Course Name, Number, Section, or Instructor", with: "500"
       click_button "Search"
       expect(page).to have_css("td", text: "500")
     end
@@ -36,7 +36,7 @@ RSpec.feature "Course Search", type: :feature do
       visit courses_path
       expect(Course.count).to be > 0
 
-      fill_in "Search by Course Details", with: "Dr.richey"
+      fill_in "Enter Course Name, Number, Section, or Instructor", with: "Dr.richey"
       click_button "Search"
       expect(page).to have_css("td", text: "Dr.richey")
     end
