@@ -1,9 +1,10 @@
+<div class="aux-container">
 <h2>Assign TA</h2>
 
 <%= form_with url: assign_ta_assignments_path, method: :post,  local: true, multipart: true do |f| %>
   <%= f.file_field :file %>
   <%= f.submit "Assign TA" %>
 <% end %>
-
+</div>
 
 

@@ -1,4 +1,5 @@
-<h2>Blacklisted Students</h2>
+<div class="aux-container">
+<h1><%= link_to "BlackListed Students", root_path, class: "action-button"%></h1>
 
 <%= form_with model: Blacklist.new, url: blacklists_path, method: :post do |f| %>
     <label>Name:</label>
@@ -32,3 +33,4 @@
 </table>
 
 <%= link_to "Return to Home Page", root_path, class: "action-button", style: "display: block; margin-top: 20px; text-align: center;" %>
+</div>

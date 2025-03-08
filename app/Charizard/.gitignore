@@ -8,5 +8,4 @@ env/
 **/._.DS_Store
 *.pyc
 *.pyo
-TA_Matches.csv
 *.numbers

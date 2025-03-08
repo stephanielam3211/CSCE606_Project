@@ -39,6 +39,7 @@ class CoursesController < ApplicationController
     end
     def clear
         Course.delete_all
+      
         if request
             redirect_to courses_path, notice: "All courses have been deleted."
         else

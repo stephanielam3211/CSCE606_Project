@@ -4,8 +4,7 @@ class TaAssignmentsController < ApplicationController
   require "csv"
   def process_csvs
     if params[:file3].present?
-
-
+      
       apps_csv = generate_csv_apps(Applicant.all)
       apps_csv_path = Rails.root.join("tmp", "TA_Applicants.csv")
       File.write(apps_csv_path, apps_csv)
@@ -16,7 +15,8 @@ class TaAssignmentsController < ApplicationController
 
       file3_path = save_uploaded_file(params[:file3])
 
-      system("python3 app/Charizard/main.py '#{apps_csv_path}' '#{needs_csv_path}' '#{file3_path}'")
+      python_path = `which python3`.strip  # Find Python path dynamically
+      system("#{python_path} app/Charizard/main.py '#{apps_csv_path}' '#{needs_csv_path}' '#{file3_path}'")
 
       flash[:notice] = "CSV processing complete"
       redirect_to view_csv_path
@@ -35,14 +35,52 @@ class TaAssignmentsController < ApplicationController
       @csv_content = read_csv(File.join(csv_directory, @selected_csv))
     end
   end
+
   def download_csv
     file_name = params[:file]
-    file_path = Rails.root.join("app", "Charizard", "output", file_name)
+    file_path = Rails.root.join("app", "Charizard", "util", "public", "output", file_name)
     if File.exist?(file_path)
       send_file file_path, filename: file_name, type: "text/csv", disposition: "attachment"
     else
       redirect_to root_path, alert: "File not found."
     end
+  end
+
+  def delete_all_csvs
+    Dir[Rails.root.join('app/Charizard/util/public/output/*.csv')].each do |file|
+      File.delete(file)
+    end
+    GraderBackup.delete_all
+    GraderMatch.delete_all
+    SeniorGraderBackup.delete_all
+    SeniorGraderMatch.delete_all
+    TaBackup.delete_all
+    TaMatch.delete_all
+
+    redirect_to view_csv_path, notice: 'All CSV files and models have been deleted.'
+  end
+
+  def export_final_csv
+    headers = ['Course Number', 'Section ID', 'Instructor Name', 'Instructor Email', 'Student Name', 'Student Email', 'Calculated Score']
+    final_csv_path = Rails.root.join("app", "Charizard", "util", "public", "output", "Assignments.csv")
+  
+    CSV.open(final_csv_path, 'w') do |csv|
+      csv << headers
+      ['TA_Matches.csv', 'Grader_Matches.csv', 'Senior_Grader_Matches.csv'].each do |file_name|
+        file_path = Rails.root.join("app", "Charizard", "util", "public", "output", file_name)
+        if File.exist?(file_path)
+          CSV.foreach(file_path, headers: true) do |row|
+            csv << row.values_at(*headers)
+          end
+        else
+          Rails.logger.error "File not found: #{file_name}"
+        end
+      end
+    end
+
+    flash[:notice] = "Assignments.csv has been successfully created!"
+    redirect_to view_csv_path 
+  end
   end
 
   private
@@ -112,5 +150,5 @@ class TaAssignmentsController < ApplicationController
       ]
     end
   end
-  end
 end
+
