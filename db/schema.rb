@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_03_03_165726) do
+ActiveRecord::Schema[7.2].define(version: 2025_03_07_084422) do
   create_table "applicants", force: :cascade do |t|
     t.string "email"
     t.string "name"
@@ -39,6 +39,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_03_165726) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.float "gpa"
+    t.integer "confirm", default: 0, null: false
   end
 
   create_table "assignments", force: :cascade do |t|

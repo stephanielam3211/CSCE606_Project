@@ -19,6 +19,7 @@ class TaAssignmentsController < ApplicationController
       system("#{python_path} app/Charizard/main.py '#{apps_csv_path}' '#{needs_csv_path}' '#{file3_path}'")
 
       flash[:notice] = "CSV processing complete"
+      system("rake import:csv")
       redirect_to view_csv_path
     else
       flash[:alert] = "Please upload all 3 CSV files."

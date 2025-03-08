@@ -47,6 +47,8 @@ resources :assignments, only: [ :index ] do
   # TA assignment
   post "ta_assignments/process_csvs", to: "ta_assignments#process_csvs", as: "process_csvs"
   get "ta_assignments/view_csv", to: "ta_assignments#view_csv", as: "view_csv"
+  post 'import_csv', to: 'csv_imports#import', as: 'import_csv'
+
 
   # TA reassignment
   post "ta_reassignments/process_csvs", to: "ta_reassignments#process_csvs", as: "reprocess_csvs"
