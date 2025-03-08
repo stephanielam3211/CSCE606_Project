@@ -7,6 +7,6 @@ Feature: Course Search
     Given the following courses exist:
       | Course Name | Course Number | Section | Instructor |
     When I visit the courses page
-    And I fill in "Search by Course Details" with "PROGRAMMING I"
+    And I fill in "Enter Course Name, Number, Section, or Instructor" with "PROGRAMMING I"
     And I press "Search"
     Then I should see "PROGRAMMING I"
