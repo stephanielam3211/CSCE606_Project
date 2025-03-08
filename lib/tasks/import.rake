@@ -7,10 +7,7 @@ namespace :import do
 
     csv_mappings = {
       "TA_Matches.csv" => TaMatch,
-      "TA_Backups.csv" => TaBackup,
       "Grader_Matches.csv" => GraderMatch,
-      "Grader_Backups.csv" => GraderBackup,
-      "Senior_Grader_Backups.csv" => SeniorGraderBackup,
       "Senior_Grader_Matches.csv" => SeniorGraderMatch
     }
 
@@ -21,6 +18,7 @@ namespace :import do
       "Instructor Email" => "ins_email",
       "Student Name" => "stu_name",
       "Student Email" => "stu_email",
+      "UIN"=> "uin",
       "Calculated Score" => "score"
     }
 

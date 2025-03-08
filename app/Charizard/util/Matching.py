@@ -119,13 +119,13 @@ def compute_ta_matches(students_np, courses_np):
         ta_weights_matrix = TA_Scoring.compute_ta_weight_matrix(students_np[students_that_want_ta], courses_np[courses_that_need_ta])
 
         matched_rows, matched_cols = scipy.optimize.linear_sum_assignment(ta_weights_matrix, maximize=True)
-        header = 'Course Number,Section ID,Instructor Name,Instructor Email,Student Name,Student Email,Calculated Score\n'
+        header = 'Course Number,Section ID,Instructor Name,Instructor Email,Student Name,Student Email,UIN,Calculated Score\n'
         ta_matches.write(header)
         for student_idx, course_idx in zip(matched_rows, matched_cols):
             student = students_np[students_that_want_ta][student_idx]
             student.matched = True
             course = courses_np[courses_that_need_ta][course_idx]
-            row = course.course_numbers[0] + ',' + course.section_ids[0] + ',' + course.instructor + ',' + course.faculty_email + ',' + (student.first_name + ' ' + student.last_name) + ',' + student.email + ',' + str(ta_weights_matrix[student_idx][course_idx]) + '\n'
+            row = course.course_numbers[0] + ',' + course.section_ids[0] + ',' + course.instructor + ',' + course.faculty_email + ',' + (student.first_name + ' ' + student.last_name) + ',' + student.email + ',' + student.uin + ',' + str(ta_weights_matrix[student_idx][course_idx]) + '\n'
             ta_matches.write(row)
 
         print('total cost for TAs: ', np.array(ta_weights_matrix)[matched_rows, matched_cols].sum())
@@ -148,14 +148,14 @@ def compute_senior_grader_matches(students_np, courses_np):
         senior_grader_weights_matrix = SeniorGrader_Scoring.compute_senior_grader_weight_matrix(students_np[students_mask], courses_with_duplicated_courses_np)
 
         matched_rows, matched_cols = scipy.optimize.linear_sum_assignment(senior_grader_weights_matrix, maximize=True)
-        header = 'Course Number,Section ID,Instructor Name,Instructor Email,Student Name,Student Email,Calculated Score\n'
+        header = 'Course Number,Section ID,Instructor Name,Instructor Email,Student Name,Student Email,UIN,Calculated Score\n'
         senior_grader_matches.write(header)
         for student_idx, course_idx in zip(matched_rows, matched_cols):
             student = students_np[students_mask][student_idx]
             assert not student.matched
             student.matched = True
             course = courses_with_duplicated_courses_np[course_idx]
-            row = course.course_numbers[0] + ',' + course.section_ids[0] + ',' + course.instructor + ',' + course.faculty_email + ',' + (student.first_name + ' ' + student.last_name) + ',' + student.email + ',' + str(senior_grader_weights_matrix[student_idx][course_idx]) + '\n'
+            row = course.course_numbers[0] + ',' + course.section_ids[0] + ',' + course.instructor + ',' + course.faculty_email + ',' + (student.first_name + ' ' + student.last_name) + ',' + student.email+ ',' + student.uin + ',' + str(senior_grader_weights_matrix[student_idx][course_idx]) + '\n'
             senior_grader_matches.write(row)
 
         print('total cost for Senior Graders: ', np.array(senior_grader_weights_matrix)[matched_rows, matched_cols].sum())
@@ -178,14 +178,14 @@ def compute_grader_matches(students_np, courses_np):
         grader_weights_matrix = Grader_Scoring.compute_grader_weight_matrix(students_np[students_mask], courses_with_duplicated_courses_np)
 
         matched_rows, matched_cols = scipy.optimize.linear_sum_assignment(grader_weights_matrix, maximize=True)
-        header = 'Course Number,Section ID,Instructor Name,Instructor Email,Student Name,Student Email,Calculated Score\n'
+        header = 'Course Number,Section ID,Instructor Name,Instructor Email,Student Name,Student Email,UIN,Calculated Score\n'
         grader_matches.write(header)
         for student_idx, course_idx in zip(matched_rows, matched_cols):
             student = students_np[students_mask][student_idx]
             assert not student.matched
             student.matched = True
             course = courses_with_duplicated_courses_np[course_idx]
-            row = course.course_numbers[0] + ',' + course.section_ids[0] + ',' + course.instructor + ',' + course.faculty_email + ',' + (student.first_name + ' ' + student.last_name) + ',' + student.email + ',' + str(grader_weights_matrix[student_idx][course_idx]) + '\n'
+            row = course.course_numbers[0] + ',' + course.section_ids[0] + ',' + course.instructor + ',' + course.faculty_email + ',' + (student.first_name + ' ' + student.last_name) + ',' + student.email + ',' + student.uin + ',' + str(grader_weights_matrix[student_idx][course_idx]) + '\n'
             grader_matches.write(row)
 
         print('total cost for Graders: ', np.array(grader_weights_matrix)[matched_rows, matched_cols].sum())

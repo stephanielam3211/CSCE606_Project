@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_03_07_084422) do
+ActiveRecord::Schema[7.2].define(version: 2025_03_08_180048) do
   create_table "applicants", force: :cascade do |t|
     t.string "email"
     t.string "name"
@@ -94,6 +94,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_07_084422) do
     t.integer "score"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "uin"
+    t.index ["uin"], name: "index_grader_matches_on_uin", unique: true
   end
 
   create_table "recommendations", force: :cascade do |t|
@@ -128,6 +130,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_07_084422) do
     t.integer "score"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "uin"
+    t.index ["uin"], name: "index_senior_grader_matches_on_uin", unique: true
   end
 
   create_table "ta_backups", force: :cascade do |t|
@@ -152,6 +156,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_07_084422) do
     t.integer "score"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "uin"
+    t.index ["uin"], name: "index_ta_matches_on_uin", unique: true
   end
 
   create_table "withdrawal_requests", force: :cascade do |t|
