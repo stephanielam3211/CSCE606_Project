@@ -1,5 +1,7 @@
-require 'csv'
-require 'fileutils'
+# frozen_string_literal: true
+
+require "csv"
+require "fileutils"
 
 class WithdrawalRequestsController < ApplicationController
   def new
@@ -9,12 +11,12 @@ class WithdrawalRequestsController < ApplicationController
   def create
     puts "DEBUG: create action triggered!"
     @withdrawal_request = WithdrawalRequest.new(withdrawal_request_params)
-  
+
     if @withdrawal_request.save
       puts "DEBUG: Request saved successfully!"
-  
+
       append_matching_entries(@withdrawal_request)
-  
+
       flash[:notice] = "Withdrawal request submitted successfully."
       redirect_to root_path
     else
@@ -23,7 +25,7 @@ class WithdrawalRequestsController < ApplicationController
       render :new
     end
   end
-  
+
 
   def index
     @withdrawal_requests = WithdrawalRequest.all
@@ -38,24 +40,24 @@ class WithdrawalRequestsController < ApplicationController
   def append_matching_entries(request)
     stored_csv_path = Rails.root.join("app", "Charizard", "sample_input", "TA_Needs.csv")
     output_csv_path = Rails.root.join("app", "Charizard", "util", "public", "output", "New_Needs.csv")
-  
+
     output_dir = File.dirname(output_csv_path)
     FileUtils.mkdir_p(output_dir) unless File.directory?(output_dir)
-  
+
     puts "DEBUG: Checking if stored CSV exists: #{stored_csv_path}"
     unless File.exist?(stored_csv_path)
       puts "ERROR: Stored CSV file NOT found at #{stored_csv_path}"
       return
     end
     puts "SUCCESS: Stored CSV file found!"
-  
+
     matching_entries = []
     CSV.foreach(stored_csv_path, headers: true) do |row|
-      if row['Course_Number'] == request.course_number &&
-         row['Section'] == request.section_id &&
-         row['Instructor'] == request.instructor_name &&
-         row['Faculty_Email'] == request.instructor_email
-  
+      if row["Course_Number"] == request.course_number &&
+         row["Section"] == request.section_id &&
+         row["Instructor"] == request.instructor_name &&
+         row["Faculty_Email"] == request.instructor_email
+
         matching_entries << {
           "Course_Name" => row["Course_Name"],
           "Course_Number" => row["Course_Number"],
@@ -69,17 +71,17 @@ class WithdrawalRequestsController < ApplicationController
         }
       end
     end
-  
+
     if matching_entries.any?
       headers = [
         "Course_Name", "Course_Number", "Section", "Instructor", "Faculty_Email",
         "TA", "Senior_Grader", "Grader", "Professor Pre-Reqs"
       ]
-  
+
       puts "DEBUG: Writing #{matching_entries.size} matching entries to #{output_csv_path}"
       file_exists = File.exist?(output_csv_path)
-  
-      CSV.open(output_csv_path, 'a') do |csv|
+
+      CSV.open(output_csv_path, "a") do |csv|
         csv << headers unless file_exists # Ensure headers are written if the file is new
         matching_entries.each { |entry| csv << headers.map { |h| entry[h] } }
       end
@@ -87,5 +89,5 @@ class WithdrawalRequestsController < ApplicationController
     else
       puts "WARNING: No matching entries found in #{stored_csv_path}"
     end
-  end  
+  end
 end

@@ -1,0 +1,19 @@
+<h2>Edit Student Information</h2>
+
+<%= form_with url: ta_assignment_path(@record["Student Email"]), method: :patch, local: true do |f| %>
+  <%= f.hidden_field :file, value: @table_name%> 
+  <%= f.hidden_field :course_number, value: @record["Course Number"]%> 
+  <%= f.hidden_field :section, value: @record["Section ID"]%> 
+  <label>Student Name:</label>
+  <%= f.text_field :stu_name, value: @record["Student Name"] %>
+
+  <label>Student Email:</label>
+  <%= f.text_field :stu_email, value: @record["Student Email"] %>
+
+  <label>UIN:</label>
+  <%= f.text_field :uin, value: @record["UIN"] %>
+
+  <%= f.submit "Save Changes" %>
+<% end %>
+
+<%= link_to "Cancel", view_csv_path %>

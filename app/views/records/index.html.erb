@@ -12,6 +12,8 @@
           <th>Instructor Email</th>
           <th>Student</th>
           <th>Student Email</th>
+          <th>UIN</th>
+          <th>Actions</th>
         <% else %>
           <th>No records found</th>
         <% end %>
@@ -26,6 +28,13 @@
           <td><%= record.ins_email %></td>
           <td><%= record.stu_name %></td>
           <td><%= record.stu_email %></td>
+          <td><%= record.uin %></td>
+          <td>
+          <div class="button-group button-group--cta">
+            <%= link_to "Edit", edit_ta_assignment_path(record, file: @table_name, uin: record.uin), method: :get, class: 'btn btn-danger' %>
+            <%= button_to "Delete", ta_assignment_path(record, file: @table_name, uin: record.uin), method: :delete, class: 'btn btn--cta-secondary' %>
+          </div>
+          </td>
         </tr>
       <% end %>
     </tbody>

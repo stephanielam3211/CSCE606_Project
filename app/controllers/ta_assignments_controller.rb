@@ -2,9 +2,10 @@
 
 class TaAssignmentsController < ApplicationController
   require "csv"
+
   def process_csvs
     if params[:file3].present?
-      
+
       apps_csv = generate_csv_apps(Applicant.all)
       apps_csv_path = Rails.root.join("tmp", "TA_Applicants.csv")
       File.write(apps_csv_path, apps_csv)
@@ -37,6 +38,174 @@ class TaAssignmentsController < ApplicationController
     end
   end
 
+  def edit
+    csv_directory = Rails.root.join("app", "Charizard", "util", "public", "output")
+
+    file_name = params[:file] + ".csv"
+    @table_name = params[:file]
+
+    case file_name
+    when "ta_matches.csv"
+      "TA_Matches.csv"
+    when "senior_grader_matches.csv"
+      "Senior_Grader_Matches.csv"
+    when "grader_matches.csv"
+      "Grader_Matches.csv"
+    end
+
+    file_path = File.join(csv_directory, file_name)
+
+    @records = read_csv(file_path)
+    @record = @records.find { |r| r["UIN"] == params[:uin] }
+
+    if @record.nil?
+      redirect_to view_csv_path, alert: "Record not found."
+    end
+  end
+
+  def update
+    Rails.logger.debug "Received params: #{params.inspect}"
+
+    csv_directory = Rails.root.join("app", "Charizard", "util", "public", "output")
+    Rails.logger.debug "Raw params[:file]: '#{params[:file]}'"
+    Rails.logger.debug "Stripped params[:file]: '#{params[:file].strip}'"
+    Rails.logger.debug "Downcased params[:file]: '#{params[:file].strip.downcase}'"
+
+    file_key = params[:file].strip.downcase
+
+    if file_key == "ta_matches"
+      file_name = "TA_Matches.csv"
+    elsif file_key == "senior_grader_matches"
+      file_name = "Senior_Grader_Matches.csv"
+    elsif file_key == "grader_matches"
+      file_name = "Grader_Matches.csv"
+    else
+      file_name = params[:file] + ".csv"
+    end
+
+    csv_mappings = {
+      "TA_Matches.csv" => TaMatch,
+      "Grader_Matches.csv" => GraderMatch,
+      "Senior_Grader_Matches.csv" => SeniorGraderMatch
+    }
+
+    model_class = csv_mappings[file_name]
+    #   Rails.logger.debug "checking filepath: #{params[:file]}"
+    file_path = File.join(csv_directory, file_name)
+    #    Rails.logger.debug "checking filepath: #{file_path}"
+    records = read_csv(file_path)
+    #   Rails.logger.debug "Params UIN: #{params[:uin]}"
+    #    Rails.logger.debug "File Path: #{file_path}"
+    #    Rails.logger.debug "Loaded Records: #{params[:course_number]}"
+    #    Rails.logger.debug "Available UINs in CSV: #{params[:section]}"
+    record_index = records.index { |r| r["Course Number"] == params[:course_number] && r["Section ID"] == params[:section] }
+
+    if record_index.nil?
+    #      Rails.logger.debug "No record found for UIN: #{params[:uin]}"
+    else
+      #      Rails.logger.debug "Record found at index: #{record_index}"
+      #      Rails.logger.debug "Before update: #{records[record_index].inspect}"
+    end
+
+    if record_index
+      #     Rails.logger.debug "Record found at index: #{record_index}"
+      #     Rails.logger.debug "Before update: #{records[record_index].inspect}"
+      records[record_index]["Student Name"] = params[:stu_name]
+      records[record_index]["Student Email"] = params[:stu_email]
+      records[record_index]["UIN"] = params[:uin]
+      #     Rails.logger.debug "After update: #{records[record_index].inspect}"
+      CSV.open(file_path, "w", headers: records.first.keys, write_headers: true) do |csv|
+        records.each { |r| csv << r.values }
+      end
+      model_record = model_class.find_by(course_number: params[:course_number], section: params[:section])
+      model_record.update(
+        stu_name: params[:stu_name],
+        stu_email: params[:stu_email],
+        uin: params[:uin]
+      )
+      flash[:notice] = "Student information updated successfully."
+    else
+      flash[:alert] = "Student record not found."
+    end
+
+    redirect_back(fallback_location: view_csv_path)
+  end
+
+  def destroy
+    csv_directory = Rails.root.join("app", "Charizard", "util", "public", "output")
+    file_name = params[:file] + ".csv"
+
+    case file_name
+    when "ta_matches.csv"
+      file_name = "TA_Matches.csv"
+    when "senior_grader_matches.csv"
+      file_name = "Senior_Grader_Matches.csv"
+    when "grader_matches.csv"
+      file_name = "Grader_Matches.csv"
+    end
+    # file_name = "TA_Matches.csv" if file_name == "ta_matches.csv"
+
+    csv_mappings = {
+      "TA_Matches.csv" => TaMatch,
+      "Grader_Matches.csv" => GraderMatch,
+      "Senior_Grader_Matches.csv" => SeniorGraderMatch
+    }
+    model_class = csv_mappings[file_name]
+    Rails.logger.debug "Model class for #{file_name}: #{model_class.inspect}"
+
+    # Log error if model_class is nil
+    if model_class.nil?
+      Rails.logger.error "No model class found for file: #{file_name}"
+      flash[:alert] = "No model found for file #{file_name}."
+      redirect_to view_csv_path and return
+    end
+
+
+    file_path = File.join(csv_directory, file_name)
+
+    records = read_csv(file_path)
+    record = records.find do |r|
+      r["UIN"] == params[:uin]
+    end
+
+    # Log an error if the record is not found
+    Rails.logger.error "record not found with uin #{params[:uin]}" if record.nil?
+
+    if record
+      Rails.logger.debug "Received UIN: #{params[:uin]}"
+
+      Rails.logger.debug "Before Deletion: #{records.count} records"
+      records.reject! { |r| r["UIN"] == params[:uin] }
+      Rails.logger.debug "After Deletion: #{records.count} records"
+
+      modified_class_csv_path = Rails.root.join("app", "Charizard", "util", "public", "output", "Modified_assignments.csv")
+
+      # Save the updated data to the new CSV file
+      CSV.open(file_path, "w", headers: records.first.keys, write_headers: true) do |csv|
+        records.each { |r| csv << r.values }
+      end
+
+      CSV.open(modified_class_csv_path, "a", headers: records.first.keys, write_headers: !File.exist?(modified_class_csv_path)) do |csv|
+        csv << record.values
+      end
+
+      Rails.logger.debug "Searching for record with UIN: #{params[:uin]}"
+      Rails.logger.debug "Received params: #{params.inspect}"
+      model_record = model_class.find_by(uin: params[:uin])
+      if model_record.nil?
+        Rails.logger.debug "No record found with UIN: #{params[:uin]}"
+      else
+        model_record.destroy
+      Rails.logger.debug "Record with UIN #{params[:uin]} destroyed."
+      end
+      flash[:notice] = "Student record deleted. Class details saved separately."
+    else
+      flash[:alert] = "Student record with UIN #{params[:uin]} not found."
+    end
+    redirect_back(fallback_location: view_csv_path)
+  end
+
+
   def download_csv
     file_name = params[:file]
     file_path = Rails.root.join("app", "Charizard", "util", "public", "output", file_name)
@@ -48,7 +217,7 @@ class TaAssignmentsController < ApplicationController
   end
 
   def delete_all_csvs
-    Dir[Rails.root.join('app/Charizard/util/public/output/*.csv')].each do |file|
+    Dir[Rails.root.join("app/Charizard/util/public/output/*.csv")].each do |file|
       File.delete(file)
     end
     GraderBackup.delete_all
@@ -58,16 +227,16 @@ class TaAssignmentsController < ApplicationController
     TaBackup.delete_all
     TaMatch.delete_all
 
-    redirect_to view_csv_path, notice: 'All CSV files and models have been deleted.'
+    redirect_to view_csv_path, notice: "All CSV files and models have been deleted."
   end
 
   def export_final_csv
-    headers = ['Course Number', 'Section ID', 'Instructor Name', 'Instructor Email', 'Student Name', 'Student Email', 'Calculated Score']
+    headers = [ "Course Number", "Section ID", "Instructor Name", "Instructor Email", "Student Name", "Student Email", "Calculated Score" ]
     final_csv_path = Rails.root.join("app", "Charizard", "util", "public", "output", "Assignments.csv")
-  
-    CSV.open(final_csv_path, 'w') do |csv|
+
+    CSV.open(final_csv_path, "w") do |csv|
       csv << headers
-      ['TA_Matches.csv', 'Grader_Matches.csv', 'Senior_Grader_Matches.csv'].each do |file_name|
+      [ "TA_Matches.csv", "Grader_Matches.csv", "Senior_Grader_Matches.csv" ].each do |file_name|
         file_path = Rails.root.join("app", "Charizard", "util", "public", "output", file_name)
         if File.exist?(file_path)
           CSV.foreach(file_path, headers: true) do |row|
@@ -80,9 +249,9 @@ class TaAssignmentsController < ApplicationController
     end
 
     flash[:notice] = "Assignments.csv has been successfully created!"
-    redirect_to view_csv_path 
+    redirect_to view_csv_path
   end
-  end
+end
 
   private
   def save_uploaded_file(file)
@@ -152,4 +321,3 @@ class TaAssignmentsController < ApplicationController
     end
   end
 end
-
