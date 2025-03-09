@@ -11,6 +11,43 @@ class CoursesController < ApplicationController
       @courses = @q.result(distinct: true).order("#{sort_column} #{sort_direction}")
     end
 
+    def create
+      @course = Course.new(course_params)
+      respond_to do |format|
+        if @course.save
+          format.html { redirect_to courses_path, notice: "Course was successfully created." }
+          format.json { render :show, status: :created, location: @course }
+          format.js 
+        else
+          format.html { render :new, status: :unprocessable_entity }
+          format.json { render json: @course.errors, status: :unprocessable_entity }
+          format.js 
+        end
+      end
+    end
+
+    def update
+      #Rails.logger.debug "CSRF Token: #{form_authenticity_token}"
+     # Rails.logger.debug "Received Headers: #{request.headers.to_h}"
+      #Rails.logger.debug "Params: #{params.inspect}"
+      @course = Course.find(params[:id])
+      
+      if @course.update(course_params)
+        render json: { message: "Course deleted successfully", id: @course.id }, status: :ok
+      else
+        render json: { errors: @course.errors.full_messages }, status: :unprocessable_entity
+      end
+    end
+
+    def destroy
+      @course = Course.find(params[:id])
+      @course.destroy
+      respond_to do |format|
+        format.js 
+        format.html { redirect_to courses_path, notice: 'Course was successfully deleted.' }
+      end
+    end
+
     def import
       file = params[:csv_file]
 
@@ -57,6 +94,10 @@ class CoursesController < ApplicationController
       end
     end
     private
+
+    def course_params
+      params.require(:course).permit(:course_name, :course_number, :section, :instructor, :faculty_email, :ta, :senior_grader, :grader, :pre_reqs)
+    end
 
     def generate_csv(courses)
       CSV.generate(headers: true) do |csv|

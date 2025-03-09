@@ -8,9 +8,9 @@ Rails.application.routes.draw do
   get "recommendations/new"
 
   resources :ta_assignments, only: [ :index, :edit, :update, :destroy ]
-
+  
   resources :applicants
-  resources :courses, only: [ :index ] do
+  resources :courses, only: [ :index, :update, :destroy,:create] do
     collection do
       post :import
       delete :clear
@@ -51,13 +51,14 @@ resources :assignments, only: [ :index ] do
   post "ta_assignments/process_csvs", to: "ta_assignments#process_csvs", as: "process_csvs"
   get "ta_assignments/view_csv", to: "ta_assignments#view_csv", as: "view_csv"
   post "import_csv", to: "csv_imports#import", as: "import_csv"
+  delete "delete_all_csvs", to: "ta_assignments#delete_all_csvs", as: "delete_all_csvs"
 
 
   # TA reassignment
   post "ta_reassignments/process_csvs", to: "ta_reassignments#process_csvs", as: "reprocess_csvs"
   get "ta_reassignments/view_csv", to: "ta_reassignments#view_csv", as: "review_csv"
   get "ta_reassignments/new", to: "ta_reassignments#new", as: "ta_reassignments_new"
-  delete "delete_all_csvs", to: "ta_assignments#delete_all_csvs", as: "delete_all_csvs"
+
 
   # Recommendation system
   get "recommendations/new", to: "recommendations#new", as: "recommendation_view"
