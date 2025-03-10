@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.feature "Applicant Search", type: :feature do
   # Create test applicants with all required fields
-  let!(:applicant1) { 
+  let!(:applicant1) {
     Applicant.create!(
-      name: "Ayush Gautam", 
-      email: "ayushgautam@tamu.edu", 
+      name: "Ayush Gautam",
+      email: "ayushgautam@tamu.edu",
       uin: "121",
       degree: "Master's",
       positions: "Developer",
@@ -15,10 +17,10 @@ RSpec.feature "Applicant Search", type: :feature do
       cert: "Certified"
     )
   }
-  let!(:applicant2) { 
+  let!(:applicant2) {
     Applicant.create!(
-      name: "Abhijit Rathore", 
-      email: "abhijitrathore1@tamu.edu", 
+      name: "Abhijit Rathore",
+      email: "abhijitrathore1@tamu.edu",
       uin: "130",
       degree: "Master's",
       positions: "Manager",
@@ -28,10 +30,10 @@ RSpec.feature "Applicant Search", type: :feature do
       cert: "Certified"
     )
   }
-  let!(:applicant3) { 
+  let!(:applicant3) {
     Applicant.create!(
-      name: "John Doe", 
-      email: "johndoe@tamu.edu", 
+      name: "John Doe",
+      email: "johndoe@tamu.edu",
       uin: "999",
       degree: "PhD",
       positions: "Researcher",
@@ -46,7 +48,7 @@ RSpec.feature "Applicant Search", type: :feature do
     visit applicants_path
     fill_in "Enter Name, Email, or UIN", with: "Ayush"
     click_button "Search"
-    
+
     expect(page).to have_content("Ayush Gautam")
     expect(page).not_to have_content("Abhijit Rathore")
     expect(page).not_to have_content("John Doe")

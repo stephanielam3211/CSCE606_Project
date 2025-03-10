@@ -17,25 +17,29 @@ class CoursesController < ApplicationController
         if @course.save
           format.html { redirect_to courses_path, notice: "Course was successfully created." }
           format.json { render :show, status: :created, location: @course }
-          format.js 
+          format.js
         else
           format.html { render :new, status: :unprocessable_entity }
           format.json { render json: @course.errors, status: :unprocessable_entity }
-          format.js 
+          format.js
         end
       end
     end
 
     def update
-      #Rails.logger.debug "CSRF Token: #{form_authenticity_token}"
-     # Rails.logger.debug "Received Headers: #{request.headers.to_h}"
-      #Rails.logger.debug "Params: #{params.inspect}"
+      # Rails.logger.debug "CSRF Token: #{form_authenticity_token}"
+      # Rails.logger.debug "Received Headers: #{request.headers.to_h}"
+      # Rails.logger.debug "Params: #{params.inspect}"
       @course = Course.find(params[:id])
-      
-      if @course.update(course_params)
-        render json: { message: "Course deleted successfully", id: @course.id }, status: :ok
-      else
-        render json: { errors: @course.errors.full_messages }, status: :unprocessable_entity
+
+      respond_to do |format|
+        if @course.update(course_params)
+          format.html { redirect_to courses_path, notice: "Course was successfully updated." }
+          format.json { render json: { message: "Course updated successfully", id: @course.id }, status: :ok }
+        else
+          format.html { render :edit, status: :unprocessable_entity }
+          format.json { render json: { errors: @course.errors.full_messages }, status: :unprocessable_entity }
+        end
       end
     end
 
@@ -43,8 +47,8 @@ class CoursesController < ApplicationController
       @course = Course.find(params[:id])
       @course.destroy
       respond_to do |format|
-        format.js 
-        format.html { redirect_to courses_path, notice: 'Course was successfully deleted.' }
+        format.js
+        format.html { redirect_to courses_path, notice: "Course was successfully deleted." }
       end
     end
 

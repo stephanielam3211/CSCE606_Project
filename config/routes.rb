@@ -8,9 +8,9 @@ Rails.application.routes.draw do
   get "recommendations/new"
 
   resources :ta_assignments, only: [ :index, :edit, :update, :destroy ]
-  
+
   resources :applicants
-  resources :courses, only: [ :index, :update, :destroy,:create] do
+  resources :courses, only: [ :index, :update, :destroy, :create ] do
     collection do
       post :import
       delete :clear
