@@ -46,16 +46,16 @@ class TaAssignmentsController < ApplicationController
 
     case file_name
     when "ta_matches.csv"
-      "TA_Matches.csv"
+      file_name = "TA_Matches.csv"
     when "senior_grader_matches.csv"
-      "Senior_Grader_Matches.csv"
+      file_name = "Senior_Grader_Matches.csv"
     when "grader_matches.csv"
-      "Grader_Matches.csv"
+      file_name = "Grader_Matches.csv"
     end
 
     file_path = File.join(csv_directory, file_name)
 
-    @records = read_csv(file_path)
+    @records = read_csv(file_name)
     @record = @records.find { |r| r["UIN"] == params[:uin] }
 
     if @record.nil?
@@ -93,7 +93,7 @@ class TaAssignmentsController < ApplicationController
     #   Rails.logger.debug "checking filepath: #{params[:file]}"
     file_path = File.join(csv_directory, file_name)
     #    Rails.logger.debug "checking filepath: #{file_path}"
-    records = read_csv(file_path)
+    records = read_csv(file_name)
     #   Rails.logger.debug "Params UIN: #{params[:uin]}"
     #    Rails.logger.debug "File Path: #{file_path}"
     #    Rails.logger.debug "Loaded Records: #{params[:course_number]}"
@@ -163,7 +163,7 @@ class TaAssignmentsController < ApplicationController
 
     file_path = File.join(csv_directory, file_name)
 
-    records = read_csv(file_path)
+    records = read_csv(file_name)
     record = records.find do |r|
       r["UIN"] == params[:uin]
     end
@@ -260,8 +260,9 @@ end
     path
   end
 
-  def read_csv(file_path)
+  def read_csv(file_name)
     csv_data = []
+    file_path = Rails.root.join('app', 'Charizard', 'util', 'public', 'output', file_name)
     CSV.foreach(file_path, headers: true) do |row|
       csv_data << row.to_h
     end
