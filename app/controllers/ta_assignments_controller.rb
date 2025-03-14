@@ -127,8 +127,9 @@ class TaAssignmentsController < ApplicationController
     else
       flash[:alert] = "Student record not found."
     end
+    Rails.logger.debug "Redirecting to fallback: #{view_csv_path}"
 
-    redirect_back(fallback_location: view_csv_path)
+    redirect_to all_records_path(table: "#{params[:file]}")
   end
 
   def destroy
