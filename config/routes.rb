@@ -7,6 +7,14 @@ Rails.application.routes.draw do
   get "download_csv", to: "ta_assignments#download_csv", as: :download_csv_ta_assignments
   get "recommendations/new"
 
+  root "home#index"
+
+  get "/login", to: redirect("/auth/google_oauth2"), as: :login
+  get "/auth/:provider/callback", to: "sessions#create"
+  get "/auth/google_oauth2", to: redirect("/auth/google_oauth2/callback")
+  get "/auth/failure", to: redirect("/")
+  get "/logout", to: "sessions#destroy", as: "logout"
+
   resources :ta_assignments, only: [ :index, :edit, :update, :destroy ]
 
   resources :applicants
@@ -39,13 +47,6 @@ resources :assignments, only: [ :index ] do
       get :assign_ta
     end
   end
-
-  # Defines the root path route ("/")
-  # root "posts#index"
-  root "home#index" # home
-  get "login", to: "sessions#login" # login form
-  post "login", to: "sessions#create" # login
-  get "/logout", to: "sessions#destroy", as: "logout" # logout
 
   # TA assignment
   post "ta_assignments/process_csvs", to: "ta_assignments#process_csvs", as: "process_csvs"
