@@ -6,9 +6,14 @@ class SessionsController < ApplicationController
   
   def create
     auth = request.env['omniauth.auth']
-    user = User.from_google(auth)
-    session[:user_id] = user.id
-    redirect_to root_path, notice: "Signed in successfully!"
+
+    begin
+      user = User.from_google(auth)
+      session[:user_id] = user.id
+      redirect_to root_path, notice: "Signed in successfully!"
+    rescue => e
+      redirect_to root_path, alert: e.message
+    end
   end
 
   def destroy

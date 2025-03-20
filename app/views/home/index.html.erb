@@ -103,14 +103,18 @@
 </head>
 
 <body>
+    <% if flash[:alert] %>
+      <div style="color: red; margin: 10px; padding: 10px; border: 1px solid red; border-radius: 5px;">
+        <%= flash[:alert] %>
+      </div>
+    <% end %>
+    
     <% if session[:user_id] %>
         <p>Hello, <%= session[:user] %>! You are logged in.</p>
         <div class="header">
             <%= image_tag "logo.png", alt: "CSCE Logo", class: "logo" %>
             <%= link_to "Logout", logout_path, class: "logout-button" %>
         </div>
-
-        
 
         <div class="content">
             <div class="role-selector">
