@@ -21,10 +21,10 @@ class CoursesController < ApplicationController
 
           # Path to the CSV file
           new_needs_path = Rails.root.join("app", "Charizard", "util", "public", "output", "New_Needs.csv")
-              # Define fixed headers for the CSV file
-          column_order = ["Course_Name", "Course_Number", "Section", "Instructor", "Faculty_Email", 
-          "TA", "Senior_Grader", "Grader", "Professor Pre-Reqs"]
-          
+          # Define fixed headers for the CSV file
+          column_order = [ "Course_Name", "Course_Number", "Section", "Instructor", "Faculty_Email",
+          "TA", "Senior_Grader", "Grader", "Professor Pre-Reqs" ]
+
           write_headers = !File.exist?(new_needs_path)
           row_values = [
             @course.course_name,

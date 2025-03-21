@@ -6,7 +6,7 @@ class TaReassignmentsController < ApplicationController
       if params[:file3].present?
         apps_csv_path = Rails.root.join("app/Charizard/util/public/output", "Unassigned_Applicants.csv")
         needs_csv_path = Rails.root.join("app/Charizard/util/public/output", "New_Needs.csv")
-        
+
         file3_path = save_uploaded_file(params[:file3])
 
         unless File.exist?(apps_csv_path) && File.exist?(needs_csv_path)
