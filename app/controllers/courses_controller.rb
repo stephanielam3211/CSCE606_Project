@@ -18,6 +18,29 @@ class CoursesController < ApplicationController
           format.html { redirect_to courses_path, notice: "Course was successfully created." }
           format.json { render :show, status: :created, location: @course }
           format.js
+
+          # Path to the CSV file
+          new_needs_path = Rails.root.join("app", "Charizard", "util", "public", "output", "New_Needs.csv")
+              # Define fixed headers for the CSV file
+          column_order = ["Course_Name", "Course_Number", "Section", "Instructor", "Faculty_Email", 
+          "TA", "Senior_Grader", "Grader", "Professor Pre-Reqs"]
+          
+          write_headers = !File.exist?(new_needs_path)
+          row_values = [
+            @course.course_name,
+            @course.course_number,
+            @course.section,
+            @course.instructor,
+            @course.faculty_email,
+            @course.ta,
+            @course.senior_grader,
+            @course.grader,
+            @course.pre_reqs.presence || "N/A"
+          ]
+
+        CSV.open(new_needs_path, "a", headers: column_order, write_headers: write_headers) do |csv|
+          csv << row_values
+        end
         else
           format.html { render :new, status: :unprocessable_entity }
           format.json { render json: @course.errors, status: :unprocessable_entity }

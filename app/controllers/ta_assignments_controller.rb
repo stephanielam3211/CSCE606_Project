@@ -174,7 +174,6 @@ class TaAssignmentsController < ApplicationController
 
     if record
       Rails.logger.debug "Received UIN: #{params[:uin]}"
-
       Rails.logger.debug "Before Deletion: #{records.count} records"
       records.reject! { |r| r["UIN"] == params[:uin] }
       Rails.logger.debug "After Deletion: #{records.count} records"
@@ -192,18 +191,96 @@ class TaAssignmentsController < ApplicationController
 
       Rails.logger.debug "Searching for record with UIN: #{params[:uin]}"
       Rails.logger.debug "Received params: #{params.inspect}"
-      model_record = model_class.find_by(uin: params[:uin])
+      model_record = model_class&.find_by(uin: params[:uin])
       if model_record.nil?
         Rails.logger.debug "No record found with UIN: #{params[:uin]}"
       else
-        model_record.destroy
-      Rails.logger.debug "Record with UIN #{params[:uin]} destroyed."
+        model_class1 = Applicant
+        model_record1 = model_class1&.find_by(uin: params[:uin])
+        if model_record1.nil?
+          Rails.logger.debug "No record found with UIN: #{params[:uin]}"
+        else 
+          add_to_backup_csv = Rails.root.join("app", "Charizard", "util", "public", "output", "Unassigned_Applicants.csv")
+          column_order = [
+            "timestamp", "email", "name", "uin", "number", "hours", "degree", "choice_1", "choice_2", "choice_3", "choice_4",
+            "choice_5", "choice_6", "choice_7", "choice_8", "choice_9", "choice_10","gpa", "citizenship", "cert",
+            "prev_course", "prev_uni", "prev_ta", "advisor", "positions"
+          ]
+          CSV.open(add_to_backup_csv, "a", headers: column_order, write_headers: !File.exist?(add_to_backup_csv)) do |csv|
+            if model_record1.present? && model_record1.respond_to?(:attributes)
+              row_values = column_order.map { |col| model_record1.attributes[col] || "" }
+              csv << row_values
+            end
+          end
+        end
+
+        model_class2 = Course
+        model_record2 = model_class2.where("course_number LIKE ?", "%#{params[:course_number]}%")
+          .where("section LIKE ?", "%#{params[:section]}%").first
+        if model_record2.nil?
+          Rails.logger.debug "No record found with section: #{params[:section]} and course_number: #{params[:course_number]}"
+        else 
+          Rails.logger.debug "Found record: #{model_record2.inspect}"
+
+          assignment_type = determine_assignment_type(file_name)
+
+          add_to_new_needs_csv = Rails.root.join("app", "Charizard", "util", "public", "output", "New_Needs.csv")
+          column_order = [
+            "Course_Name", "Course_Number", "Section", "Instructor", "Faculty_Email",
+            "TA", "Senior_Grader", "Grader", "Professor Pre-Reqs"
+          ]
+
+          write_headers = !File.exist?(add_to_new_needs_csv)
+          existing_data = []
+          if File.exist?(add_to_new_needs_csv)
+            CSV.foreach(add_to_new_needs_csv, headers: true) do |row|
+              existing_data << row.to_h
+            end
+          end
+          course_entry = existing_data.find do |row|
+            row["Course_Number"] == model_record2.course_number && row["Section"] == model_record2.section
+          end
+          if course_entry
+            current_value = course_entry[assignment_type].to_i
+            course_entry[assignment_type] = (current_value + 1).to_s
+          else
+            Rails.logger.debug "Updated CSV Data: #{existing_data.inspect}"
+
+            new_entry = {
+              "Course_Name" => model_record2.course_name,
+              "Course_Number" => model_record2.course_number,
+              "Section" => model_record2.section,
+              "Instructor" => model_record2.instructor,
+              "Faculty_Email" => model_record2.faculty_email,
+              "TA" => "0", "Senior_Grader" => "0", "Grader" => "0",
+              "Professor Pre-Reqs" => model_record2.pre_reqs.presence || "N/A"
+            }
+            new_entry[assignment_type] = "1" 
+            existing_data << new_entry
+          end
+          Rails.logger.debug "Updated CSV Data: #{new_entry.inspect}"
+      
+          # Write back to CSV
+          CSV.open(add_to_new_needs_csv, "w", write_headers: true, headers: column_order) do |csv|
+            existing_data.each { |row| csv << row.values_at(*column_order) }
+          end
+        end
       end
+      model_record.destroy
+      Rails.logger.debug "Record with UIN #{params[:uin]} destroyed."
       flash[:notice] = "Student record deleted. Class details saved separately."
     else
       flash[:alert] = "Student record with UIN #{params[:uin]} not found."
     end
     redirect_back(fallback_location: view_csv_path)
+  end
+
+  def determine_assignment_type(record)
+    case record
+    when "TA_Matches.csv" then "TA"
+    when "Senior_Grader_Matches.csv" then "Senior_Grader"
+    when "Grader_Matches.csv" then "Grader"
+    end
   end
 
 

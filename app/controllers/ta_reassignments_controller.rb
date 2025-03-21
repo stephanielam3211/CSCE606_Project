@@ -6,9 +6,10 @@ class TaReassignmentsController < ApplicationController
       if params[:file3].present?
         apps_csv_path = Rails.root.join("app/Charizard/util/public/output", "Unassigned_Applicants.csv")
         needs_csv_path = Rails.root.join("app/Charizard/util/public/output", "New_Needs.csv")
-        prof_csv_path = Rails.root.join("app/Charizard/sample_input", "Prof_Prefs.csv")
+        
+        file3_path = save_uploaded_file(params[:file3])
 
-        unless File.exist?(apps_csv_path) && File.exist?(needs_csv_path) && File.exist?(prof_csv_path)
+        unless File.exist?(apps_csv_path) && File.exist?(needs_csv_path)
           flash[:alert] = "One or more required CSV files are missing."
           return redirect_to ta_reassignments_new_path
         end
@@ -17,8 +18,8 @@ class TaReassignmentsController < ApplicationController
           system("mv #{file} #{file}_o.csv") if File.exist?(file)
         end
 
-        python_command = "python3 app/Charizard/main.py '#{apps_csv_path}' '#{needs_csv_path}' '#{prof_csv_path}'"
-        system(python_command)
+        python_path = `which python3`.strip  # Find Python path dynamically
+        system("#{python_path} app/Charizard/main.py '#{apps_csv_path}' '#{needs_csv_path}' '#{file3_path}'")
 
         flash[:notice] = "CSV processing complete"
         redirect_to view_csv_path
