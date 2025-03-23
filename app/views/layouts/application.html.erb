@@ -19,6 +19,14 @@
   </head>
 
   <body>
+  <% if flash[:notice] %>
+  <div id="alert" class="alert alert-success">
+    <%= flash[:notice] %>
+  </div>
+  <script>
+    setTimeout(() => { document.getElementById('alert').style.display = 'none'; }, 3000);
+  </script>
+<% end %>
     <%= yield %>
   </body>
 </html>

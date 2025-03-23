@@ -61,6 +61,12 @@ resources :assignments, only: [ :index ] do
 
 
   # Recommendation system
+  resources :recommendations, only: [:new, :create, :index] do
+    collection do
+      get :export_csv
+    end
+  end
+
   get "recommendations/new", to: "recommendations#new", as: "recommendation_view"
   post "recommendations", to: "recommendations#create"
   # blacklist
