@@ -8,7 +8,6 @@
 </head>
 
 <body>
-  <!-- Header -->
   <div class="header">
     <%= image_tag "logo.png", alt: "CSCE Logo", class: "logo" %>
     <%= link_to "logout", logout_path, method: :delete, class: "logout-button" %>
@@ -20,34 +19,31 @@
       <div class="role-selector">
         <button class="role-button" onclick="showButtons('student')">Student</button>
         <button class="role-button" onclick="showButtons('prof')">Professor</button>
-        <button class="role-button" onclick="showButtons('organizer')">Organizer</button>
         <button class="role-button" onclick="showButtons('admin')">Admin</button>
       </div>
 
       <div id="student-buttons" class="button-container hidden">
-        <%= link_to "Submit Request to be a TA (Student)", new_applicant_path, class: "action-button" %>
+        <%= link_to "Submit Request for TA/Grader", new_applicant_path, class: "action-button" %>
         <%= link_to "Request a Withdrawal", new_withdrawal_request_path, class: "action-button" %>
+        <%= link_to "View My Applications", root_path, class: "action-button" %>
       </div>
 
       <div id="prof-buttons" class="button-container hidden">
-        <%= link_to "Recomend Student to be a TA", recommendation_view_path, class: "action-button" %>
-      </div>
-
-      <div id="organizer-buttons" class="button-container hidden">
-        <%= link_to "Reassign TA", ta_reassignments_new_path, class: "action-button" %>
-        <%= link_to "Assign TA", ta_assignments_new_path, class: "action-button" %>
-        <%= link_to "View Applicants", applicants_path, class: "action-button" %>
-        <%= link_to "View Classes", courses_path, class: "action-button" %>
-        <%= link_to "View Withdrawal Requests", withdrawal_requests_path, class: "action-button" %>
+        <%= link_to "Recomend a Student", recommendation_view_path, class: "action-button" %>
+        <%= link_to "View My Recommandations", root_path, class: "action-button" %>
       </div>
 
       <div id="admin-buttons" class="button-container hidden">
-        <%= link_to "Submit Request to be a TA (Student)", new_applicant_path, class: "action-button" %>
-        <%= link_to "Recomend Student to be a TA", recommendation_view_path, class: "action-button" %>
-        <%= link_to "View Blacklisted Students", blacklists_path, class: "action-button" %>
-        <%= link_to "Assign TA", ta_assignments_new_path, class: "action-button" %>
+        <%= link_to "Assign TA/Grader", ta_assignments_new_path, class: "action-button" %>
+        <%= link_to "Reassign TA/grader", ta_reassignments_new_path, class: "action-button" %>
+        
         <%= link_to "View Applicants", applicants_path, class: "action-button" %>
         <%= link_to "View Classes", courses_path, class: "action-button" %>
+        <%= link_to "View Withdrawal Requests", withdrawal_requests_path, class: "action-button" %>
+        <%= link_to "View Blacklisted Students", blacklists_path, class: "action-button" %>
+
+        <%= link_to "Submit Request for TA/Grader", new_applicant_path, class: "action-button" %>
+        <%= link_to "Recomend a Student", recommendation_view_path, class: "action-button" %>
       </div>
     </div>
   <% else %>
@@ -56,15 +52,13 @@
     </p>
   <% end %>
 
-  <!-- Footer -->
   <div class="footer">
     &copy; 2025 Texas A&M University. All Rights Reserved.
   </div>
 
-  <!-- Script -->
   <script>
     function showButtons(role) {
-      const roles = ["student", "prof", "organizer", "admin"];
+      const roles = ["student", "prof", "admin"];
       roles.forEach(r => {
         document.getElementById(`${r}-buttons`).classList.add("hidden");
       });

@@ -1,11 +1,34 @@
-<div class="aux-container">
-<p style="color: green"><%= notice %></p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Applicant Details</title>
+  <%= stylesheet_link_tag 'tamu', media: 'all', 'data-turbo-track': 'reload' %>
+</head>
+<body>
+  <div class="header">
+    <%= image_tag "logo.png", alt: "CSCE Logo", class: "logo" %>
+    <%= link_to "logout", logout_path, method: :delete, class: "logout-button" %>
+  </div>
 
-<%= render @applicant %>
+  <div class="main-content">
+    <% if notice %>
+      <p class="notice-text"><%= notice %></p>
+    <% end %>
 
-<div class="content">
-  <%= link_to "Edit this applicant", edit_applicant_path(@applicant) %> |
-  <%= link_to "Back to applicants", applicants_path %>
-  <%= button_to "Destroy this applicant", @applicant, method: :delete %>
-</div>
-</div>
+    <div class="applicant-details">
+      <%= render @applicant %>
+    </div>
+
+    <div class="button-container">
+      <%= link_to "Edit this applicant", edit_applicant_path(@applicant), class: "action-button" %>
+      <%= link_to "Back to applicants", applicants_path, class: "action-button" %>
+      <%= button_to "Destroy this applicant", @applicant, method: :delete, data: { confirm: "Are you sure?" }, class: "action-button" %>
+    </div>
+  </div>
+
+  <div class="footer">
+    &copy; 2025 Texas A&M University. All Rights Reserved.
+  </div>
+</body>
+</html>

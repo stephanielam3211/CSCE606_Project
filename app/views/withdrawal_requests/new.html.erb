@@ -1,37 +1,63 @@
-<h2>Request a Withdrawal</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Request a Withdrawal</title>
+  <%= stylesheet_link_tag 'tamu', media: 'all', 'data-turbo-track': 'reload' %>
+</head>
 
-<%= form_with model: @withdrawal_request, url: withdrawal_requests_path, local: true do |f| %>
-  <div>
-    <%= f.label :course_number, "Course Number" %>
-    <%= f.text_field :course_number, required: true %>
+<body>
+  <div class="header">
+    <%= image_tag "logo.png", alt: "CSCE Logo", class: "logo" %>
+    <%= link_to "logout", logout_path, method: :delete, class: "logout-button" %>
   </div>
 
-  <div>
-    <%= f.label :section_id, "Section ID" %>
-    <%= f.text_field :section_id, required: true %>
-  </div>
+  <div class="main-content">
+    <h2>Request a Withdrawal</h2>
 
-  <div>
-    <%= f.label :instructor_name, "Instructor Name" %>
-    <%= f.text_field :instructor_name, required: true %>
-  </div>
+    <%= form_with model: @withdrawal_request, url: withdrawal_requests_path, local: true do |f| %>
+      <div class="form-grid">
+        <div>
+          <%= f.label :course_number, "Course Number" %>
+          <%= f.text_field :course_number, required: true %>
+        </div>
 
-  <div>
-    <%= f.label :instructor_email, "Instructor Email" %>
-    <%= f.email_field :instructor_email, required: true %>
-  </div>
+        <div>
+          <%= f.label :section_id, "Section ID" %>
+          <%= f.text_field :section_id, required: true %>
+        </div>
 
-  <div>
-    <%= f.label :student_name, "Student Name" %>
-    <%= f.text_field :student_name, required: true %>
-  </div>
+        <div>
+          <%= f.label :instructor_name, "Instructor Name" %>
+          <%= f.text_field :instructor_name, required: true %>
+        </div>
 
-  <div>
-    <%= f.label :student_email, "Student Email" %>
-    <%= f.email_field :student_email, required: true %>
-  </div>
+        <div>
+          <%= f.label :instructor_email, "Instructor Email" %>
+          <%= f.email_field :instructor_email, required: true %>
+        </div>
 
-  <div>
-    <%= f.submit "Submit Withdrawal Request", class: "action-button" %>
+        <div>
+          <%= f.label :student_name, "Student Name" %>
+          <%= f.text_field :student_name, required: true %>
+        </div>
+
+        <div>
+          <%= f.label :student_email, "Student Email" %>
+          <%= f.email_field :student_email, required: true %>
+        </div>
+
+        <div class="full-width">
+          <%= f.submit "Submit Withdrawal Request", class: "action-button" %>
+        </div>
+      </div>
+    <% end %>
+
+    <%= link_to "Back to Main Page", root_path, class: "action-button" %>
   </div>
-<% end %>
+  <div class="footer">
+    &copy; 2025 Texas A&M University. All Rights Reserved.
+  </div>
+</body>
+</html>

@@ -5,6 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Applicants</title>
   <%= stylesheet_link_tag 'tamu', media: 'all', 'data-turbo-track': 'reload' %>
+  <style>
+    .styled-table th a {
+      text-decoration: none;
+      color: inherit;
+      display: inline-flex;
+      align-items: center; /* Align text and arrow vertically */
+      gap: 4px; /* Space between text and arrow */
+    }
+
+    .sort-arrow {
+      font-size: 0.8em;
+      line-height: 1;
+    }
+  </style>
 </head>
 <body>
   <div class="header">
@@ -32,19 +46,61 @@
       <table class="styled-table">
         <thead>
           <tr>
-            <th><%= link_to "Name", applicants_path(sort: "name", direction: toggle_direction) %></th>
-            <th><%= link_to "Email", applicants_path(sort: "email", direction: toggle_direction) %></th>
-            <th><%= link_to "Degree", applicants_path(sort: "degree", direction: toggle_direction) %></th>
-            <th><%= link_to "Applied Positions", applicants_path(sort: "positions", direction: toggle_direction) %></th>
-            <th><%= link_to "Previous Courses", applicants_path(sort: "prev_course", direction: toggle_direction) %></th>
-            <th><%= link_to "Previous TA Postitions", applicants_path(sort: "prev_ta", direction: toggle_direction) %></th>
+            <th>
+              <%= link_to applicants_path(sort: "name", direction: toggle_direction("name")) do %>
+                Name
+                <% if params[:sort] == "name" %>
+                  <span class="sort-arrow"><%= params[:direction] == "asc" ? "▲" : "▼" %></span>
+                <% end %>
+              <% end %>
+            </th>
+            <th>
+              <%= link_to applicants_path(sort: "email", direction: toggle_direction("email")) do %>
+                Email
+                <% if params[:sort] == "email" %>
+                  <span class="sort-arrow"><%= params[:direction] == "asc" ? "▲" : "▼" %></span>
+                <% end %>
+              <% end %>
+            </th>
+            <th>
+              <%= link_to applicants_path(sort: "degree", direction: toggle_direction("degree")) do %>
+                Degree
+                <% if params[:sort] == "degree" %>
+                  <span class="sort-arrow"><%= params[:direction] == "asc" ? "▲" : "▼" %></span>
+                <% end %>
+              <% end %>
+            </th>
+            <th>
+              <%= link_to applicants_path(sort: "positions", direction: toggle_direction("positions")) do %>
+                Applied Positions
+                <% if params[:sort] == "positions" %>
+                  <span class="sort-arrow"><%= params[:direction] == "asc" ? "▲" : "▼" %></span>
+                <% end %>
+              <% end %>
+            </th>
+            <th>
+              <%= link_to applicants_path(sort: "prev_course", direction: toggle_direction("prev_course")) do %>
+                Previous Courses
+                <% if params[:sort] == "prev_course" %>
+                  <span class="sort-arrow"><%= params[:direction] == "asc" ? "▲" : "▼" %></span>
+                <% end %>
+              <% end %>
+            </th>
+            <th>
+              <%= link_to applicants_path(sort: "prev_ta", direction: toggle_direction("prev_ta")) do %>
+                Previous TA Positions
+                <% if params[:sort] == "prev_ta" %>
+                  <span class="sort-arrow"><%= params[:direction] == "asc" ? "▲" : "▼" %></span>
+                <% end %>
+              <% end %>
+            </th>
             <th>More</th>
           </tr>
         </thead>
         <tbody>
           <% @applicants.each do |applicant| %>
             <tr id="<%= dom_id applicant %>">
-              <td style="<%= applicant.name.start_with?('*') ? 'color: red; font-weight: bold;' : '' %>">
+              <td class="<%= 'highlight-name' if applicant.name.start_with?('*') %>">
                 <%= applicant.name %>
               </td>
               <td><%= applicant.email %></td>
@@ -62,7 +118,6 @@
     <%= link_to "Back to Main Page", root_path, class: "action-button" %>
   </div>
 
-  <!-- Footer -->
   <div class="footer">
     &copy; 2025 Texas A&M University. All Rights Reserved.
   </div>
