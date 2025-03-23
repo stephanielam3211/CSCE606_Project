@@ -60,7 +60,7 @@ RSpec.describe CoursesController, type: :controller do
     it "deletes the course and redirects to index" do
       expect {
         delete :clear
-      }.to change(Course, :count).by(-2)
+      }.to change(Course, :count).to(0)
 
       expect(response).to redirect_to(courses_path)
       expect(flash[:notice]).to eq("All courses have been deleted.")

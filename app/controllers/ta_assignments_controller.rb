@@ -199,11 +199,11 @@ class TaAssignmentsController < ApplicationController
         model_record1 = model_class1&.find_by(uin: params[:uin])
         if model_record1.nil?
           Rails.logger.debug "No record found with UIN: #{params[:uin]}"
-        else 
+        else
           add_to_backup_csv = Rails.root.join("app", "Charizard", "util", "public", "output", "Unassigned_Applicants.csv")
           column_order = [
             "timestamp", "email", "name", "uin", "number", "hours", "degree", "choice_1", "choice_2", "choice_3", "choice_4",
-            "choice_5", "choice_6", "choice_7", "choice_8", "choice_9", "choice_10","gpa", "citizenship", "cert",
+            "choice_5", "choice_6", "choice_7", "choice_8", "choice_9", "choice_10", "gpa", "citizenship", "cert",
             "prev_course", "prev_uni", "prev_ta", "advisor", "positions"
           ]
           CSV.open(add_to_backup_csv, "a", headers: column_order, write_headers: !File.exist?(add_to_backup_csv)) do |csv|
@@ -219,7 +219,7 @@ class TaAssignmentsController < ApplicationController
           .where("section LIKE ?", "%#{params[:section]}%").first
         if model_record2.nil?
           Rails.logger.debug "No record found with section: #{params[:section]} and course_number: #{params[:course_number]}"
-        else 
+        else
           Rails.logger.debug "Found record: #{model_record2.inspect}"
 
           assignment_type = determine_assignment_type(file_name)
@@ -255,11 +255,11 @@ class TaAssignmentsController < ApplicationController
               "TA" => "0", "Senior_Grader" => "0", "Grader" => "0",
               "Professor Pre-Reqs" => model_record2.pre_reqs.presence || "N/A"
             }
-            new_entry[assignment_type] = "1" 
+            new_entry[assignment_type] = "1"
             existing_data << new_entry
           end
           Rails.logger.debug "Updated CSV Data: #{new_entry.inspect}"
-      
+
           # Write back to CSV
           CSV.open(add_to_new_needs_csv, "w", write_headers: true, headers: column_order) do |csv|
             existing_data.each { |row| csv << row.values_at(*column_order) }
@@ -340,7 +340,7 @@ end
 
   def read_csv(file_name)
     csv_data = []
-    file_path = Rails.root.join('app', 'Charizard', 'util', 'public', 'output', file_name)
+    file_path = Rails.root.join("app", "Charizard", "util", "public", "output", file_name)
     CSV.foreach(file_path, headers: true) do |row|
       csv_data << row.to_h
     end
