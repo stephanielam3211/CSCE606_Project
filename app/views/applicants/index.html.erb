@@ -1,65 +1,70 @@
-<div class="aux-container">
-<p style="color: green"><%= notice %></p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Applicants</title>
+  <%= stylesheet_link_tag 'tamu', media: 'all', 'data-turbo-track': 'reload' %>
+</head>
+<body>
+  <div class="header">
+    <%= image_tag "logo.png", alt: "CSCE Logo", class: "logo" %>
+    <%= link_to "logout", logout_path, method: :delete, class: "logout-button" %>
+  </div>
 
-<% content_for :title, "Applicants" %>
+  <div class="main-content">
+    <p class="notice-text"><%= notice %></p>
 
+    <h1><%= link_to "Applicants", root_path, class: "action-button" %></h1>
 
-<h1><%= link_to "Applicants", root_path, class: "action-button" %></h1>
-
-<div class="search search--slim">
-  <%= search_form_for @q, url: applicants_path, method: :get do |f| %>
-    <div class="search-container">
-      <%= f.label :name_or_email_or_uin_cont, "Search by Name, Email, or UIN" %>
-      <%= f.text_field :name_or_email_or_uin_cont, placeholder: "Enter Name, Email, or UIN" %>
-      <%= f.submit "Search", class: "btn search-btn" %>
-      <%= link_to "Clear", applicants_path, class: "btn search-btn" %>
+    <div class="search search--slim">
+      <%= search_form_for @q, url: applicants_path, method: :get do |f| %>
+        <div class="search-container">
+          <%= f.label :name_or_email_or_uin_cont, "Search by Name, Email, or UIN" %>
+          <%= f.text_field :name_or_email_or_uin_cont, placeholder: "Enter Name, Email, or UIN", class: "search-input" %>
+          <%= f.submit "Search", class: "search-btn" %>
+          <%= link_to "Clear", applicants_path, class: "search-btn" %>
+        </div>
+      <% end %>
     </div>
-  <% end %>
-</div>
-<div style="max-height: 800px; overflow-y: auto;">
-<table border="1">
-  <thead style="position: sticky; top: 0; background-color: white; z-index: 100;">
-    <tr>
-      <th><%= link_to "Name", applicants_path(sort: "name", direction: toggle_direction) %></th>
-      <th><%= link_to "Email", applicants_path(sort: "email", direction: toggle_direction) %></th>
-      <th><%= link_to "Degree", applicants_path(sort: "degree", direction: toggle_direction) %></th>
-      <th><%= link_to "Applied Positions", applicants_path(sort: "positions", direction: toggle_direction) %></th>
-      <th><%= link_to "Previous Courses", applicants_path(sort: "prev_course", direction: toggle_direction) %></th>
-      <th><%= link_to "Previous TA Postitions", applicants_path(sort: "prev_ta", direction: toggle_direction) %></th>
-      <th>More</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @applicants.each do |applicant| %>
-      <tr id="<%= dom_id applicant %>">
-        <td style="<%= applicant.name.start_with?('*') ? 'color: red; font-weight: bold;' : '' %>">
-          <%= applicant.name %>
-        </td>
-        <td><%= applicant.email %></td>
-        <td><%= applicant.degree %></td>
-        <td><%= applicant.positions %></td>
-        <td><%= applicant.prev_course %></td>
-        <td><%= applicant.prev_ta %></td>
-        <td><%= link_to "Show this applicant",applicant_path(applicant)%></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-</div>
 
-<%= link_to "Back to Main Page", root_path, class: "action-button" %>
+    <div style="max-height: 800px; overflow-y: auto;">
+      <table class="styled-table">
+        <thead>
+          <tr>
+            <th><%= link_to "Name", applicants_path(sort: "name", direction: toggle_direction) %></th>
+            <th><%= link_to "Email", applicants_path(sort: "email", direction: toggle_direction) %></th>
+            <th><%= link_to "Degree", applicants_path(sort: "degree", direction: toggle_direction) %></th>
+            <th><%= link_to "Applied Positions", applicants_path(sort: "positions", direction: toggle_direction) %></th>
+            <th><%= link_to "Previous Courses", applicants_path(sort: "prev_course", direction: toggle_direction) %></th>
+            <th><%= link_to "Previous TA Postitions", applicants_path(sort: "prev_ta", direction: toggle_direction) %></th>
+            <th>More</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @applicants.each do |applicant| %>
+            <tr id="<%= dom_id applicant %>">
+              <td style="<%= applicant.name.start_with?('*') ? 'color: red; font-weight: bold;' : '' %>">
+                <%= applicant.name %>
+              </td>
+              <td><%= applicant.email %></td>
+              <td><%= applicant.degree %></td>
+              <td><%= applicant.positions %></td>
+              <td><%= applicant.prev_course %></td>
+              <td><%= applicant.prev_ta %></td>
+              <td><%= link_to "Show this applicant", applicant_path(applicant), class: "table-link" %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
 
-</div>
+    <%= link_to "Back to Main Page", root_path, class: "action-button" %>
+  </div>
 
-<style>
-  .search-container {
-    display: flex;
-    align-items: center;
-
-  }
-
-  .search-container input[type="text"] {
-  }
-  .search-btn { 
-  }
-</style>
+  <!-- Footer -->
+  <div class="footer">
+    &copy; 2025 Texas A&M University. All Rights Reserved.
+  </div>
+</body>
+</html>

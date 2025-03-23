@@ -1,12 +1,25 @@
-<div class="aux-container">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Applicant</title>
+  <%= stylesheet_link_tag 'tamu', media: 'all', 'data-turbo-track': 'reload' %>
+</head>
 
-<h1><%= link_to "New Applicant", root_path, class: "action-button" %></h1>
+<body>
+  <div class="header">
+    <%= image_tag "logo.png", alt: "CSCE Logo", class: "logo" %>
+    <%= link_to "logout", logout_path, method: :delete, class: "logout-button" %>
+  </div>
 
-<%= render "form", applicant: @applicant %>
+  <div class="main-content">
+    <%= render "form", applicant: @applicant %>
+    <%= link_to "Back to Main Page", root_path, class: "action-button" %>
+  </div>
 
-<br>
-
-<div>
-  <%= link_to "Back to Main Page", root_path, class: "action-button" %>
-</div>
-</div>
+  <div class="footer">
+    &copy; 2025 Texas A&M University. All Rights Reserved.
+  </div>
+</body>
+</html>

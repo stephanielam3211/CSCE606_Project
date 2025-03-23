@@ -1,0 +1,257 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #121212;
+    color: #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  .header {
+    background-color: #500000;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 20px;
+    width: 100%;
+    box-sizing: border-box;
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
+  
+  .logo {
+    height: 70px;
+    width: auto;
+  }
+  
+  .logout-button {
+    background-color: #e0e0e0;
+    color: #500000;
+    border: none;
+    padding: 5px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    text-decoration: none;
+  }
+  
+  .logout-button:hover {
+    background-color: #700000;
+    color: white;
+  }
+  
+  .footer {
+    background-color: #500000;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+  }
+  
+  /* Page wrapper */
+  .main-content {
+    margin-top: 100px;
+    margin-bottom: 60px;
+    padding: 20px;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .action-button {
+    background-color: #500000;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 16px;
+    border-radius: 5px;
+    display: inline-block;
+    margin: 10px 0;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+  }
+  
+  .action-button:hover {
+    background-color: #700000;
+  }
+  
+  .search-btn,
+  input[type="submit"] {
+    background-color: #500000;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .search-btn:hover,
+  input[type="submit"]:hover {
+    background-color: #700000;
+  }
+  
+  form div {
+    margin-bottom: 16px;
+  }
+  
+  input[type="text"],
+  input[type="email"],
+  select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #555;
+    border-radius: 4px;
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 4px;
+    font-weight: bold;
+    color: #ccc;
+  }
+  
+  .styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  .styled-table thead {
+    background-color: #222;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .styled-table th,
+  .styled-table td {
+    border: 1px solid #444;
+    padding: 10px;
+    text-align: left;
+  }
+  
+  .styled-table tbody tr:nth-child(even) {
+    background-color: #1e1e1e;
+  }
+  
+  .styled-table tbody tr:hover {
+    background-color: #2a2a2a;
+  }
+  
+  .table-link {
+    color: #66b0ff;
+    font-weight: bold;
+    text-decoration: none;
+  }
+  
+  .table-link:hover {
+    text-decoration: underline;
+  }
+  
+  .search-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .search-container label {
+    color: #ccc;
+  }
+  .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 200px;
+  }
+  
+  .button-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+  }
+  
+  .role-selector {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .role-button {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    border: 1px solid #444;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    text-decoration: none;
+  }
+  
+  .role-button:hover {
+    background-color: #333;
+  }
+  
+  .hidden {
+    display: none;
+  }
+  
+  .login-reminder,
+  .logged-in-message {
+    text-align: center;
+    margin-top: 150px;
+  }
+  
+  .logged-in-message {
+    margin-top: 100px;
+  }
+  
+  a {
+    color: #ffa;
+  }
+  .error-messages {
+    color: white;
+    margin-bottom: 20px;
+    font-weight: bold;
+  }
+  
+  
+  input[type="submit"] {
+    background-color: #500000;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  input[type="submit"]:hover {
+    background-color: #700000;
+  }
+    
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  
+  form div {
+    margin-bottom: 16px;
+  }
+  
+  form .full-width {
+    grid-column: span 2;
+  }

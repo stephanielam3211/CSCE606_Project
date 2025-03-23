@@ -39,7 +39,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_08_180048) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.float "gpa"
-    t.integer "confirm", default: 0, null: false
   end
 
   create_table "assignments", force: :cascade do |t|
