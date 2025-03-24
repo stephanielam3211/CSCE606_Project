@@ -1,25 +1,23 @@
 # frozen_string_literal: true
 
 class SessionsController < ApplicationController
-  def new
-  end
-
+  protect_from_forgery except: :create
+  skip_before_action :verify_authenticity_token, only: [:create]
+  
   def create
-    username = params[:username]
-    password = params[:password]
+    auth = request.env['omniauth.auth']
 
-    # dummy login
-    if username == "admin" && password == "admin"
-      session[:user] = username
-      redirect_to root_path, notice: "Logged in!"
-    else
-      flash.now[:alert] = "Invalid username or password."
-      render :login
+    begin
+      user = User.from_google(auth)
+      session[:user_id] = user.id
+      redirect_to root_path, notice: "Signed in successfully!"
+    rescue => e
+      redirect_to root_path, alert: e.message
     end
   end
 
   def destroy
-    session[:user] = nil
-    redirect_to login_path, notice: "Logged out!"
+    session[:user_id] = nil
+    redirect_to root_path, notice: "Signed out successfully!"
   end
 end

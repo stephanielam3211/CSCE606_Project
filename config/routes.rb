@@ -24,6 +24,19 @@ Rails.application.routes.draw do
   get "ta_assignments/new"
   get "ta_assignments/create"
   get "download_csv", to: "ta_assignments#download_csv", as: :download_csv_ta_assignments
+<<<<<<< HEAD
+  get "recommendations/new"
+
+  root "home#index"
+
+  get "/login", to: redirect("/auth/google_oauth2"), as: :login
+  get "/auth/:provider/callback", to: "sessions#create"
+  get "/auth/google_oauth2", to: redirect("/auth/google_oauth2/callback")
+  get "/auth/failure", to: redirect("/")
+  get "/logout", to: "sessions#destroy", as: "logout"
+
+=======
+>>>>>>> main
   resources :ta_assignments, only: [ :index, :edit, :update, :destroy ]
 
   

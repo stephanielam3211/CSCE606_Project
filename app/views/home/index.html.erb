@@ -8,6 +8,57 @@
 </head>
 
 <body>
+<<<<<<< HEAD
+    <% if flash[:alert] %>
+      <div style="color: red; margin: 10px; padding: 10px; border: 1px solid red; border-radius: 5px;">
+        <%= flash[:alert] %>
+      </div>
+    <% end %>
+    
+    <% if session[:user_id] %>
+        <p>Hello, <%= session[:user] %>! You are logged in.</p>
+        <div class="header">
+            <%= image_tag "logo.png", alt: "CSCE Logo", class: "logo" %>
+            <%= link_to "Logout", logout_path, class: "logout-button" %>
+        </div>
+
+        <div class="content">
+            <div class="role-selector">
+                <button class="role-button" onclick="showButtons('student')">Student</button>
+                <button class="role-button" onclick="showButtons('prof')">Professor</button>
+                <button class="role-button" onclick="showButtons('organizer')">Organizer</button>
+                <button class="role-button" onclick="showButtons('admin')">Admin</button>
+            </div>
+            <div id="student-buttons" class="button-container hidden">
+                <%= link_to "Submit Request to be a TA (Student)", new_applicant_path, class: "action-button" %>
+                <%= link_to "Request a Withdrawal", new_withdrawal_request_path, class: "action-button" %>
+            </div>
+            <div id="prof-buttons" class="button-container hidden">
+                <%= link_to "Recomend Student to be a TA", recommendation_view_path, class: "action-button" %>
+            </div>
+            <div id="organizer-buttons" class="button-container hidden">
+                <%= link_to "Reassign TA", ta_reassignments_new_path, class: "action-button" %>
+                <%= link_to "Assign TA", ta_assignments_new_path, class: "action-button" %>
+                <%= link_to "View Applicants", applicants_path, class: "action-button" %>
+                <%= link_to "View Classes", courses_path, class: "action-button" %>
+                <%= link_to "View Withdrawal Requests", withdrawal_requests_path, class: "action-button" %>
+            </div>
+            <div id="admin-buttons" class="button-container hidden">
+                <%= link_to "Submit Request to be a TA (Student)", new_applicant_path, class: "action-button" %>
+                <%= link_to "Recomend Student to be a TA", recommendation_view_path, class: "action-button" %>
+                <%= link_to "View Blacklisted Students", blacklists_path, class: "action-button" %>
+                <%= link_to "Assign TA", ta_assignments_new_path, class: "action-button" %>
+                <%= link_to "View Applicants", applicants_path, class: "action-button" %>
+                <%= link_to "View Classes", courses_path, class: "action-button" %>
+            </div>
+        </div>
+    <% else %>
+        <p>You need to <%= link_to "Login", "/auth/google_oauth2" %> to access this page.</p>
+    <% end %>
+
+    <div class="footer">
+        &copy; 2025 Texas A&M University. All Rights Reserved.
+=======
   <div class="header">
     <%= image_tag "logo.png", alt: "CSCE Logo", class: "logo" %>
     <%= link_to "logout", logout_path, method: :delete, class: "logout-button" %>
@@ -46,6 +97,7 @@
         <%= link_to "Submit Request for TA/Grader", new_applicant_path, class: "action-button"%>
         <%= link_to "Recomend a Student", recommendation_view_path, class: "action-button" %>
       </div>
+>>>>>>> main
     </div>
   <% else %>
     <p class="login-reminder">
