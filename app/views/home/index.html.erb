@@ -38,6 +38,7 @@
         <%= link_to "Reassign TA/grader", ta_reassignments_new_path, class: "action-button" %>
         
         <%= link_to "View Applicants", applicants_path, class: "action-button" %>
+        <%= button_to "Clear All Recommendations", clear_recommendations_path, method: :delete, data: { turbo: false }, onclick: "return confirmClear();" %>
         <%= link_to "View Classes", courses_path, class: "action-button" %>
         <%= link_to "View Withdrawal Requests", withdrawal_requests_path, class: "action-button" %>
         <%= link_to "View Blacklisted Students", blacklists_path, class: "action-button" %>

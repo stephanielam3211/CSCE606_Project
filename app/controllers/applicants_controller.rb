@@ -13,6 +13,15 @@ class ApplicantsController < ApplicationController
     @applicants = @q.result(distinct: true).order("#{sort_column} #{sort_direction}")
   end
 
+  def search
+    applicants = Applicant.where("name LIKE ?", "%#{params[:term]}%").limit(10)
+    render json: applicants.map { |applicant| { 
+      id: applicant.id, 
+      text: "#{applicant.name} (#{applicant.email})",
+      name: applicant.name,
+      email: applicant.email } }
+  end
+
   # GET /applicants/1 or /applicants/1.json
   def show
   end
@@ -85,6 +94,6 @@ notice: "Applicant was successfully destroyed." }
     # Only allow a list of trusted parameters through.
     def applicant_params
       params.require(:applicant).permit(:email, :name, :degree, :positions,
-:number, :uin, :hours, :citizenship, :cert, :prev_course, :prev_uni, :prev_ta, :advisor, :choice_1, :choice_2, :choice_3, :choice_4, :choice_5, :choice_6, :choice_7, :choice_8, :choice_8, :choice_9, :choice_10)
+:number, :uin, :hours, :citizenship, :cert, :prev_course, :prev_uni, :prev_ta, :advisor, :choice_1, :choice_2, :choice_3, :choice_4, :choice_5, :choice_6, :choice_7, :choice_8, :choice_9, :choice_10)
     end
 end

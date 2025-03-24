@@ -11,19 +11,20 @@
     <%= f.label :name, "Your Name (First and Last)" %>
     <%= f.text_field :name, required: true %>
   </div>
-  <div>
-    <%= f.label :course, "Course (e.g. CSCE 421)" %>
-    <%= f.text_field :course, class: "form-control" %>
-  </div>
 
   <div>
-    <%= f.label :selectionsTA, "Select a TA/Grader" %>
-    <%= f.text_field :selectionsTA, required: true %>
-  </div>
+  <%= f.label :course, "Course (e.g. CSCE 421)" %>
+  <%= f.select :course, [], { prompt: "Search for a course" }, class: "form-control", id: "course-search"%>
+</div>
 
+<div>
+  <%= f.label :selectionsTA, "Select a TA/Grader" %>
+  <%= f.select :selectionsTA, [], { prompt: "Search for a TA" }, class: "form-control", id: "ta-search" %>
+</div>
+  
   <div>
     <%= f.label :feedback, "Feedback" %>
-    <%= f.text_area :feedback, required: true %>
+    <%= f.select :feedback, [["I want to work with this student"], ["I would recommend this person as a good TA/grader"], ["I would not recommend this student"]], { prompt: "Feedback" }, required: true, class: "form-control" %>
   </div>
 
   <div>
@@ -41,6 +42,56 @@
       document.getElementById("recommendation_form").reset();
     }
   });
+
+$(document).ready(function() {
+  if ($('#course-search').length) {
+    $('#course-search').select2({
+      placeholder: "Search for a course...",
+      minimumInputLength: 1,
+      tags: false,  
+      ajax: {
+        url: '/courses/search',
+        dataType: 'json',
+        delay: 250,
+        data: function(params) {
+          return { term: params.term };
+        },
+        processResults: function(data) {
+          return {
+            results: data.map(course => ({ id: `CSCE ${course.course_number}`, 
+                    text: `${course.course_number} - ${course.section}` }))          
+          };
+        },
+        cache: true
+      }
+    }).on("select2:select", function(e) {
+    var selected = e.params.data;
+    $("#course-section").val(selected.section);  
+  });
+  }
+
+  if ($('#ta-search').length) {
+    $('#ta-search').select2({
+      placeholder: "Search for a TA...",
+      minimumInputLength: 1,
+      tags: false, 
+      ajax: {
+        url: '/applicants/search',
+        dataType: 'json',
+        delay: 250,
+        data: function(params) {
+          return { term: params.term };
+        },
+        processResults: function(data) {
+          return {
+            results: data.map(ta => ({ id: ta.text, text: `${ta.name} (${ta.email})` }))
+          };
+        },
+        cache: true
+      }
+    });
+  }
+});
 </script>
 <% end %>
 

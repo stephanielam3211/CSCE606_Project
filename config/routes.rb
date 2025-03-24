@@ -9,11 +9,17 @@ Rails.application.routes.draw do
 
   resources :ta_assignments, only: [ :index, :edit, :update, :destroy ]
 
-  resources :applicants
+  resources :applicants do
+    collection do
+      get :search
+    end
+  end
+
   resources :courses, only: [ :index, :update, :destroy, :create ] do
     collection do
       post :import
       delete :clear
+      get :search
     end
   end
 
@@ -64,8 +70,12 @@ resources :assignments, only: [ :index ] do
   resources :recommendations, only: [:new, :create, :index] do
     collection do
       get :export_csv
+      delete :clear
     end
   end
+
+  get 'courses/search', to: 'courses#search'
+  get 'applicants/search', to: 'applicants#search'
 
   get "recommendations/new", to: "recommendations#new", as: "recommendation_view"
   post "recommendations", to: "recommendations#create"

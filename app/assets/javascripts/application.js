@@ -9,3 +9,9 @@ function confirmClear() {
   }
 // Import all other files in the app/javascript directory
 import "channels"
+
+//= require select2
+
+
+
+
