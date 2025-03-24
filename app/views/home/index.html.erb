@@ -1,108 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TA Assignment Home Page</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        .header {
-            background-color: #500000;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 5px 20px;
-            width: 100%;
-            box-sizing: border-box;
-            position: fixed;
-            top: 0;
-            left: 0;
-        }
-        .logo {
-            height: 150px;
-            width: auto;
-        }
-        .logout-button {
-            background-color: white;
-            color: #500000;
-            border: none;
-            padding: 5px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        .logout-button:hover {
-            background-color: #700000;
-            color: white;
-        }
-        .footer {
-            background-color: #500000;
-            color: white;
-            text-align: center;
-            padding: 10px 0;
-            width: 100%;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-        }
-        .content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            margin-top: 220px;
-            margin-bottom: 50px;
-        }
-        .button-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            align-items: center;
-        }
-        .role-selector {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .role-button {
-            background-color: #333;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        .role-button:hover {
-            background-color: #555;
-        }
-        .action-button {
-            background-color: #500000;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-size: 18px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        .action-button:hover {
-            background-color: #700000;
-        }
-        .hidden {
-            display: none;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TA Assignment Home Page</title>
+  <%= stylesheet_link_tag 'tamu', media: 'all', 'data-turbo-track': 'reload' %>
 </head>
 
 <body>
+<<<<<<< HEAD
     <% if flash[:alert] %>
       <div style="color: red; margin: 10px; padding: 10px; border: 1px solid red; border-radius: 5px;">
         <%= flash[:alert] %>
@@ -152,16 +58,65 @@
 
     <div class="footer">
         &copy; 2025 Texas A&M University. All Rights Reserved.
-    </div>
+=======
+  <div class="header">
+    <%= image_tag "logo.png", alt: "CSCE Logo", class: "logo" %>
+    <%= link_to "logout", logout_path, method: :delete, class: "logout-button" %>
+  </div>
 
-    <script>
-        function showButtons(role) {
-            document.getElementById("student-buttons").classList.add("hidden");
-            document.getElementById("prof-buttons").classList.add("hidden");
-            document.getElementById("organizer-buttons").classList.add("hidden");
-            document.getElementById("admin-buttons").classList.add("hidden");
-            document.getElementById(role + "-buttons").classList.remove("hidden");
-        }
-    </script>
+  <% if session[:user] %>
+    <p class="logged-in-message">Hello, <%= session[:user] %>! You are logged in.</p>
+    <div class="content">
+      <div class="role-selector">
+        <button class="role-button" onclick="showButtons('student')">Student</button>
+        <button class="role-button" onclick="showButtons('prof')">Professor</button>
+        <button class="role-button" onclick="showButtons('admin')">Admin</button>
+      </div>
+
+      <div id="student-buttons" class="button-container hidden">
+        <%= link_to "Submit Request for TA/Grader", new_applicant_path, class: "action-button"%>
+        <%= link_to "Request a Withdrawal", new_withdrawal_request_path, class: "action-button" %>
+        <%= link_to "View My Applications", my_application_applicants_path, class: "action-button" %>
+      </div>
+
+      <div id="prof-buttons" class="button-container hidden">
+        <%= link_to "Recomend a Student", recommendation_view_path, class: "action-button" %>
+        <%= link_to "View My Recommandations", root_path, class: "action-button" %>
+      </div>
+
+      <div id="admin-buttons" class="button-container hidden">
+        <%= link_to "Assign TA/Grader", ta_assignments_new_path, class: "action-button" %>
+        <%= link_to "Reassign TA/grader", ta_reassignments_new_path, class: "action-button" %>
+        
+        <%= link_to "View Applicants", applicants_path, class: "action-button" %>
+        <%= button_to "Clear All Recommendations", clear_recommendations_path, method: :delete, data: { turbo: false }, onclick: "return confirmClear();" %>
+        <%= link_to "View Classes", courses_path, class: "action-button" %>
+        <%= link_to "View Withdrawal Requests", withdrawal_requests_path, class: "action-button" %>
+        <%= link_to "View Blacklisted Students", blacklists_path, class: "action-button" %>
+
+        <%= link_to "Submit Request for TA/Grader", new_applicant_path, class: "action-button"%>
+        <%= link_to "Recomend a Student", recommendation_view_path, class: "action-button" %>
+      </div>
+>>>>>>> main
+    </div>
+  <% else %>
+    <p class="login-reminder">
+      You need to <%= link_to "Login", login_path %> to access this page.
+    </p>
+  <% end %>
+
+  <div class="footer">
+    &copy; 2025 Texas A&M University. All Rights Reserved.
+  </div>
+
+  <script>
+    function showButtons(role) {
+      const roles = ["student", "prof", "admin"];
+      roles.forEach(r => {
+        document.getElementById(`${r}-buttons`).classList.add("hidden");
+      });
+      document.getElementById(`${role}-buttons`).classList.remove("hidden");
+    }
+  </script>
 </body>
 </html>

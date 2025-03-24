@@ -1,12 +1,32 @@
-<div class="aux-container">
+<% content_for :title, "New Application" %>
 
-<h1><%= link_to "New Applicant", root_path, class: "action-button" %></h1>
+<% content_for :head do %>
+  <turbo-stream action="replace" target="page-title">
+    <template>
+      <title id="page-title">New Application</title>
+    </template>
+  </turbo-stream>
+<% end %>
 
-<%= render "form", applicant: @applicant %>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="csrf-token" content="<%= form_authenticity_token %>">
+  <%= stylesheet_link_tag 'tamu', media: 'all', 'data-turbo-track': 'reload' %>
+</head>
 
-<br>
+<body>
+  <div class="header">
+    <%= image_tag "logo.png", alt: "CSCE Logo", class: "logo" %>
+    <%= link_to "logout", logout_path, method: :delete, class: "logout-button" %>
+  </div>
 
-<div>
-  <%= link_to "Back to Main Page", root_path, class: "action-button" %>
-</div>
-</div>
+  <div class="main-content">
+    <h1>New Application</h1>
+    <%= render "form", applicant: @applicant %>
+  </div>
+
+  <div class="footer">
+    &copy; 2025 Texas A&M University. All Rights Reserved.
+  </div>
+</body>

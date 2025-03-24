@@ -1,24 +1,42 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Ta Assignment App" %></title>
+    <title><%= yield(:title) || "Default Title" %></title>
+
     <meta name="csrf-token" content="<%= form_authenticity_token %>">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
-    <%= javascript_include_tag "application" %>
+    
     <%= csp_meta_tag %>
 
-   <%= yield :head %>
+    <!-- jQuery (Required for Select2) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+
+    <!-- Select2 CDN -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+    <%= yield :head %>
 
     <!-- Add Aggie UX Styles -->
     <link rel="stylesheet" href="https://aux.tamu.edu/@major/v1.x/styles/aux-styles.min.css">
-
+  
     <%= stylesheet_link_tag :app %> 
     <%= javascript_importmap_tags %>
   </head>
 
   <body>
+
+  <% if flash[:notice] %>
+  <div id="alert" class="alert alert-success">
+    <%= flash[:notice] %>
+  </div>
+  <script>
+    setTimeout(() => { document.getElementById('alert').style.display = 'none'; }, 3000);
+  </script>
+<% end %>
     <%= yield %>
   </body>
 </html>

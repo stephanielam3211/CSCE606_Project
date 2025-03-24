@@ -3,29 +3,64 @@
 class TaReassignmentsController < ApplicationController
     require "csv"
     def process_csvs
-      if params[:file3].present?
+      #if params[:file3].present?
         apps_csv_path = Rails.root.join("app/Charizard/util/public/output", "Unassigned_Applicants.csv")
         needs_csv_path = Rails.root.join("app/Charizard/util/public/output", "New_Needs.csv")
-        prof_csv_path = Rails.root.join("app/Charizard/sample_input", "Prof_Prefs.csv")
+        recommendation_path = Rails.root.join("tmp", "Prof_Prefs.csv")
 
-        unless File.exist?(apps_csv_path) && File.exist?(needs_csv_path) && File.exist?(prof_csv_path)
-          flash[:alert] = "One or more required CSV files are missing."
-          return redirect_to ta_reassignments_new_path
+        #file3_path = save_uploaded_file(params[:file3])
+
+        #unless File.exist?(apps_csv_path) && File.exist?(needs_csv_path)
+        #  flash[:alert] = "One or more required CSV files are missing."
+        #  return redirect_to ta_reassignments_new_path
+        #end
+
+        ta_csv_path = Rails.root.join("app/Charizard/util/public/output", "TA_Matches.csv")
+        senior_grader_csv_path = Rails.root.join("app/Charizard/util/public/output", "Senior_Grader_Matches.csv")
+        grader_csv_path = Rails.root.join("app/Charizard/util/public/output", "Grader_Matches.csv")
+
+        [ta_csv_path, senior_grader_csv_path, grader_csv_path].each do |file|
+          if File.exist?(file)
+            tmp_file_path = Rails.root.join("tmp", File.basename(file))
+            FileUtils.cp(file, tmp_file_path)
+          end
         end
 
-        [ "Grader_Matches.csv", "Senior_Grader_Matches.csv", "TA_Matches.csv" ].each do |file|
-          system("mv #{file} #{file}_o.csv") if File.exist?(file)
-        end
-
-        python_command = "python3 app/Charizard/main.py '#{apps_csv_path}' '#{needs_csv_path}' '#{prof_csv_path}'"
-        system(python_command)
+        python_path = `which python3`.strip  # Find Python path dynamically
+        system("#{python_path} app/Charizard/main.py '#{apps_csv_path}' '#{needs_csv_path}' '#{recommendation_path}'")
 
         flash[:notice] = "CSV processing complete"
+        
+        combined_data = { ta: [], senior_grader: [], grader: [] }
+
+        { ta: ta_csv_path, senior_grader: senior_grader_csv_path, grader: grader_csv_path }.each do |key, file|
+          tmp_file_path = Rails.root.join("tmp", File.basename(file))
+          if File.exist?(tmp_file_path)
+            CSV.foreach(tmp_file_path, headers: true) do |row|
+              combined_data[key] << row.to_h
+            end
+          end
+        end
+
+        { ta: ta_csv_path, senior_grader: senior_grader_csv_path, grader: grader_csv_path }.each do |key, file|
+          if combined_data[key].any?
+            CSV.open(file, "a", write_headers: false, headers: combined_data[key].first.keys) do |csv|
+              combined_data[key].each do |row|
+                csv << row.values
+              end
+            end
+          end
+        end
+
+        File.delete(Rails.root.join("app/Charizard/util/public/output/New_Needs.csv"))
+        system("rake import:csv")
+ 
         redirect_to view_csv_path
-      else
-        flash[:alert] = "An error has occurred."
-        redirect_to ta_reassignments_new_path
-      end
+
+     #else
+      #  flash[:alert] = "An error has occurred."
+      #  redirect_to ta_reassignments_new_path
+     # end
     end
 
 

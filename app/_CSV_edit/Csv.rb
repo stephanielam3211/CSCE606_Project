@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 require "csv"
-
+class Csv
+end
 module CsvFilter
   def self.remove_matching_emails(input_csv, exclusion_csv, output_csv)
     exclusion_emails = CSV.read(exclusion_csv, headers: true).map { |row| row["email"] }.compact

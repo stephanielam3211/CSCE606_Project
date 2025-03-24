@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema[7.2].define(version: 2025_03_20_172819) do
+=======
+ActiveRecord::Schema[7.2].define(version: 2025_03_23_193318) do
+>>>>>>> main
   create_table "applicants", force: :cascade do |t|
     t.string "email"
     t.string "name"
@@ -105,6 +109,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_20_172819) do
     t.text "additionalfeedback"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "course"
   end
 
   create_table "senior_grader_backups", force: :cascade do |t|

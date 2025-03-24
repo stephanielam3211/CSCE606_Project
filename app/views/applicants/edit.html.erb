@@ -1,12 +1,23 @@
-<div class="aux-container">
-<h1>Editing applicant</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit Applicant</title>
+  <%= stylesheet_link_tag 'tamu', media: 'all', 'data-turbo-track': 'reload' %>
+</head>
+<body>
+  <div class="header">
+    <%= image_tag "logo.png", alt: "CSCE Logo", class: "logo" %>
+    <%= link_to "logout", logout_path, method: :delete, class: "logout-button" %>
+  </div>
 
-<%= render "form", applicant: @applicant %>
+  <div class="main-content">
+    <h1>Editing Applicant</h1>
+    <%= render "form", applicant: @applicant %>
+  </div>
 
-<br>
-
-<div>
-  <%= link_to "Show this applicant", @applicant %> |
-  <%= link_to "Back to applicants", applicants_path %>
-</div>
-</div>
+  <div class="footer">
+    &copy; 2025 Texas A&M University. All Rights Reserved.
+  </div>
+</body>
+</html>

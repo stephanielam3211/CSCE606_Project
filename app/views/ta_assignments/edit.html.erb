@@ -1,6 +1,7 @@
 <h2>Edit Student Information</h2>
 
 <%= form_with url: ta_assignment_path(@record["Student Email"]), method: :patch, local: true do |f| %>
+  <%= f.hidden_field :redirect_url, value: request.original_url %>
   <%= f.hidden_field :file, value: @table_name%> 
   <%= f.hidden_field :course_number, value: @record["Course Number"]%> 
   <%= f.hidden_field :section, value: @record["Section ID"]%> 

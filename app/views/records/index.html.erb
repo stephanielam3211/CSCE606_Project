@@ -32,7 +32,9 @@
           <td>
           <div class="button-group button-group--cta">
             <%= link_to "Edit", edit_ta_assignment_path(record, file: @table_name, uin: record.uin), method: :get, class: 'btn btn-danger' %>
-            <%= button_to "Delete", ta_assignment_path(record, file: @table_name, uin: record.uin), method: :delete, class: 'btn btn--cta-secondary' %>
+            <%= button_to "Delete", ta_assignment_path(record, file: @table_name, uin: record.uin, section: record.section,
+                 course_number: record.course_number, stu_email: record.stu_email, stu_name: record.stu_name,
+                 ins_name: record.ins_name, ins_email: record.ins_email), method: :delete, class: 'btn btn--cta-secondary' %>
           </div>
           </td>
         </tr>

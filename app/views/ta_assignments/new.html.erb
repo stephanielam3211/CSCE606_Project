@@ -26,17 +26,11 @@
           <div class="factoid-collection__wrapper">
             <div class="factoid">
               <div class="factoid__heading aux-text-xl aux-font-semibold aux-text-primary aux-mb-4">
-                <span class="heading">Upload TA Preferences</span>
+                <span class="heading">Auto Assign</span>
               </div>
               <div class="aux-flex aux-flex-col aux-items-center aux-w-full">
-                <%= form_with url: process_csvs_path, method: :post, multipart: true, class: "aux-form aux-space-y-4 aux-w-full aux-max-w-md" do |form| %>
-                  <div class="aux-form-group aux-text-left aux-w-full">
-                    <%= form.file_field :file3, class: "aux-form-control aux-mt-2 aux-w-full" %>
-                  </div>
-                  <div class="aux-mt-4 aux-flex aux-justify-center aux-w-full">
-                    <%= form.submit "Process Files", class: "aux-button aux-button-primary aux-text-lg aux-font-bold aux-px-6 aux-py-3 aux-w-1/2", style: "margin-left: 18%;" %>
-                  </div>
-                <% end %>
+                <%= button_to "Process Files", process_csvs_path, method: :post, class: "aux-button aux-button-primary aux-text-lg aux-font-bold aux-px-6 aux-py-3 aux-w-1/2", style: "margin-left: 18%;" %>
+                <%= button_to "Re-Process Files", reprocess_csvs_path, method: :post, class: "aux-button aux-button-primary aux-text-lg aux-font-bold aux-px-6 aux-py-3 aux-w-1/2", style: "margin-left: 18%;" %>
               </div>
             </div>
           </div>
