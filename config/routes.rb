@@ -20,15 +20,13 @@ Rails.application.routes.draw do
   get "all_records", to: "records#index"
 
   # TA Assignments
-  resources :ta_assignments, only: [:index, :edit, :update, :destroy, :new] do
-    collection do
-      get :view_csv
-      post :process_csvs
-      delete :delete_all_csvs
-      get :download_csv
-      post :export_final_csv
-    end
-  end
+
+  get "ta_assignments/new"
+  get "ta_assignments/create"
+  get "download_csv", to: "ta_assignments#download_csv", as: :download_csv_ta_assignments
+  resources :ta_assignments, only: [ :index, :edit, :update, :destroy ]
+
+  
 
   # Applicants
   resources :applicants do
