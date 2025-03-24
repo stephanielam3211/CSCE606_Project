@@ -23,9 +23,9 @@
       </div>
 
       <div id="student-buttons" class="button-container hidden">
-        <%= link_to "Submit Request for TA/Grader", new_applicant_path, class: "action-button" %>
+        <%= link_to "Submit Request for TA/Grader", new_applicant_path, class: "action-button"%>
         <%= link_to "Request a Withdrawal", new_withdrawal_request_path, class: "action-button" %>
-        <%= link_to "View My Applications", root_path, class: "action-button" %>
+        <%= link_to "View My Applications", my_application_applicants_path, class: "action-button" %>
       </div>
 
       <div id="prof-buttons" class="button-container hidden">
@@ -34,7 +34,7 @@
       </div>
 
       <div id="admin-buttons" class="button-container hidden">
-        <%= link_to "Assign TA/Grader", ta_assignments_new_path, class: "action-button" %>
+        <%= link_to "Assign TA/Grader", new_ta_assignment_path, class: "action-button" %>
         <%= link_to "Reassign TA/grader", ta_reassignments_new_path, class: "action-button" %>
         
         <%= link_to "View Applicants", applicants_path, class: "action-button" %>
@@ -42,7 +42,7 @@
         <%= link_to "View Withdrawal Requests", withdrawal_requests_path, class: "action-button" %>
         <%= link_to "View Blacklisted Students", blacklists_path, class: "action-button" %>
 
-        <%= link_to "Submit Request for TA/Grader", new_applicant_path, class: "action-button" %>
+        <%= link_to "Submit Request for TA/Grader", new_applicant_path, class: "action-button"%>
         <%= link_to "Recomend a Student", recommendation_view_path, class: "action-button" %>
       </div>
     </div>

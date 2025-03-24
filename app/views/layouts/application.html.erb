@@ -1,21 +1,22 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Ta Assignment App" %></title>
+    <title><%= yield(:title) || "Default Title" %></title>
+
     <meta name="csrf-token" content="<%= form_authenticity_token %>">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
-    <%= javascript_include_tag "application" %>
+    
     <%= csp_meta_tag %>
-
-   <%= yield :head %>
+    <%= javascript_include_tag "application" %>
+    <%= javascript_importmap_tags %>
+    <%= stylesheet_link_tag :app, media: "all", "data-turbo-track": "reload" %>
 
     <!-- Add Aggie UX Styles -->
     <link rel="stylesheet" href="https://aux.tamu.edu/@major/v1.x/styles/aux-styles.min.css">
 
-    <%= stylesheet_link_tag :app %> 
-    <%= javascript_importmap_tags %>
+    <%= yield :head %>
   </head>
 
   <body>

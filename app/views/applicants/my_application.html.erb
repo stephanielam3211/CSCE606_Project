@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Application</title>
+  <%= stylesheet_link_tag 'tamu', media: 'all', 'data-turbo-track': 'reload' %>
+</head>
+
+<body>
+  <div class="header">
+    <%= image_tag "logo.png", alt: "CSCE Logo", class: "logo" %>
+    <%= link_to "Logout", logout_path, method: :delete, class: "logout-button" %>
+  </div>
+
+  <div class="main-content">
+    <h1>My TA Application</h1>
+
+    <% if @applicant %>
+      <div class="applicant-details-grid" id="<%= dom_id(@applicant) %>">
+        <% {
+          "Email" => @applicant.email,
+          "Name" => @applicant.name,
+          "Degree" => @applicant.degree,
+          "Positions" => @applicant.positions,
+          "Phone Number" => @applicant.number,
+          "UIN" => @applicant.uin,
+          "Hours Enrolled" => @applicant.hours,
+          "Citizenship" => @applicant.citizenship,
+          "English Cert Level" => @applicant.cert,
+          "Previously Taken Courses" => @applicant.prev_course,
+          "Courses at Other Universities" => @applicant.prev_uni,
+          "Previous TA Experience" => @applicant.prev_ta,
+          "Advisor" => @applicant.advisor,
+          "Course Choice 1" => @applicant.choice_1,
+          "Course Choice 2" => @applicant.choice_2,
+          "Course Choice 3" => @applicant.choice_3,
+          "Course Choice 4" => @applicant.choice_4,
+          "Course Choice 5" => @applicant.choice_5,
+          "Course Choice 6" => @applicant.choice_6,
+          "Course Choice 7" => @applicant.choice_7,
+          "Course Choice 8" => @applicant.choice_8,
+          "Course Choice 9" => @applicant.choice_9,
+          "Course Choice 10" => @applicant.choice_10
+        }.each do |label, value| %>
+          <div class="applicant-field">
+            <strong><%= label %>:</strong>
+            <span><%= value.presence || "—" %></span>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <p class="notice-text">No application found for your email.</p>
+    <% end %>
+
+    <div class="button-container">
+      <%= link_to "Edit this applicant", edit_applicant_path(@applicant), class: "action-button" %>
+      <%= link_to "Back to Home", root_path, class: "action-button" %>
+    </div>
+  </div>
+  <div class="footer">
+    &copy; 2025 Texas A&M University. All Rights Reserved.
+  </div>
+</body>
+</html>

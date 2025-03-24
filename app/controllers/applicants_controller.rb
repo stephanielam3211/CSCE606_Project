@@ -39,12 +39,12 @@ class ApplicantsController < ApplicationController
     respond_to do |format|
       if @applicant.save
         format.html {
- redirect_to @applicant, notice: "Applicant was successfully created." }
+        redirect_to @applicant, notice: "Applicant was successfully created." }
         format.json { render :show, status: :created, location: @applicant }
       else
         format.html { render :new, status: :unprocessable_entity }
         format.json {
- render json: @applicant.errors, status: :unprocessable_entity }
+        render json: @applicant.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -70,10 +70,16 @@ class ApplicantsController < ApplicationController
 
     respond_to do |format|
       format.html {
- redirect_to applicants_path, status: :see_other,
-notice: "Applicant was successfully destroyed." }
+        redirect_to applicants_path, status: :see_other,
+        notice: "Applicant was successfully destroyed." }
       format.json { head :no_content }
     end
+  end
+
+  # for view my application
+  def my_application
+    # this is a temporary value for debugging need to be fixed after login is finished
+    @applicant = Applicant.find_by(name: session[:user])
   end
 
   private
@@ -84,7 +90,7 @@ notice: "Applicant was successfully destroyed." }
 
     # Only allow a list of trusted parameters through.
     def applicant_params
-      params.require(:applicant).permit(:email, :name, :degree, :positions,
-:number, :uin, :hours, :citizenship, :cert, :prev_course, :prev_uni, :prev_ta, :advisor, :choice_1, :choice_2, :choice_3, :choice_4, :choice_5, :choice_6, :choice_7, :choice_8, :choice_8, :choice_9, :choice_10)
+      params.require(:applicant).permit(:email, :name, :degree, :positions,:number, :uin, :hours, :citizenship, :cert, :prev_course, :prev_uni, :prev_ta, :advisor, :choice_1, :choice_2, :choice_3, :choice_4, :choice_5, :choice_6, :choice_7, :choice_8, :choice_8, :choice_9, :choice_10)
     end
+
 end
