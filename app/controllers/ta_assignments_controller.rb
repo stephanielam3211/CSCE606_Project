@@ -4,7 +4,7 @@ class TaAssignmentsController < ApplicationController
   require "csv"
 
   def process_csvs
-    if params[:file3].present?
+    #if params[:file3].present?
 
       apps_csv = generate_csv_apps(Applicant.all)
       apps_csv_path = Rails.root.join("tmp", "TA_Applicants.csv")
@@ -14,18 +14,24 @@ class TaAssignmentsController < ApplicationController
       needs_csv_path = Rails.root.join("tmp", "TA_Needs.csv")
       File.write(needs_csv_path, needs_csv)
 
-      file3_path = save_uploaded_file(params[:file3])
+      recs_csv = generate_csv_recommendations(Recommendation.all)
+      recs_csv_path = Rails.root.join("tmp", "Prof_Prefs.csv")
+      File.write(recs_csv_path, recs_csv)
+      #File.write(needs_csv_path, needs_csv)
+
+
+      #file3_path = save_uploaded_file(params[:file3])
 
       python_path = `which python3`.strip  # Find Python path dynamically
-      system("#{python_path} app/Charizard/main.py '#{apps_csv_path}' '#{needs_csv_path}' '#{file3_path}'")
+      system("#{python_path} app/Charizard/main.py '#{apps_csv_path}' '#{needs_csv_path}' '#{recs_csv_path}'")
 
       flash[:notice] = "CSV processing complete"
       system("rake import:csv")
       redirect_to view_csv_path
-    else
-      flash[:alert] = "Please upload all 3 CSV files."
-      redirect_to ta_assignments_new_path
-    end
+    #else
+     # flash[:alert] = "Please upload all 3 CSV files."
+     # redirect_to ta_assignments_new_path
+    #end
   end
 
   def view_csv
@@ -160,6 +166,14 @@ class TaAssignmentsController < ApplicationController
       flash[:alert] = "No model found for file #{file_name}."
       redirect_to view_csv_path and return
     end
+
+    Recommendation.create(
+      email: "#{params[:ins_email]}",
+      name: "#{params[:ins_name]}",
+      course: "CSCE #{params[:course_number]}",
+      selectionsTA: "#{params[:stu_name]} (#{params[:stu_email]})",
+      feedback: "I would not recommend this student",
+    )
 
 
     file_path = File.join(csv_directory, file_name)
@@ -297,6 +311,9 @@ class TaAssignmentsController < ApplicationController
   def delete_all_csvs
     Dir[Rails.root.join("app/Charizard/util/public/output/*.csv")].each do |file|
       File.delete(file)
+    File.delete(Rails.root.join("tmp", "TA_Matches.csv")) if File.exist?(Rails.root.join("tmp", "TA_Matches.csv"))
+    File.delete(Rails.root.join("tmp", "Grader_Matches.csv")) if File.exist?(Rails.root.join("tmp", "Grader_Matches.csv"))  
+    File.delete(Rails.root.join("tmp", "Senior_Grader_Matches.csv")) if File.exist?(Rails.root.join("tmp", "Senior_Grader_Matches.csv"))  
     end
     GraderBackup.delete_all
     GraderMatch.delete_all
@@ -362,9 +379,27 @@ end
         record.grader.to_f,
         record.pre_reqs || "N/A"
       ]
+      end
     end
   end
+
+  def generate_csv_recommendations(records)
+    CSV.generate(headers: true) do |csv|
+      csv << ["Timestamp", "Email Address", "Your Name (first and last)", "Select a TA/Grader", "Course (e.g. CSCE 421)", "Feedback", "Additional Feedback about this student"]
+      records.each do |record|
+        csv << [
+          record.created_at.strftime('%m/%d/%Y %H:%M:%S'),
+          record.email,
+          record.name,
+          record.selectionsTA,
+          record.course,
+          record.feedback,
+          record.additionalfeedback
+        ]
+      end
+    end
   end
+
 
   def generate_csv_apps(records)
     CSV.generate(headers: true) do |csv|
@@ -399,4 +434,5 @@ end
       ]
     end
   end
+
 end

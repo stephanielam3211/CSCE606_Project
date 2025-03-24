@@ -29,6 +29,16 @@ class RecommendationsController < ApplicationController
     end
   end
 
+  def clear
+    Recommendation.delete_all
+
+    if request
+        redirect_to root_path, notice: "All recommendations have been deleted."
+    else
+        puts "All recommendations have been deleted."
+    end
+end
+
   def generate_csv
     CSV.generate(headers: true) do |csv|
       csv << ["Timestamp", "Email Address", "Your Name (first and last)", "Select a TA/Grader", "Course (e.g. CSCE 421)", "Feedback", "Additional Feedback about this student"]

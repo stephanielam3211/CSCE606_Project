@@ -34,14 +34,16 @@ Rails.application.routes.draw do
   resources :applicants do
     collection do
       get :my_application
+      get :search
     end
   end  
 
-  # Courses
+
   resources :courses, only: [ :index, :update, :destroy, :create ] do
     collection do
       post :import
       delete :clear
+      get :search
     end
   end
 
@@ -75,8 +77,12 @@ Rails.application.routes.draw do
   resources :recommendations, only: [:new, :create, :index] do
     collection do
       get :export_csv
+      delete :clear
     end
   end
+
+  get 'courses/search', to: 'courses#search'
+  get 'applicants/search', to: 'applicants#search'
 
   get "recommendations/new", to: "recommendations#new", as: "recommendation_view"
   post "recommendations", to: "recommendations#create"
