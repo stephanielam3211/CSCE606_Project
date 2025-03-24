@@ -1,34 +1,51 @@
 <div class="aux-container">
 <h1><%= link_to "Recommend TA", root_path, class: "action-button" %></h1>
 
-  <%= form_with model: @recommendation, local: true do |form| %>
-    <div>
-      <%= form.label :email, "Student Email" %>
-      <%= form.text_field :email %>
-    </div>
+<%= form_with model: @recommendation, local: true do |f| %>
+  <div>
+    <%= f.label :email, "Email Address" %>
+    <%= f.email_field :email, required: true %>
+  </div>
 
-    <div>
-      <%= form.label :name, "Student Name" %>
-      <%= form.text_field :name %>
-    </div>
+  <div>
+    <%= f.label :name, "Your Name (First and Last)" %>
+    <%= f.text_field :name, required: true %>
+  </div>
+  <div>
+    <%= f.label :course, "Course (e.g. CSCE 421)" %>
+    <%= f.text_field :course, class: "form-control" %>
+  </div>
 
-    <div>
-      <%= form.label :selectionTA, "TA Selection" %>
-      <%= form.select :selectionTA, [["Yes", "yes"], ["No", "no"]] %>
-    </div>
+  <div>
+    <%= f.label :selectionsTA, "Select a TA/Grader" %>
+    <%= f.text_field :selectionsTA, required: true %>
+  </div>
 
-    <div>
-      <%= form.label :feedback, "Feedback" %>
-      <%= form.text_area :feedback %>
-    </div>
+  <div>
+    <%= f.label :feedback, "Feedback" %>
+    <%= f.text_area :feedback, required: true %>
+  </div>
 
-    <div>
-      <%= form.label :additionalfeedback, "Additional Feedback" %>
-      <%= form.text_area :additionalfeedback %>
-    </div>
+  <div>
+    <%= f.label :additionalfeedback, "Additional Feedback about this student" %>
+    <%= f.text_area :additionalfeedback %>
+  </div>
 
-    <%= form.submit "Submit Recommendation" %>
-  <% end %>
+  <div>
+    <%= f.submit "Submit Recommendation" %>
+  </div>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", function() {
+    if (window.location.href.includes("notice=")) {
+      document.getElementById("recommendation_form").reset();
+    }
+  });
+</script>
+<% end %>
 
   <%= link_to "Back to Home", root_path, class: "action-button" %>
+
+  <%= link_to "Download CSV", recommendations_path(format: :csv), class: "btn btn-primary" %>
 </div>
+
