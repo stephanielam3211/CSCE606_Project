@@ -53,8 +53,17 @@
     <% end %>
 
     <div class="button-container">
-      <%= link_to "Edit this applicant", edit_applicant_path(@applicant), class: "action-button" %>
-      <%= link_to "Back to Home", root_path, class: "action-button" %>
+      <% if @applicant %>
+        <div class="button-container">
+          <%= link_to "Edit this applicant", edit_applicant_path(@applicant), class: "action-button" %>
+          <%= link_to "Back to Home", root_path, class: "action-button" %>
+        </div>
+      <% else %>
+        <p class="notice-text">No application found for your email.</p>
+        <div class="button-container">
+          <%= link_to "Back to Home", root_path, class: "action-button" %>
+        </div>
+      <% end %>
     </div>
   </div>
   <div class="footer">

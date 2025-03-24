@@ -88,7 +88,7 @@ class ApplicantsController < ApplicationController
   # for view my application
   def my_application
     # this is a temporary value for debugging need to be fixed after login is finished
-    @applicant = Applicant.find_by(name: session[:user])
+    @applicant = Applicant.find_by(email: session[:email])
   end
 
   private

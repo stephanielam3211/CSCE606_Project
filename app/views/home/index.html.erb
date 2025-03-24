@@ -5,17 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TA Assignment Home Page</title>
   <%= stylesheet_link_tag 'tamu', media: 'all', 'data-turbo-track': 'reload' %>
-  <style>
-    .hidden { display: none; }
-  </style>
 </head>
 <body>
-  <% if flash[:alert] %>
-    <div style="color: red; margin: 10px; padding: 10px; border: 1px solid red; border-radius: 5px;">
-      <%= flash[:alert] %>
-    </div>
-  <% end %>
-
+  <div class="header">
+    <%= image_tag "logo.png", alt: "CSCE Logo", class: "logo" %>
+    <%= link_to "logout", logout_path, method: :delete, class: "logout-button" %>
+  </div>
+  
   <% if session[:user_id].present? %>
   <p class="logged-in-message">Hello, <%= session[:user] %>! You are logged in.</p>
   <div class="content">
@@ -51,16 +47,13 @@
     </div>
   </div>
   <% else %>
-    <!-- If not logged in, display the login link -->
-    <p>You need to <%= link_to "Login", login_path %> to access this page.</p>
+    <div class="login-reminder" style="color: red;">
+      You need to <%= link_to "Login", login_path %> to access this page.
+    </div>
   <% end %>
 
   <div class="footer">
     &copy; 2025 Texas A&M University. All Rights Reserved.
-  </div>
-  <div class="header">
-    <%= image_tag "logo.png", alt: "CSCE Logo", class: "logo" %>
-    <%= link_to "logout", logout_path, method: :delete, class: "logout-button" %>
   </div>
 
   <script>
