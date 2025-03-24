@@ -11,9 +11,12 @@ Rails.application.routes.draw do
   get "up", to: "rails/health#show", as: :rails_health_check
 
   # Login
-  # get "login", to: "sessions#login" # login form
-  # post "login", to: "sessions#create" # login
-  # get "/logout", to: "sessions#destroy", as: "logout" # logout
+
+  get "/login", to: redirect("/auth/google_oauth2"), as: :login
+  get "/auth/:provider/callback", to: "sessions#create"
+  get "/auth/failure", to: redirect("/")
+  get "/logout", to: "sessions#destroy", as: "logout"
+
   resources :sessions, only: [:new, :create, :destroy]
 
   # Records
@@ -26,17 +29,7 @@ Rails.application.routes.draw do
   get "download_csv", to: "ta_assignments#download_csv", as: :download_csv_ta_assignments
   get "recommendations/new"
 
-  # New Login
-
-  get "/login", to: redirect("/auth/google_oauth2"), as: :login
-  get "/auth/:provider/callback", to: "sessions#create"
-  get "/auth/google_oauth2", to: redirect("/auth/google_oauth2/callback")
-  get "/auth/failure", to: redirect("/")
-  get "/logout", to: "sessions#destroy", as: "logout"
-
   resources :ta_assignments, only: [ :index, :edit, :update, :destroy ]
-
-  
 
   # Applicants
   resources :applicants do
@@ -45,7 +38,6 @@ Rails.application.routes.draw do
       get :search
     end
   end  
-
 
   resources :courses, only: [ :index, :update, :destroy, :create ] do
     collection do
