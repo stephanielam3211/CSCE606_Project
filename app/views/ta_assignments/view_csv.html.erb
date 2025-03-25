@@ -1,74 +1,98 @@
-<div class="aux-container">
-<h1><%= link_to "Processed CSV Files", ta_assignments_new_path, class: "action-button" %></h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TA Assignment - Upload & Process</title>
+  <%= stylesheet_link_tag 'tamu', media: 'all', 'data-turbo-track': 'reload' %>
+</head>
 
-<%= button_to 'Delete All CSV Files and Models', delete_all_csvs_path, method: :delete, class: 'btn btn--danger', data: { confirm: 'Are you sure you want to delete all CSV files and models?' } %>
+<body>
+  <div class="header">
+    <%= image_tag "logo.png", alt: "CSCE Logo", class: "logo" %>
+    <%= link_to "logout", logout_path, method: :delete, class: "logout-button" %>
+  </div>
 
-<h2>Select a Table to View</h2>
-<form method="get" action="<%= all_records_path %>">
-  <label for="table">Choose a table:</label>
-  <select name="table" id="table">
-    <option value="">-- Select --</option>
-    <option value="grader_matches">Grader Matches</option>
-    <option value="senior_grader_matches">Senior Grader Matches</option>
-    <option value="ta_matches">TA Matches</option>
-  </select>
-  <button type="submit">View</button>
-</form>
+  <main style="margin-top: 100px;">
+  <div class="aux-container">
+  <h1><%= link_to "Processed CSV Files", ta_assignments_new_path, class: "action-button" %></h1>
 
-<% if @csv_files.present? %>
-  <%= form_with url: view_csv_path, method: :get, local: true do %>
-    <label for="csv_file">Select CSV File:</label>
-    <%= select_tag :file, options_for_select([['Please select a file', '']] + @csv_files, @selected_csv), onchange: 'this.form.submit();' %>
-  <% end %>
+  <%= button_to 'Delete All CSV Files and Models', delete_all_csvs_path, method: :delete, class: 'btn btn--danger', data: { confirm: 'Are you sure you want to delete all CSV files and models?' } %>
 
-  <% if @csv_content.present? %>
-    <h2>Showing: <%= @selected_csv %></h2>
-    <p>
-      <%= link_to "Download CSV", download_csv_ta_assignments_path(file: @selected_csv), class: "button", data: { turbo: false } %>
-    </p>
+  <h2>Select a Table to View</h2>
+  <form method="get" action="<%= all_records_path %>">
+    <label for="table">Choose a table:</label>
+    <select name="table" id="table">
+      <option value="">-- Select --</option>
+      <option value="grader_matches">Grader Matches</option>
+      <option value="senior_grader_matches">Senior Grader Matches</option>
+      <option value="ta_matches">TA Matches</option>
+    </select>
+    <button type="submit">View</button>
+  </form>
+
+  <% if @csv_files.present? %>
     <%= form_with url: view_csv_path, method: :get, local: true do %>
-      <input type="hidden" name="file" value="<%= @selected_csv %>">
-      <label for="per_page">Rows per page:</label>
-      <%= select_tag :per_page, options_for_select([10, 25, 50], params[:per_page] || 10), onchange: 'this.form.submit();' %>
+      <label for="csv_file">Select CSV File:</label>
+      <%= select_tag :file, options_for_select([['Please select a file', '']] + @csv_files, @selected_csv), onchange: 'this.form.submit();' %>
     <% end %>
-    <% per_page = (params[:per_page] || 10).to_i %>
-    <% page = (params[:page] || 1).to_i %>
-    <% total_pages = (@csv_content.size.to_f / per_page).ceil %>
-    <% paginated_content = @csv_content[((page - 1) * per_page)...(page * per_page)] %>
-    <table border="1">
-      <thead>
-        <tr>
-          <% @csv_content.first.keys.each do |header| %>
-            <th><%= header %></th>
-          <% end %>
-        </tr>
-      </thead>
-      <tbody>
-        <% paginated_content.each do |row| %>
+
+    <% if @csv_content.present? %>
+      <h2>Showing: <%= @selected_csv %></h2>
+      <p>
+        <%= link_to "Download CSV", download_csv_ta_assignments_path(file: @selected_csv), class: "button", data: { turbo: false } %>
+      </p>
+      <%= form_with url: view_csv_path, method: :get, local: true do %>
+        <input type="hidden" name="file" value="<%= @selected_csv %>">
+        <label for="per_page">Rows per page:</label>
+        <%= select_tag :per_page, options_for_select([10, 25, 50], params[:per_page] || 10), onchange: 'this.form.submit();' %>
+      <% end %>
+      <% per_page = (params[:per_page] || 10).to_i %>
+      <% page = (params[:page] || 1).to_i %>
+      <% total_pages = (@csv_content.size.to_f / per_page).ceil %>
+      <% paginated_content = @csv_content[((page - 1) * per_page)...(page * per_page)] %>
+      <table border="1">
+        <thead>
           <tr>
-            <% row.each do |_, value| %>
-              <td><%= value %></td>
+            <% @csv_content.first.keys.each do |header| %>
+              <th><%= header %></th>
             <% end %>
           </tr>
+        </thead>
+        <tbody>
+          <% paginated_content.each do |row| %>
+            <tr>
+              <% row.each do |_, value| %>
+                <td><%= value %></td>
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <div>
+        <% if page > 1 %>
+          <%= link_to "Previous", view_csv_path(file: @selected_csv, per_page: per_page, page: page - 1) %>
         <% end %>
-      </tbody>
-    </table>
-    <div>
-      <% if page > 1 %>
-        <%= link_to "Previous", view_csv_path(file: @selected_csv, per_page: per_page, page: page - 1) %>
-      <% end %>
 
-      Page <%= page %> of <%= total_pages %>
+        Page <%= page %> of <%= total_pages %>
 
-      <% if page < total_pages %>
-        <%= link_to "Next", view_csv_path(file: @selected_csv, per_page: per_page, page: page + 1) %>
-      <% end %>
-    </div>
+        <% if page < total_pages %>
+          <%= link_to "Next", view_csv_path(file: @selected_csv, per_page: per_page, page: page + 1) %>
+        <% end %>
+      </div>
 
+    <% else %>
+      <p>No content to display.</p>
+    <% end %>
   <% else %>
-    <p>No content to display.</p>
+    <p>No CSV files found. Please process CSVs first.</p>
   <% end %>
-<% else %>
-  <p>No CSV files found. Please process CSVs first.</p>
-<% end %>
-</div>
+  <div style="text-align: center; margin-top: 20px;">
+      <%= link_to "Back to Home", root_path, class: "action-button" %>
+    </div>
+  </div>
+  </main>
+  <div class="footer">
+    &copy; 2025 Texas A&M University. All Rights Reserved.
+  </div>
+</body>

@@ -1,36 +1,65 @@
-<div class="aux-container">
-<h1><%= link_to "BlackListed Students", root_path, class: "action-button"%></h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blacklisted Students</title>
+  <%= stylesheet_link_tag 'tamu', media: 'all', 'data-turbo-track': 'reload' %>
+</head>
 
-<%= form_with model: Blacklist.new, url: blacklists_path, method: :post do |f| %>
-    <label>Name:</label>
-    <%= f.text_field :student_name, required: true %>
-  
-    <label>Email:</label>
-    <%= f.email_field :student_email, required: true %>
-  
-    <%= f.submit "Add to Blacklist" %>
-<% end %>
-  
-<table border="1">
-  <tr>
-    <th>Name</th>
-    <th>Email</th>
-    <th>Action</th>
-  </tr>
-  <% @blacklisted_students.each do |student| %>
-    <tr>
-      <td><%= student.student_name %></td>
-      <td><%= student.student_email %></td>
-      <td>
-        <form action="<%= blacklist_path(student) %>" method="post" style="display:inline;">
-          <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
-          <input type="hidden" name="_method" value="delete">
-          <button type="submit" onclick="return confirm('Are you sure?')">Remove</button>
-        </form>
-      </td>
-    </tr>
-  <% end %>
-</table>
+<body>
+  <div class="header">
+    <%= image_tag "logo.png", alt: "CSCE Logo", class: "logo" %>
+    <%= link_to "logout", logout_path, method: :delete, class: "logout-button" %>
+  </div>
 
-<%= link_to "Return to Home Page", root_path, class: "action-button", style: "display: block; margin-top: 20px; text-align: center;" %>
-</div>
+  <div class="main-content">
+    <h1><%= link_to "Blacklisted Students", root_path, class: "action-button" %></h1>
+
+    <%= form_with model: Blacklist.new, url: blacklists_path, method: :post, class: "form-inline", local: true do |f| %>
+      <div class="form-group">
+        <%= f.label :student_name, "Name:", class: "form-label" %>
+        <%= f.text_field :student_name, required: true, class: "form-control" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :student_email, "Email:", class: "form-label" %>
+        <%= f.email_field :student_email, required: true, class: "form-control" %>
+      </div>
+      <div class="form-group">
+        <%= f.submit "Add to Blacklist", class: "action-button" %>
+      </div>
+    <% end %>
+
+    <div style="max-height: 800px; overflow-y: auto; margin-top: 20px;">
+      <table class="styled-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @blacklisted_students.each do |student| %>
+            <tr>
+              <td><%= student.student_name %></td>
+              <td><%= student.student_email %></td>
+              <td>
+                <%= button_to "Remove", blacklist_path(student), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="margin-top: 20px; text-align: center;">
+      <%= link_to "Return to Home Page", root_path, class: "action-button" %>
+    </div>
+  </div>
+
+  <div class="footer">
+    &copy; 2025 Texas A&M University. All Rights Reserved.
+  </div>
+</body>
+</html>

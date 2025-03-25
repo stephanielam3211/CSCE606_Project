@@ -1,46 +1,77 @@
-<div class="aux-container">
-<h1><%= link_to "Upload CSV Files", root_path %></h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TA Assignment - Upload & Process</title>
+  <%= stylesheet_link_tag 'tamu', media: 'all', 'data-turbo-track': 'reload' %>
+</head>
 
-<section class="section-wrap aux-bg-light aux-py-8">
-  <div class="collection aux-container">
-    <div class="collection__intro aux-flex aux-flex-col aux-items-center aux-mb-6">
-      <div class="slab-heading aux-bg-white aux-rounded aux-shadow-md aux-py-6 aux-px-8 aux-text-center aux-max-w-2xl">
-        <div class="heading-group">
-          <h2 class="aux-text-3xl aux-font-bold aux-text-primary">
-            <%= link_to "View Assignments", view_csv_path, class: "aux-link aux-text-primary" %>
-          </h2>
+<body>
+  <div class="header">
+    <%= image_tag "logo.png", alt: "CSCE Logo", class: "logo" %>
+    <%= link_to "logout", logout_path, method: :delete, class: "logout-button" %>
+  </div>
+
+  <main style="margin-top: 100px;">
+  <div class="aux-container">
+    <h1><%= link_to "Upload CSV Files", root_path,style: "text-decoration: none;"%></h1>
+
+    <section class="section-wrap aux-bg-light aux-py-8">
+      <div class="collection aux-container">
+        <div class="collection__intro aux-flex aux-flex-col aux-items-center aux-mb-6">
+          <div class="slab-heading aux-bg-white aux-rounded aux-shadow-md aux-py-6 aux-px-8 aux-text-center aux-max-w-2xl">
+            <div class="heading-group">
+              <h2 class="aux-text-3xl aux-font-bold aux-text-primary">
+                <%= link_to "View Assignments", view_csv_path, class: "aux-link aux-text-primary", style: "text-decoration: none;"%>
+              </h2>
+            </div>
+
+            <span class="divider-hash gray-300 divider--mini aux-mt-2 aux-block"></span>
+
+            <p class="slab-heading__description aux-text-gray-600 aux-text-lg aux-mt-3">
+              Already Processed TA Assignments
+            </p>
+
+            <%= button_to 'Export Final CSV', export_final_csv_path, class: 'btn btn--primary' %>
+          </div>
         </div>
 
-        <span class="divider-hash gray-300 divider--mini aux-mt-2 aux-block"></span>
+        <div class="collection__feature-container aux-flex aux-justify-center">
+          <div class="collection__feature aux-card aux-shadow-lg aux-p-6 aux-rounded-lg aux-bg-white aux-w-full aux-max-w-lg aux-text-center aux-flex aux-flex-col aux-items-center">
+            <div class="factoid-collection">
+              <div class="factoid-collection__wrapper">
+                <div class="factoid">
+                  <div class="factoid__heading aux-text-xl aux-font-semibold aux-text-primary aux-mb-4">
+                    <span class="heading">Auto Assign</span>
+                  </div>
+                  <div class="aux-flex aux-flex-col aux-items-center aux-w-full">
+                    <%= button_to "Process Files", process_csvs_path, method: :post,
+                          class: "aux-button aux-button-primary aux-text-lg aux-font-bold aux-px-6 aux-py-3 aux-w-1/2",
+                          style: "margin-left: 18%;",
+                          onclick: "return confirm('Warning!! This action will reset any previous assignments.');" %>
 
-        <p class="slab-heading__description aux-text-gray-600 aux-text-lg aux-mt-3">
-          Already Processed TA Assignments
-        </p>
-        <%= button_to 'Export Final CSV', export_final_csv_path, class: 'btn btn--primary' %>
-      </div>
-    </div>
-
-   <div class="collection__feature-container aux-flex aux-justify-center">
-      <div class="collection__feature aux-card aux-shadow-lg aux-p-6 aux-rounded-lg aux-bg-white aux-w-full aux-max-w-lg aux-text-center aux-flex aux-flex-col aux-items-center">
-        <div class="factoid-collection">
-          <div class="factoid-collection__wrapper">
-            <div class="factoid">
-              <div class="factoid__heading aux-text-xl aux-font-semibold aux-text-primary aux-mb-4">
-                <span class="heading">Auto Assign</span>
-              </div>
-              <div class="aux-flex aux-flex-col aux-items-center aux-w-full">
-                <%= button_to "Process Files", process_csvs_path, method: :post, class: "aux-button aux-button-primary aux-text-lg aux-font-bold aux-px-6 aux-py-3 aux-w-1/2", style: "margin-left: 18%;", 
-                  onclick: "return confirm('Warning!! This action will reset any previous assignments.');" %>
-                <%= button_to "Re-Process Files", reprocess_csvs_path, method: :post, class: "aux-button aux-button-primary aux-text-lg aux-font-bold aux-px-6 aux-py-3 aux-w-1/2", style: "margin-left: 18%;" %>
+                    <%= button_to "Re-Process Files", reprocess_csvs_path, method: :post,
+                          class: "aux-button aux-button-primary aux-text-lg aux-font-bold aux-px-6 aux-py-3 aux-w-1/2",
+                          style: "margin-left: 18%;" %>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
+
       </div>
+    </section>
+
+    <div style="text-align: center; margin-top: 20px;">
+      <%= link_to "Back to Home", root_path, class: "action-button" %>
     </div>
-
   </div>
-</section>
-<%= link_to "Back to Home", root_path %>
+  </main>
 
-</div>
+  <div class="footer">
+    &copy; 2025 Texas A&M University. All Rights Reserved.
+  </div>
+</body>
+</html>

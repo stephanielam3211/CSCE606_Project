@@ -1,195 +1,144 @@
-<div class="aux-container">
-<h1><%= link_to "All Courses", root_path, class: "action-button" %></h1>
-<%= form_with(url: import_courses_path, method: :post, local: true, enctype: "multipart/form-data") do |form| %>
-  <div class="form-inline">
-    <%= form.label :csv_file, "Choose CSV file to import", class: "form-label" %>
-    <%= form.file_field :csv_file, class: "file-input" %>
-    <%= form.submit "Import CSV", class: "action-button" %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Courses</title>
+  <%= stylesheet_link_tag 'tamu', media: 'all', 'data-turbo-track': 'reload' %>
+  <meta name="csrf-token" content="<%= form_authenticity_token %>">
+</head>
+
+<body>
+  <div class="header">
+    <%= image_tag "logo.png", alt: "CSCE Logo", class: "logo" %>
+    <%= link_to "logout", logout_path, method: :delete, class: "logout-button" %>
   </div>
-<% end %>
-<%= button_to "Clear All Courses", clear_courses_path, method: :delete, data: { turbo: false }, onclick: "return confirmClear();" %>
 
-<div class="search search--slim">
-  <%= search_form_for @q, url: courses_path, method: :get do |f| %>
-    <div class="search-container">
-      <%= f.text_field :course_name_or_course_number_or_section_or_instructor_cont, placeholder: "Enter Course Name, Number, Section, or Instructor" %>
-      <%= f.submit "Search", class: "btn search-btn" %>
-      <%= link_to "Clear", courses_path, class: "btn search-btn" %>
-    </div>
-  <% end %>
-</div>
-<button id="toggle-form-btn" class="btn btn-primary">Add Course</button>
+  <div class="main-content">
+    <h1><%= link_to "All Courses", root_path, class: "action-button" %></h1>
 
+    <%= form_with(url: import_courses_path, method: :post, local: true, enctype: "multipart/form-data") do |form| %>
+      <div class="form-inline">
+        <%= form.label :csv_file, "Choose CSV file to import", class: "form-label" %>
+        <%= form.file_field :csv_file, class: "file-input" %>
+        <%= form.submit "Import CSV", class: "action-button" %>
+      </div>
+    <% end %>
 
-<!-- <%= link_to "Export CSV", export_courses_path(format: :csv), class: "action-button" %> -->
+    <%= button_to "Clear All Courses", clear_courses_path, method: :delete, data: { turbo: false }, onclick: "return confirmClear();", class: "action-button" %>
 
-<div style="max-height: 800px; overflow-y: auto;">
-
-<div id="course-form-container" style="display: none; margin-bottom: 10px;">
-  <%= form_with(model: Course.new, url: courses_path, method: :post, remote: true, html: { id: "course-form" }) do |f| %>
-    <div class="form-group">
-      <%= f.label :course_name %>
-      <%= f.text_field :course_name, class: "form-control" %>
-    </div>
-    <div class="form-group">
-      <%= f.label :course_number %>
-      <%= f.text_field :course_number, class: "form-control" %>
-    </div>
-    <div class="form-group">
-      <%= f.label :section %>
-      <%= f.text_field :section, class: "form-control" %>
-    </div>
-    <div class="form-group">
-      <%= f.label :instructor %>
-      <%= f.text_field :instructor, class: "form-control" %>
-    </div>
-    <div class="form-group">
-      <%= f.label :faculty_email %>
-      <%= f.text_field :faculty_email, class: "form-control" %>
-    </div>
-    <div class="form-group">
-      <%= f.label :ta %>
-      <%= f.text_field :ta, class: "form-control" %>
-    </div>
-    <div class="form-group">
-      <%= f.label :senior_grader %>
-      <%= f.text_field :senior_grader, class: "form-control" %>
-    </div>
-    <div class="form-group">
-      <%= f.label :grader %>
-      <%= f.text_field :grader, class: "form-control" %>
-    </div>
-    <div class="form-group">
-      <%= f.label :pre_reqs %>
-      <%= f.text_field :pre_reqs, class: "form-control" %>
-    </div>
-    <div class="form-group">
-      <button type="submit" class="btn btn-success">Save Course</button>
-      <button type="button" id="cancel-form-btn" class="btn btn-secondary">Cancel</button>
-    </div>
-  <% end %>
-</div>
-
-<table>
-  <thead style="position: sticky; top: 0; background-color: white; z-index: 100;">
-    <tr>
-      <th><%= link_to "Course Name", courses_path(sort: "course_name", direction: toggle_direction("course_name")) %></th>
-      <th><%= link_to "Course Number", courses_path(sort: "course_number", direction: toggle_direction("course_number")) %></th>
-      <th><%= link_to "Section", courses_path(sort: "section", direction: toggle_direction("section")) %></th>
-      <th><%= link_to "Instructor", courses_path(sort: "instructor", direction: toggle_direction("instructor")) %></th>
-      <th><%= link_to "Faculty Email", courses_path(sort: "faculty_email", direction: toggle_direction("faculty_email")) %></th>
-      <th><%= link_to "TA", courses_path(sort: "ta", direction: toggle_direction("ta")) %></th>
-      <th><%= link_to "Senior Grader", courses_path(sort: "senior_grader", direction: toggle_direction("senior_grader")) %></th>
-      <th><%= link_to "Grader", courses_path(sort: "grader", direction: toggle_direction("grader")) %></th>
-      <th>Pre-requisites</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-      <% @courses.each do |course| %>
-        <tr data-course-id="<%= course.id %>">
-          <td contenteditable="true" class="editable" data-column="course_name"><%= course.course_name %></td>
-          <td contenteditable="true" class="editable" data-column="course_number"><%= course.course_number %></td>
-          <td contenteditable="true" class="editable" data-column="section"><%= course.section %></td>
-          <td contenteditable="true" class="editable" data-column="instructor"><%= course.instructor %></td>
-          <td contenteditable="true" class="editable" data-column="faculty_email"><%= course.faculty_email %></td>
-          <td contenteditable="true" class="editable" data-column="ta"><%= course.ta %></td>
-          <td contenteditable="true" class="editable" data-column="senior_grader"><%= course.senior_grader %></td>
-          <td contenteditable="true" class="editable" data-column="grader"><%= course.grader %></td>
-          <td contenteditable="true" class="editable" data-column="pre_reqs"><%= course.pre_reqs %></td>
-          <td>
-            <div class="button-group button-group--cta">
-             <%= button_to 'Delete Course', course_path(course), method: :delete, remote: true, data: { confirm: 'Are you sure you want to delete this course?' }, class: 'btn btn-danger' %>
-            </div>
-          </td>
-        </tr>
+    <div class="search search--slim">
+      <%= search_form_for @q, url: courses_path, method: :get do |f| %>
+        <div class="search-container">
+          <%= f.text_field :course_name_or_course_number_or_section_or_instructor_cont, placeholder: "Enter Course Name, Number, Section, or Instructor", class: "search-input" %>
+          <%= f.submit "Search", class: "search-btn" %>
+          <%= link_to "Clear", courses_path, class: "search-btn" %>
+        </div>
       <% end %>
-    </tbody>
-  </table>
-</div>
-</div>
+    </div>
 
-<script>
+    <button id="toggle-form-btn" class="action-button">Add Course</button>
 
-  document.getElementById("toggle-form-btn").addEventListener("click", function() {
-    const formContainer = document.getElementById("course-form-container");
-    formContainer.style.display = formContainer.style.display === "none" ? "block" : "none";
-  });
+    <div id="course-form-container" style="display: none; margin-bottom: 10px;">
+      <%= form_with(model: Course.new, url: courses_path, method: :post, remote: true, html: { id: "course-form" }) do |f| %>
+        <div class="form-group"><%= f.label :course_name %><%= f.text_field :course_name, class: "form-control" %></div>
+        <div class="form-group"><%= f.label :course_number %><%= f.text_field :course_number, class: "form-control" %></div>
+        <div class="form-group"><%= f.label :section %><%= f.text_field :section, class: "form-control" %></div>
+        <div class="form-group"><%= f.label :instructor %><%= f.text_field :instructor, class: "form-control" %></div>
+        <div class="form-group"><%= f.label :faculty_email %><%= f.text_field :faculty_email, class: "form-control" %></div>
+        <div class="form-group"><%= f.label :ta %><%= f.text_field :ta, class: "form-control" %></div>
+        <div class="form-group"><%= f.label :senior_grader %><%= f.text_field :senior_grader, class: "form-control" %></div>
+        <div class="form-group"><%= f.label :grader %><%= f.text_field :grader, class: "form-control" %></div>
+        <div class="form-group"><%= f.label :pre_reqs %><%= f.text_field :pre_reqs, class: "form-control" %></div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-success">Save Course</button>
+          <button type="button" id="cancel-form-btn" class="btn btn-secondary">Cancel</button>
+        </div>
+      <% end %>
+    </div>
 
-  document.getElementById("cancel-form-btn").addEventListener("click", function() {
-    document.getElementById("course-form-container").style.display = "none";
-  });
-  document.addEventListener("DOMContentLoaded", function() {
-    document.querySelectorAll('form[data-remote="true"]').forEach(function(form) {
-        form.addEventListener("ajax:success", function(event) {
-          const [data, status, xhr] = event.detail;
-          const courseId = form.closest('tr').getAttribute('data-course-id');
-          const row = document.querySelector(`tr[data-course-id='${courseId}']`);
-          if (row) {
-            row.remove(); 
-          }
-        });
+    <div style="max-height: 800px; overflow-y: auto;">
+      <table class="styled-table">
+        <thead style="position: sticky; top: 0; background-color: white; z-index: 100;">
+          <tr>
+            <th><%= link_to "Course Name", courses_path(sort: "course_name", direction: toggle_direction("course_name")) %></th>
+            <th><%= link_to "Course Number", courses_path(sort: "course_number", direction: toggle_direction("course_number")) %></th>
+            <th><%= link_to "Section", courses_path(sort: "section", direction: toggle_direction("section")) %></th>
+            <th><%= link_to "Instructor", courses_path(sort: "instructor", direction: toggle_direction("instructor")) %></th>
+            <th><%= link_to "Faculty Email", courses_path(sort: "faculty_email", direction: toggle_direction("faculty_email")) %></th>
+            <th><%= link_to "TA", courses_path(sort: "ta", direction: toggle_direction("ta")) %></th>
+            <th><%= link_to "Senior Grader", courses_path(sort: "senior_grader", direction: toggle_direction("senior_grader")) %></th>
+            <th><%= link_to "Grader", courses_path(sort: "grader", direction: toggle_direction("grader")) %></th>
+            <th>Pre-requisites</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @courses.each do |course| %>
+            <tr data-course-id="<%= course.id %>">
+              <td contenteditable="true" class="editable" data-column="course_name"><%= course.course_name %></td>
+              <td contenteditable="true" class="editable" data-column="course_number"><%= course.course_number %></td>
+              <td contenteditable="true" class="editable" data-column="section"><%= course.section %></td>
+              <td contenteditable="true" class="editable" data-column="instructor"><%= course.instructor %></td>
+              <td contenteditable="true" class="editable" data-column="faculty_email"><%= course.faculty_email %></td>
+              <td contenteditable="true" class="editable" data-column="ta"><%= course.ta %></td>
+              <td contenteditable="true" class="editable" data-column="senior_grader"><%= course.senior_grader %></td>
+              <td contenteditable="true" class="editable" data-column="grader"><%= course.grader %></td>
+              <td contenteditable="true" class="editable" data-column="pre_reqs"><%= course.pre_reqs %></td>
+              <td>
+                <%= button_to 'Delete Course', course_path(course), method: :delete, remote: true,
+                      data: { confirm: 'Are you sure you want to delete this course?' },
+                      class: 'btn btn-danger' %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="margin-top: 20px;">
+      <%= link_to "Back to Main Page", root_path, class: "action-button" %>
+    </div>
+  </div>
+
+  <div class="footer">
+    &copy; 2025 Texas A&M University. All Rights Reserved.
+  </div>
+
+  <script>
+    document.getElementById("toggle-form-btn").addEventListener("click", function() {
+      const formContainer = document.getElementById("course-form-container");
+      formContainer.style.display = formContainer.style.display === "none" ? "block" : "none";
     });
-  });
 
-  document.querySelectorAll('.editable').forEach(cell => {
-    cell.addEventListener('blur', function() {
-      const row = this.closest('tr');
-      const column = this.getAttribute('data-column');
-      const newValue = this.innerText;
-      const courseId = row.getAttribute('data-course-id');
+    document.getElementById("cancel-form-btn").addEventListener("click", function() {
+      document.getElementById("course-form-container").style.display = "none";
+    });
 
-      const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-      
-      fetch('/courses/' + courseId, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-Token': csrfToken 
-        },
-        body: JSON.stringify({
-          course: {
-            [column]: newValue
-          }
-        })
-      })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Course updated:', data);
-      })
-      .catch(error => {
-        console.error('Error:', error);
+    document.querySelectorAll('.editable').forEach(cell => {
+      cell.addEventListener('blur', function() {
+        const row = this.closest('tr');
+        const column = this.getAttribute('data-column');
+        const newValue = this.innerText;
+        const courseId = row.getAttribute('data-course-id');
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        fetch('/courses/' + courseId, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': csrfToken
+          },
+          body: JSON.stringify({
+            course: {
+              [column]: newValue
+            }
+          })
+        }).then(response => response.json())
+          .then(data => console.log('Course updated:', data))
+          .catch(error => console.error('Error:', error));
       });
     });
-  });
-</script>
-<style>
-.form-inline {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .form-label {
-    margin-right: 10px;
-  }
-
-  .file-input {
-    padding: 5px;
-  }
-
-  .action-button {
-    padding: 5px 10px;
-    cursor: pointer;
-  }
-  .search-container {
-    display: flex;
-    align-items: center;
-
-  }
-
-  .search-container input[type="text"] {
-  }
-  .search-btn { 
-  }
-</style>
+  </script>
+</body>
+</html>

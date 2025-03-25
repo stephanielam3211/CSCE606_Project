@@ -1,26 +1,55 @@
-<h2>Withdrawal Requests</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Withdrawal Requests</title>
+  <%= stylesheet_link_tag 'tamu', media: 'all', 'data-turbo-track': 'reload' %>
+</head>
 
-<table border="1">
-  <thead>
-    <tr>
-      <th>Course Number</th>
-      <th>Section ID</th>
-      <th>Instructor Name</th>
-      <th>Instructor Email</th>
-      <th>Student Name</th>
-      <th>Student Email</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @withdrawal_requests.each do |request| %>
-      <tr>
-        <td><%= request.course_number %></td>
-        <td><%= request.section_id %></td>
-        <td><%= request.instructor_name %></td>
-        <td><%= request.instructor_email %></td>
-        <td><%= request.student_name %></td>
-        <td><%= request.student_email %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<body>
+  <div class="header">
+    <%= image_tag "logo.png", alt: "CSCE Logo", class: "logo" %>
+    <%= link_to "logout", logout_path, method: :delete, class: "logout-button" %>
+  </div>
+
+  <div class="main-content">
+    <h1>Withdrawal Requests</h1>
+
+    <div style="max-height: 800px; overflow-y: auto;">
+      <table class="styled-table">
+        <thead>
+          <tr>
+            <th>Course Number</th>
+            <th>Section ID</th>
+            <th>Instructor Name</th>
+            <th>Instructor Email</th>
+            <th>Student Name</th>
+            <th>Student Email</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @withdrawal_requests.each do |request| %>
+            <tr>
+              <td><%= request.course_number %></td>
+              <td><%= request.section_id %></td>
+              <td><%= request.instructor_name %></td>
+              <td><%= request.instructor_email %></td>
+              <td><%= request.student_name %></td>
+              <td><%= request.student_email %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="margin-top: 20px;">
+      <%= link_to "Back to Main Page", root_path, class: "action-button" %>
+    </div>
+  </div>
+
+  <div class="footer">
+    &copy; 2025 Texas A&M University. All Rights Reserved.
+  </div>
+</body>
+</html>
