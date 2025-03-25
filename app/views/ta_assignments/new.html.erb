@@ -29,7 +29,8 @@
                 <span class="heading">Auto Assign</span>
               </div>
               <div class="aux-flex aux-flex-col aux-items-center aux-w-full">
-                <%= button_to "Process Files", process_csvs_path, method: :post, class: "aux-button aux-button-primary aux-text-lg aux-font-bold aux-px-6 aux-py-3 aux-w-1/2", style: "margin-left: 18%;" %>
+                <%= button_to "Process Files", process_csvs_path, method: :post, class: "aux-button aux-button-primary aux-text-lg aux-font-bold aux-px-6 aux-py-3 aux-w-1/2", style: "margin-left: 18%;", 
+                  onclick: "return confirm('Warning!! This action will reset any previous assignments.');" %>
                 <%= button_to "Re-Process Files", reprocess_csvs_path, method: :post, class: "aux-button aux-button-primary aux-text-lg aux-font-bold aux-px-6 aux-py-3 aux-w-1/2", style: "margin-left: 18%;" %>
               </div>
             </div>
