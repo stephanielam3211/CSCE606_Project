@@ -52,7 +52,10 @@
     </div>
   <% else %>
     <!-- If not logged in, display the login link -->
-    <p>You need to <%= link_to "Login", login_path %> to access this page.</p>
+    <p class="login-reminder">
+       Only <strong>@tamu.edu</strong> emails are allowed.<br>
+       You need to <%= link_to "Login", "/auth/google_oauth2", data: { turbo: false } %> to access this page.
+     </p>
   <% end %>
 
   <div class="footer">
