@@ -31,13 +31,12 @@ class RecommendationsController < ApplicationController
 
   def clear
     Recommendation.delete_all
-
     if request
         redirect_to root_path, notice: "All recommendations have been deleted."
     else
         puts "All recommendations have been deleted."
     end
-end
+  end
 
   def generate_csv
     CSV.generate(headers: true) do |csv|
