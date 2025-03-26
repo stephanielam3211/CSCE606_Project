@@ -118,4 +118,8 @@ Rails.application.configure do
   }
   config.action_mailer.default_url_options = { host: "tamu-ta.herokuapp.com" }
 
+  config.cache_store = :redis_cache_store, { url: ENV['UPSTASH_REDIS_URL'], expires_in: 90.minutes }
+
+  config.session_store :cache_store, key: '_your_app_session', expire_after: 90.minutes
+
 end
