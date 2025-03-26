@@ -40,6 +40,9 @@ rubocop
 ```sh 
 open coverage/index.html
 ``` 
+```
+heroku run rails db:migrate
+```
 
 * Services (job queues, cache servers, search engines, etc.)
 

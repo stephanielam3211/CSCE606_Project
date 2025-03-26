@@ -4,6 +4,13 @@ class ApplicationController < ActionController::Base
   before_action :require_login
   before_action :set_cache_buster
   helper_method :current_user
+
+  def wipe_users
+    User.delete_all
+    reset_session
+    redirect_to root_path, notice: 'All users have been cleared.'
+  end
+
   private
 
   def set_cache_buster

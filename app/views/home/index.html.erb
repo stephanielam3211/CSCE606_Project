@@ -17,54 +17,56 @@
   <% if session[:user_id].present? %>
   <p class="logged-in-message">Hello, <%= session[:user] %>! You are logged in.</p>
   <div class="content">
-    <div class="role-selector">
-      <button class="role-button" onclick="showButtons('student')">Student</button>
-      <button class="role-button" onclick="showButtons('prof')">Professor</button>
-      <button class="role-button" onclick="showButtons('admin')">Admin</button>
-    </div>
+   <% if session[:role].to_s == "student" %>
+      <div id="student-buttons" class="button-container">
+          <div id="faculty-buttons" class="button-container">
+      <!-- REMOVE AFTER TESTING-->
+        <%= button_to "Clear All users", wipe_users_path, method: :delete, data: { turbo: false }, onclick: "return confirmClear();"%>
+      <!-- REMOVE AFTER TESTING-->
+        <%= link_to "Submit Request for TA/Grader", new_applicant_path, class: "action-button"%>
+        <%= link_to "Request a Withdrawal", new_withdrawal_request_path, class: "action-button" %>
+        <%= link_to "View My Applications", my_application_applicants_path, class: "action-button" %>
+      </div>
+    <% end %>
 
+   <% if session[:role].to_s == "faculty" %>
+      <div id="faculty-buttons" class="button-container">
+      <!-- REMOVE AFTER TESTING-->
+        <%= button_to "Clear All users", wipe_users_path, method: :delete, data: { turbo: false }, onclick: "return confirmClear();"%>
+      <!-- REMOVE AFTER TESTING-->
+        <%= link_to "Recomend a Student", recommendation_view_path, class: "action-button" %>
+        <%= link_to "View My Recommandations", root_path, class: "action-button" %>
+      </div>
+    <% end %>
+
+    <% if session[:role].to_s == "admin" %>
+      <div class="role-selector">
+        <button class="role-button" onclick="showButtons('student')">Student</button>
+        <button class="role-button" onclick="showButtons('faculty')">Professor</button>
+        <button class="role-button" onclick="showButtons('admin')">Admin</button>
+      </div>
       <div id="student-buttons" class="button-container hidden">
         <%= link_to "Submit Request for TA/Grader", new_applicant_path, class: "action-button"%>
         <%= link_to "Request a Withdrawal", new_withdrawal_request_path, class: "action-button" %>
         <%= link_to "View My Applications", my_application_applicants_path, class: "action-button" %>
       </div>
-
-      <div id="prof-buttons" class="button-container hidden">
+      <div id="faculty-buttons" class="button-container hidden">
         <%= link_to "Recomend a Student", recommendation_view_path, class: "action-button" %>
         <%= link_to "View My Recommandations", root_path, class: "action-button" %>
       </div>
-
       <div id="admin-buttons" class="button-container hidden">
+        <%= button_to "Clear All users", wipe_users_path, method: :delete, data: { turbo: false }, onclick: "return confirmClear();"%>
         <%= link_to "Assign TA/Grader", ta_assignments_new_path, class: "action-button" %> 
         <%= link_to "View Applicants", applicants_path, class: "action-button" %>
         <%= button_to "Clear All Recommendations", clear_recommendations_path, method: :delete, data: { turbo: false }, onclick: "return confirmClear();"%>
         <%= link_to "View Classes", courses_path, class: "action-button" %>
         <%= link_to "View Withdrawal Requests", withdrawal_requests_path, class: "action-button" %>
         <%= link_to "View Blacklisted Students", blacklists_path, class: "action-button" %>
-         <%= link_to "Send Emails", new_email_path, class: "action-button" %>
+        <%= link_to "Send Emails", new_email_path, class: "action-button" %>
         <%= link_to "Submit Request for TA/Grader", new_applicant_path, class: "action-button" %>
         <%= link_to "Recomend a Student", recommendation_view_path, class: "action-button" %>
       </div>
-    </div>
-
-    <div id="prof-buttons" class="button-container hidden">
-      <%= link_to "Recomend a Student", recommendation_view_path, class: "action-button" %>
-      <%= link_to "View My Recommandations", root_path, class: "action-button" %>
-    </div>
-
-    <div id="admin-buttons" class="button-container hidden">
-      <%= link_to "Assign TA/Grader", ta_assignments_new_path, class: "action-button" %>
-      <%= link_to "Reassign TA/grader", ta_reassignments_new_path, class: "action-button" %>
-      
-      <%= link_to "View Applicants", applicants_path, class: "action-button" %>
-      <%= button_to "Clear All Recommendations", clear_recommendations_path, method: :delete, data: { turbo: false }, onclick: "return confirmClear();" %>
-      <%= link_to "View Classes", courses_path, class: "action-button" %>
-      <%= link_to "View Withdrawal Requests", withdrawal_requests_path, class: "action-button" %>
-      <%= link_to "View Blacklisted Students", blacklists_path, class: "action-button" %>
-
-      <%= link_to "Submit Request for TA/Grader", new_applicant_path, class: "action-button"%>
-      <%= link_to "Recomend a Student", recommendation_view_path, class: "action-button" %>
-    </div>
+    <% end %>
   </div>
   <% else %>
     <!-- If not logged in, display the login link -->
@@ -78,9 +80,9 @@
     &copy; 2025 Texas A&M University. All Rights Reserved.
   </div>
 
-  <script>
+<script>
     function showButtons(role) {
-      const roles = ["student", "prof", "admin"];
+      const roles = ["student", "faculty", "admin"];
       roles.forEach(r => {
         document.getElementById(`${r}-buttons`).classList.add("hidden");
       });
