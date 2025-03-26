@@ -83,5 +83,4 @@ gem 'googleauth'
 
 gem 'omniauth-oauth2'
 
-gem 'redis'
 
