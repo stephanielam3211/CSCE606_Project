@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  get "emails/new"
+  get "emails/create"
 
   # Root and Home
   root "home#index"
@@ -30,7 +32,8 @@ Rails.application.routes.draw do
   get "recommendations/new"
 
   resources :ta_assignments, only: [ :index, :edit, :update, :destroy ]
-
+  
+  resources :emails, only: [:new, :create]
   # Applicants
   resources :applicants do
     collection do

@@ -3,17 +3,9 @@
 class TaReassignmentsController < ApplicationController
     require "csv"
     def process_csvs
-      #if params[:file3].present?
         apps_csv_path = Rails.root.join("app/Charizard/util/public/output", "Unassigned_Applicants.csv")
         needs_csv_path = Rails.root.join("app/Charizard/util/public/output", "New_Needs.csv")
         recommendation_path = Rails.root.join("tmp", "Prof_Prefs.csv")
-
-        #file3_path = save_uploaded_file(params[:file3])
-
-        #unless File.exist?(apps_csv_path) && File.exist?(needs_csv_path)
-        #  flash[:alert] = "One or more required CSV files are missing."
-        #  return redirect_to ta_reassignments_new_path
-        #end
 
         ta_csv_path = Rails.root.join("app/Charizard/util/public/output", "TA_Matches.csv")
         senior_grader_csv_path = Rails.root.join("app/Charizard/util/public/output", "Senior_Grader_Matches.csv")
@@ -56,11 +48,6 @@ class TaReassignmentsController < ApplicationController
         system("rake import:csv")
  
         redirect_to view_csv_path
-
-     #else
-      #  flash[:alert] = "An error has occurred."
-      #  redirect_to ta_reassignments_new_path
-     # end
     end
 
 
