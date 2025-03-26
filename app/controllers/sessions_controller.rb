@@ -11,7 +11,7 @@ class SessionsController < ApplicationController
     session[:email] = user.email
     session[:user] = user.name
     session[:role] = 'admin'
-    redirect_to courses_path#root_path
+    redirect_to root_path
   rescue => e
     redirect_to root_path, alert: e.message
   end
