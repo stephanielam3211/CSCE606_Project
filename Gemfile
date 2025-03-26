@@ -78,3 +78,7 @@ gem "kaminari", "~> 1.2"
 gem 'omniauth-google-oauth2'
 
 gem 'dotenv-rails'
+
+gem 'googleauth'
+
+gem 'omniauth-oauth2'

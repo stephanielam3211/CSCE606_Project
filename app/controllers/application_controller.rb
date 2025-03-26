@@ -2,6 +2,8 @@
 
 class ApplicationController < ActionController::Base
   before_action :set_cache_buster
+   
+  helper_method :current_user
 
   private
 
