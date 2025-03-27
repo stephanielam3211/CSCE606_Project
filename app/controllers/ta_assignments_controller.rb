@@ -155,7 +155,6 @@ class TaAssignmentsController < ApplicationController
     Rails.logger.error "record not found with uin #{params[:uin]}" if record.nil?
 
     if record
-      records.reject! { |r| r["UIN"] == params[:uin] }
 
       modified_class_csv_path = Rails.root.join("app", "Charizard", "util", "public", "output", "Modified_assignments.csv")
 
