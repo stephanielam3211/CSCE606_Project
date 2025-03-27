@@ -35,6 +35,8 @@ Rails.application.routes.draw do
   
   resources :emails, only: [:new, :create]
   # Applicants
+
+  delete 'wipe_applicants', to: 'applicants#wipe_applicants'
   resources :applicants do
     collection do
       get :my_application
@@ -97,7 +99,7 @@ Rails.application.routes.draw do
   get "export_courses", to: "courses#export", as: :export_courses
 
   # withdrawer
-  resources :withdrawal_requests, only: [ :new, :create, :index ]
+  resources :withdrawal_requests, only: [:new, :create, :index, :show]
   post "export_final_csv", to: "ta_assignments#export_final_csv", as: "export_final_csv"
 
   delete 'wipe_users', to: 'application#wipe_users'

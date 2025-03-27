@@ -14,48 +14,40 @@
   </div>
 
   <div class="main-content">
-    <h2>Request a Withdrawal</h2>
+    <h2>Accept/Deny Assignment</h2>
 
-    <%= form_with model: @withdrawal_request, url: withdrawal_requests_path, local: true do |f| %>
-      <div class="form-grid">
-        <div>
-          <%= f.label :course_number, "Course Number" %>
-          <%= f.text_field :course_number, required: true %>
-        </div>
-
-        <div>
-          <%= f.label :section_id, "Section ID" %>
-          <%= f.text_field :section_id, required: true %>
-        </div>
-
-        <div>
-          <%= f.label :instructor_name, "Instructor Name" %>
-          <%= f.text_field :instructor_name, required: true %>
-        </div>
-
-        <div>
-          <%= f.label :instructor_email, "Instructor Email" %>
-          <%= f.email_field :instructor_email, required: true %>
-        </div>
-
-        <div>
-          <%= f.label :student_name, "Student Name" %>
-          <%= f.text_field :student_name, required: true %>
-        </div>
-
-        <div>
-          <%= f.label :student_email, "Student Email" %>
-          <%= f.email_field :student_email, required: true %>
-        </div>
-
-        <div class="full-width">
-          <%= f.submit "Submit Withdrawal Request", class: "action-button" %>
-          <%= link_to "Back to Main Page", root_path, class: "action-button" %>
-        </div>
-      </div>
+    <% if @role && @role != "Not Found" %>
+    <div class="record-details">
+      <h3>Found Record Details</h3>
+      <% key_mapping = {
+        "stu_email" => "Student Email",
+        "stu_name" => "Student Name",
+        "course_number" => "Course Number",
+        "section" => "Section",
+        "ins_name" => "Instructor Name",
+        "ins_email" => "Instructor Email",
+      } %>
+      <ul>
+        <% excluded_keys = ["created_at", "updated_at", "id"] %> 
+        <% @role.attributes.each do |key, value| %>
+          <% next if excluded_keys.include?(key) %> 
+          <li><strong><%= key_mapping[key] || key.humanize  %>:</strong> <%= value %></li>
+        <% end %>
+      </ul>
+      <%= button_to "Deny", 
+          ta_assignment_path(id: @role.id, file: @class, ins_email: @role.ins_email, ins_name: @role.ins_name, 
+                                  course_number: @role.course_number, stu_name: @role.stu_name, 
+                                  stu_email: @role.stu_email, uin: @role.uin, section: @role.section), 
+          method: :delete, 
+          class: "deny-button",
+          onclick: "return confirm('Warning!! This will permanently delete your assignments. There is no guarantee another posistion will be given');" %>
+    </div>
+    <% elsif @role == "Not Found" %>
+    <p><strong>Your Application is being processed or rejected.</strong></p>
     <% end %>
-
-
+  </div>
+  <div style="text-align: center; margin-top: 20px;">
+      <%= link_to "Back to Home", root_path, class: "action-button" %>
   </div>
   <div class="footer">
     &copy; 2025 Texas A&M University. All Rights Reserved.

@@ -45,7 +45,8 @@
           <%= f.select :feedback, [
                 ["I want to work with this student"],
                 ["I would recommend this person as a good TA/grader"],
-                ["I would not recommend this student"]
+                ["I would not recommend this student"],
+                ["I do not want to work with this student"]
               ],
               { prompt: "Feedback" }, required: true, class: "form-control" %>
         </div>

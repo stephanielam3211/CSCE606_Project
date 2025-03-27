@@ -6,6 +6,20 @@ require "fileutils"
 class WithdrawalRequestsController < ApplicationController
   def new
     @withdrawal_request = WithdrawalRequest.new
+    @applicant = Applicant.find_by(email: session[:email])
+
+    if (ta_matches = TaMatch.find_by(stu_email: session[:email]))
+      @role = ta_matches
+      @class = "ta_matches"
+    elsif (senior_grader_matches = SeniorGraderMatch.find_by(stu_email: session[:email]))
+      @role = senior_grader_matches
+      @class = "senior_grader_matches"
+    elsif (grader_matches = GraderMatch.find_by(stu_email: session[:email]))
+      @role = grader_matches
+      @class = "grader_matches"
+    else
+      @role = "Not Found"
+    end
   end
 
   def create
@@ -24,6 +38,28 @@ class WithdrawalRequestsController < ApplicationController
       flash[:alert] = "There was an error submitting your request."
       render :new
     end
+  end
+
+  def show
+    @applicant = Applicant.find_by(email: session[:email])
+
+    if (ta_matches = TaMatch.find_by(stu_email: session[:email]))
+      @role = ta_matches
+      @class = "ta_matches"
+    elsif (senior_grader_matches = SeniorGraderMatch.find_by(stu_email: session[:email]))
+      @role = senior_grader_matches
+      @class = "senior_grader_matches"
+    elsif (grader_matches = GraderMatch.find_by(stu_email: session[:email]))
+      @role = grader_matches
+      @class = "grader_matches"
+    else
+      @role = "Not Found"
+    end
+  end
+
+  def confirm_app
+    
+
   end
 
 

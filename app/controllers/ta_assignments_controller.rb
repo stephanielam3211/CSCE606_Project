@@ -142,7 +142,7 @@ class TaAssignmentsController < ApplicationController
       name: "#{params[:ins_name]}",
       course: "CSCE #{params[:course_number]}",
       selectionsTA: "#{params[:stu_name]} (#{params[:stu_email]})",
-      feedback: "I would not recommend this student",
+      feedback: "I do not want to work with this student"
     )
 
     file_path = File.join(csv_directory, file_name)
@@ -239,6 +239,7 @@ class TaAssignmentsController < ApplicationController
         end
       end
       model_record.destroy
+      records.reject! { |r| r["UIN"] == params[:uin] }
       Rails.logger.debug "Record with UIN #{params[:uin]} destroyed."
       flash[:notice] = "Student record deleted. Class details saved separately."
     else

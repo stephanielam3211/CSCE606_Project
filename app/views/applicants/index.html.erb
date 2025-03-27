@@ -34,16 +34,16 @@
     <div class="search search--slim">
       <%= search_form_for @q, url: applicants_path, method: :get do |f| %>
         <div class="search-container">
-          <%= f.label :name_or_email_or_uin_cont, "Search by Name, Email, or UIN" %>
-          <%= f.text_field :name_or_email_or_uin_cont, placeholder: "Enter Name, Email, or UIN", class: "search-input" %>
+          <%= f.label :name_or_email_or_uin_or_degree_or_number_or_hours_or_prev_ta_or_advisor_or_cert_or_citizenship_cont, "Search for Applicant" %>
+          <%= f.text_field :name_or_email_or_uin_or_degree_or_number_or_hours_or_prev_ta_or_advisor_or_cert_or_citizenship_cont, placeholder: "Enter Name, Email, UIN, Degree, etc", class: "search-input" %>
           <%= f.submit "Search", class: "search-btn" %>
           <%= link_to "Clear", applicants_path, class: "search-btn" %>
         </div>
       <% end %>
     </div>
 
-    <div style="max-height: 800px; overflow-y: auto;">
-      <table class="styled-table">
+    <div style="max-height: 800px; overflow-y: auto; overflow-x: auto;">
+      <table class="styled-table" style="min-width: 2000px;">
         <thead>
           <tr>
             <th>
@@ -71,9 +71,65 @@
               <% end %>
             </th>
             <th>
+              <%= link_to applicants_path(sort: "gpa", direction: toggle_direction("gpa")) do %>
+                GPA
+                <% if params[:sort] == "gpa" %>
+                  <span class="sort-arrow"><%= params[:direction] == "asc" ? "▲" : "▼" %></span>
+                <% end %>
+              <% end %>
+            </th>
+            <th>
               <%= link_to applicants_path(sort: "positions", direction: toggle_direction("positions")) do %>
                 Applied Positions
                 <% if params[:sort] == "positions" %>
+                  <span class="sort-arrow"><%= params[:direction] == "asc" ? "▲" : "▼" %></span>
+                <% end %>
+              <% end %>
+            </th>
+<th>
+              <%= link_to applicants_path(sort: "number", direction: toggle_direction("number")) do %>
+                Number
+                <% if params[:sort] == "number" %>
+                  <span class="sort-arrow"><%= params[:direction] == "asc" ? "▲" : "▼" %></span>
+                <% end %>
+              <% end %>
+            </th>
+            <th>
+              <%= link_to applicants_path(sort: "uin", direction: toggle_direction("uin")) do %>
+                UIN
+                <% if params[:sort] == "uin" %>
+                  <span class="sort-arrow"><%= params[:direction] == "asc" ? "▲" : "▼" %></span>
+                <% end %>
+              <% end %>
+            </th>
+            <th>
+              <%= link_to applicants_path(sort: "hours", direction: toggle_direction("hours")) do %>
+                Hours
+                <% if params[:sort] == "hours" %>
+                  <span class="sort-arrow"><%= params[:direction] == "asc" ? "▲" : "▼" %></span>
+                <% end %>
+              <% end %>
+            </th>
+            <th>
+              <%= link_to applicants_path(sort: "citizenship", direction: toggle_direction("citizenship")) do %>
+                Citizenship
+                <% if params[:sort] == "citizenship" %>
+                  <span class="sort-arrow"><%= params[:direction] == "asc" ? "▲" : "▼" %></span>
+                <% end %>
+              <% end %>
+            </th>
+            <th>
+              <%= link_to applicants_path(sort: "cert", direction: toggle_direction("cert")) do %>
+                Certification
+                <% if params[:sort] == "cert" %>
+                  <span class="sort-arrow"><%= params[:direction] == "asc" ? "▲" : "▼" %></span>
+                <% end %>
+              <% end %>
+            </th>
+            <th>
+              <%= link_to applicants_path(sort: "prev_ta", direction: toggle_direction("prev_ta")) do %>
+                Previous TA Positions
+                <% if params[:sort] == "prev_ta" %>
                   <span class="sort-arrow"><%= params[:direction] == "asc" ? "▲" : "▼" %></span>
                 <% end %>
               <% end %>
@@ -87,13 +143,22 @@
               <% end %>
             </th>
             <th>
-              <%= link_to applicants_path(sort: "prev_ta", direction: toggle_direction("prev_ta")) do %>
-                Previous TA Positions
-                <% if params[:sort] == "prev_ta" %>
+              <%= link_to applicants_path(sort: "prev_uni", direction: toggle_direction("prev_uni")) do %>
+                Previous Universities
+                <% if params[:sort] == "prev_uni" %>
                   <span class="sort-arrow"><%= params[:direction] == "asc" ? "▲" : "▼" %></span>
                 <% end %>
               <% end %>
             </th>
+            <th>
+              <%= link_to applicants_path(sort: "advisors", direction: toggle_direction("advisors")) do %>
+                Advisors
+                <% if params[:sort] == "advisors" %>
+                  <span class="sort-arrow"><%= params[:direction] == "asc" ? "▲" : "▼" %></span>
+                <% end %>
+              <% end %>
+            </th>
+
             <th>More</th>
           </tr>
         </thead>
@@ -105,10 +170,19 @@
               </td>
               <td><%= applicant.email %></td>
               <td><%= applicant.degree %></td>
+              <td><%= applicant.gpa %></td>
               <td><%= applicant.positions %></td>
-              <td><%= applicant.prev_course %></td>
+              <td><%= applicant.number %></td>
+              <td><%= applicant.uin %></td>
+              <td><%= applicant.hours %></td>
+              <td><%= applicant.citizenship %></td>
+              <td><%= applicant.cert %></td>
               <td><%= applicant.prev_ta %></td>
+              <td><%= applicant.prev_course %></td>
+              <td><%= applicant.prev_uni %></td>
+              <td><%= applicant.advisor %></td>
               <td><%= link_to "Show this applicant", applicant_path(applicant), class: "table-link" %></td>
+              
             </tr>
           <% end %>
         </tbody>

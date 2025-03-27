@@ -19,7 +19,14 @@ class ApplicantsController < ApplicationController
       id: applicant.id, 
       text: "#{applicant.name} (#{applicant.email})",
       name: applicant.name,
-      email: applicant.email } }
+      email: applicant.email,
+      degree: applicant.degree,
+      uin: applicant.uin,
+      number: applicant.number,
+      citizenship: applicant.citizenship,
+      hours: applicant.hours,
+      prev_ta: applicant.prev_ta,
+      cert: applicant.cert } }
   end
 
   # GET /applicants/1 or /applicants/1.json
@@ -85,6 +92,11 @@ class ApplicantsController < ApplicationController
     end
   end
 
+  def wipe_applicants
+    Applicant.delete_all
+    redirect_to root_path, notice: 'All Applicants have been cleared.'
+  end
+
   # for view my application
   def my_application
     # this is a temporary value for debugging need to be fixed after login is finished
@@ -99,7 +111,7 @@ class ApplicantsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def applicant_params
-      params.require(:applicant).permit(:email, :name, :degree, :positions,
+      params.require(:applicant).permit(:email, :name, :degree, :positions, :gpa,
 :number, :uin, :hours, :citizenship, :cert, :prev_course, :prev_uni, :prev_ta, :advisor, :choice_1, :choice_2, :choice_3, :choice_4, :choice_5, :choice_6, :choice_7, :choice_8, :choice_9, :choice_10)
     end
 
