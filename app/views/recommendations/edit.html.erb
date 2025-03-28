@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TA Assignment Home Page</title>
+  <title>Edit Recommendation</title>
   <%= stylesheet_link_tag 'tamu', media: 'all', 'data-turbo-track': 'reload' %>
 </head>
 
@@ -13,14 +13,9 @@
     <%= link_to "logout", logout_path, method: :delete, class: "logout-button" %>
   </div>
   <div class="main-content">
-
-    <h1>
-      Recommend TA
-    </h1>
-
-    <%= form_with model: @recommendation, local: true, html: { id: "recommendation_form" } do |f| %>
-      <div class="form-grid">
-        <div>
+    <h1>Edit Recommendation</h1>
+    <%= form_with model: @recommendation, local: true do |f| %>
+      <div>
           <%= f.hidden_field :email, value: session[:email] %>
           <label>Email: <%= session[:email] %></label>
         </div>
@@ -55,15 +50,12 @@
           <%= f.label :additionalfeedback, "Additional Feedback about this student" %>
           <%= f.text_area :additionalfeedback, rows: 4 %>
         </div>
-
-        <div class="full-width">
-          <%= f.submit "Submit Recommendation" %>
-          <%= link_to "Back to Home", root_path, class: "action-button" %>
-        </div>
+      <div>
+        <%= f.submit "Update Recommendation", class: "action-button" %>
       </div>
     <% end %>
+    <%= link_to "Back to Recommendations",my_recommendations_view_path, class: "action-button" %>
   </div>
-
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       if (window.location.href.includes("notice=")) {

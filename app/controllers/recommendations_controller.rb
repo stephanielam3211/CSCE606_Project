@@ -13,12 +13,34 @@ class RecommendationsController < ApplicationController
     @recommendation = Recommendation.new
   end
 
+  def edit
+    @recommendation = Recommendation.find(params[:id])
+  end
+
+  def update
+    @recommendation = Recommendation.find(params[:id])
+    if @recommendation.update(recommendation_params)
+      redirect_to my_recommendations_view_path, notice: 'Recommendation updated successfully.'
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    @recommendation = Recommendation.find(params[:id])
+    @recommendation.destroy
+    respond_to do |format|
+      format.js
+      format.html { redirect_to my_recommendations_view_path, notice: "Course was successfully deleted." }
+    end
+  end
+
   def create
     @recommendation = Recommendation.new(recommendation_params)
   
     if @recommendation.save
       respond_to do |format|
-        format.html { redirect_to new_recommendation_path, notice: "Recommendation submitted successfully!" }
+        format.html { redirect_to my_recommendations_view_path, notice: "Recommendation submitted successfully!" }
         format.json { render json: { message: "Recommendation submitted successfully!" }, status: :created }
       end
     else
@@ -27,6 +49,14 @@ class RecommendationsController < ApplicationController
         format.json { render json: @recommendation.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def show
+    @recommendations = Recommendation.all
+  end
+
+  def my_recommendations
+    @recommendations = Recommendation.where(email: session[:email])
   end
 
   def clear
@@ -59,6 +89,6 @@ class RecommendationsController < ApplicationController
   private
 
   def recommendation_params
-    params.require(:recommendation).permit(:email, :name, :selectionsTA,:course, :feedback, :additionalfeedback)
+    params.require(:recommendation).permit(:email, :name, :course, :selectionsTA, :feedback, :additionalfeedback)
   end
 end

@@ -15,7 +15,7 @@
 
   <main style="margin-top: 100px;">
   <div class="aux-container">
-    <h1><%= link_to "Upload CSV Files", root_path,style: "text-decoration: none;"%></h1>
+    <h1 style="text-decoration: none;">Manage Assignments</h1>
 
     <section class="section-wrap aux-bg-light aux-py-8">
       <div class="collection aux-container">
@@ -23,15 +23,11 @@
           <div class="slab-heading aux-bg-white aux-rounded aux-shadow-md aux-py-6 aux-px-8 aux-text-center aux-max-w-2xl">
             <div class="heading-group">
               <h2 class="aux-text-3xl aux-font-bold aux-text-primary">
-                <%= link_to "View Assignments", view_csv_path, class: "aux-link aux-text-primary", style: "text-decoration: none;"%>
+                <%= link_to "View Assignments", view_csv_path, class: "aux-link aux-text-primary", style: "text-decoration: none;",class: 'btn btn--primary'%>
               </h2>
             </div>
 
             <span class="divider-hash gray-300 divider--mini aux-mt-2 aux-block"></span>
-
-            <p class="slab-heading__description aux-text-gray-600 aux-text-lg aux-mt-3">
-              Already Processed TA Assignments
-            </p>
 
             <%= button_to 'Export Final CSV', export_final_csv_path, class: 'btn btn--primary' %>
           </div>
@@ -46,12 +42,12 @@
                     <span class="heading">Auto Assign</span>
                   </div>
                   <div class="aux-flex aux-flex-col aux-items-center aux-w-full">
-                    <%= button_to "Process Files", process_csvs_path, method: :post,
+                    <%= button_to "Auto-Assign", process_csvs_path, method: :post,
                           class: "aux-button aux-button-primary aux-text-lg aux-font-bold aux-px-6 aux-py-3 aux-w-1/2",
                           style: "margin-left: 18%;",
                           onclick: "return confirm('Warning!! This action will reset any previous assignments.');" %>
 
-                    <%= button_to "Re-Process Files", reprocess_csvs_path, method: :post,
+                    <%= button_to "Re-run Auto-Assign", reprocess_csvs_path, method: :post,
                           class: "aux-button aux-button-primary aux-text-lg aux-font-bold aux-px-6 aux-py-3 aux-w-1/2",
                           style: "margin-left: 18%;" %>
                   </div>

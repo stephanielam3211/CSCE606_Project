@@ -1,8 +1,8 @@
-<h1><%= link_to "Assignments", view_csv_path, class: "action-button" %></h1>
+<h1>Assignments</h1>
 <!-- Display selected table data -->
 <% if @table_name.present? %>
-  <h2>Showing: <%= @table_name.titleize %></h2>
-  <table border="1">
+  <h2><%= @table_name.titleize %></h2>
+  <table border:"1">
     <thead>
       <tr>
         <% if @records.any? %>
@@ -42,3 +42,4 @@
     </tbody>
   </table>
 <% end %>
+

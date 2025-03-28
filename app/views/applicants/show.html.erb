@@ -22,8 +22,8 @@
 
     <div class="button-container">
       <%= link_to "Edit this applicant", edit_applicant_path(@applicant), class: "action-button" %>
-      <%= link_to "Back to applicants", applicants_path, class: "action-button" %>
       <%= button_to "Destroy this applicant", @applicant, method: :delete, data: { confirm: "Are you sure?" }, class: "action-button" %>
+      <%= link_to "Back", request.referer || root_path, class: "action-button" %>
     </div>
   </div>
 

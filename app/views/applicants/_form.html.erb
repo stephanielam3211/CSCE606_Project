@@ -89,15 +89,7 @@
 
     <div class="full-width">
       <%= form.submit "Submit Application" %>
-      <%= link_to "Back to Main Page", root_path, class: "action-button" %>
-
-      <% if controller.action_name == "edit" %>
-        <%= link_to "Show this applicant", applicant, class: "action-button" %>
-
-        <% unless from_my_application? %>
-          <%= link_to "Back to applicants", applicants_path, class: "action-button" %>
-        <% end %>
-      <% end %>
+      <%= link_to "Back to Home", request.referer || root_path, class: "action-button" %>
     </div>
   </div>
 <% end %>

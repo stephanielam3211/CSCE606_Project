@@ -33,8 +33,8 @@
         <!-- REMOVE AFTER TESTING-->
         <%= button_to "Clear All users", wipe_users_path, method: :delete, data: { turbo: false }, onclick: "return confirmClear();"%>
         <!-- REMOVE AFTER TESTING-->
-        <%= link_to "Recomend a Student", recommendation_view_path, class: "action-button" %>
-        <%= link_to "View My Recommandations", root_path, class: "action-button" %>
+        <%= link_to "Recomend a Student", new_recommendation_path, class: "action-button" %>
+        <%= link_to "View My Recommendations", my_recommendations_view_path, class: "action-button" %> 
       </div>
     <% end %>
 
@@ -50,15 +50,15 @@
         <%= link_to "View My Applications", my_application_applicants_path, class: "action-button" %>
       </div>
       <div id="faculty-buttons" class="button-container hidden">
-        <%= link_to "Recomend a Student", recommendation_view_path, class: "action-button" %>
-         <%= link_to "View Applicants", applicants_path, class: "action-button" %>
-        <%= link_to "View My Recommandations", root_path, class: "action-button" %>
+        <%= link_to "Recomend a Student", new_recommendation_path, class: "action-button" %>
+        <%= link_to "View My Recommendations", my_recommendations_view_path, class: "action-button" %> 
       </div>
       <div id="admin-buttons" class="button-container hidden">
         <%= link_to "Assign TA/Grader", ta_assignments_new_path, class: "action-button" %> 
         <%= link_to "View Applicants", applicants_path, class: "action-button" %>
         <%= link_to "View Classes", courses_path, class: "action-button" %>
         <%= link_to "View Withdrawal Requests", withdrawal_requests_path, class: "action-button" %>
+        <%= link_to "View All Recommendations", recommendation_view_path, class: "action-button" %> 
         <%= link_to "View Blacklisted Students", blacklists_path, class: "action-button" %>
         <%= link_to "Send Emails", new_email_path, class: "action-button" %>
         <div class="button-group button-group--primary">
@@ -91,6 +91,13 @@
       });
       document.getElementById(`${role}-buttons`).classList.remove("hidden");
     }
+
+    // Automatically show admin buttons if the user is an admin
+    document.addEventListener("DOMContentLoaded", function() {
+      <% if session[:role].to_s == "admin" %>
+        showButtons('admin');
+      <% end %>
+    });
   </script>
 </body>
 </html>

@@ -6,15 +6,79 @@
   <%= f.hidden_field :course_number, value: @record["Course Number"]%> 
   <%= f.hidden_field :section, value: @record["Section ID"]%> 
   <label>Student Name:</label>
-  <%= f.text_field :stu_name, value: @record["Student Name"] %>
+  <%= f.select :stu_name, [], { prompt: "Search for a TA" }, class: "form-control", id: "ta-search" %>
 
   <label>Student Email:</label>
-  <%= f.text_field :stu_email, value: @record["Student Email"] %>
+  <%= f.select :stu_email, [], { prompt: "Search for an Email" }, class: "form-control", id: "stu_email" %>
 
   <label>UIN:</label>
-  <%= f.text_field :uin, value: @record["UIN"] %>
+  <%= f.select :uin, [], { prompt: "Search for a UIN" }, class: "form-control", id: "uin" %>
 
   <%= f.submit "Save Changes" %>
 <% end %>
+<%= link_to "Cancel", view_csv_path || root_path, class: "action-button" %>
 
-<%= link_to "Cancel", view_csv_path %>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    if (window.location.href.includes("notice=")) {
+      document.getElementById("recommendation_form").reset();
+    }
+  });
+
+    const initializeSelect2 = (selector, placeholder, ajaxUrl, onSelectCallback) => {
+    if ($(selector).length) {
+      $(selector).select2({
+        placeholder: placeholder,
+        minimumInputLength: 1,
+        ajax: {
+          url: ajaxUrl,
+          dataType: 'json',
+          delay: 250,
+          data: function (params) {
+            return { term: params.term };
+          },
+          processResults: function (data) {
+            return {
+              results: data.map(item => ({
+                id: item.id,
+                text: item.name,
+                email: item.email,
+                uin: item.uin
+              }))
+            };
+          },
+          cache: true
+        }
+      }).on("select2:select", function (e) {
+        const selectedData = e.params.data;
+        onSelectCallback(selectedData);
+      });
+    }
+  };
+
+  const populateFields = (data) => {
+    $('#ta-search').val(data.id).trigger('change.select2'); 
+    $('#stu_email').val(data.email).trigger('change.select2');
+    $('#uin').val(data.uin).trigger('change.select2');
+
+    let newOptionName = new Option(data.text, data.name, true, true);
+    let newOptionEmail = new Option(data.email, data.email, true, true);
+    let newOptionUIN = new Option(data.uin, data.uin, true, true);
+
+    $('#ta-search').append(newOptionName).trigger('change');
+    $('#stu_email').append(newOptionEmail).trigger('change');
+    $('#uin').append(newOptionUIN).trigger('change');
+  };
+  $(document).ready(function () {
+    initializeSelect2('#ta-search', "Search for a TA...", '/applicants/search', function(data) {
+      populateFields(data);
+    });
+    initializeSelect2('#stu_email', "Search for an Email...", '/applicants/search_email', function(data) {
+      populateFields(data);
+    });
+    initializeSelect2('#uin', "Search for a UIN...", '/applicants/search_uin', function(data) {
+      populateFields(data);
+    });
+  });
+
+</script>

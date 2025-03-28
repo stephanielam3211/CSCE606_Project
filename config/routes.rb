@@ -41,6 +41,8 @@ Rails.application.routes.draw do
     collection do
       get :my_application
       get :search
+      get :search_email
+      get :search_uin
     end
   end  
 
@@ -79,18 +81,16 @@ Rails.application.routes.draw do
 
 
   # Recommendation system
-  resources :recommendations, only: [:new, :create, :index] do
+  resources :recommendations, only: [:new, :create, :index, :edit, :destroy, :update] do
     collection do
-      get :export_csv
       delete :clear
     end
   end
+  get "recommendations/show", to: "recommendations#show", as: "recommendation_view"
+  get "recommendations/mine", to: "recommendations#my_recommendations", as: "my_recommendations_view"
 
   get 'courses/search', to: 'courses#search'
   get 'applicants/search', to: 'applicants#search'
-
-  get "recommendations/new", to: "recommendations#new", as: "recommendation_view"
-  post "recommendations", to: "recommendations#create"
 
   # blacklist
   resources :blacklists, only: [ :index, :create, :destroy ]
