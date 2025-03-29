@@ -32,7 +32,7 @@
 
         <div class="full-width">
           <%= f.label :course, "Course (e.g. CSCE 421)" %>
-          <%= f.select :course, [], { prompt: "Search for a course" }, class: "form-control", id: "course-search" %>
+          <%= f.select :course, [], { include_blank: true }, { class: "course-select", id: "course-search" } %>
         </div>
 
         <div class="full-width">
@@ -86,16 +86,13 @@
             processResults: function (data) {
               return {
                 results: data.map(course => ({
-                  id: `CSCE ${course.course_number}`,
-                  text: `${course.course_number} - ${course.section}`
+                  id: course.id,
+                  text: course.name
                 }))
               };
             },
             cache: true
           }
-        }).on("select2:select", function (e) {
-          var selected = e.params.data;
-          $("#course-section").val(selected.section);
         });
       }
 

@@ -28,6 +28,7 @@ class ApplicantsController < ApplicationController
       prev_ta: applicant.prev_ta,
       cert: applicant.cert } }
   end
+  
   def search_email
     applicants = Applicant.where("email LIKE ?", "%#{params[:term]}%").limit(10)
     render json: applicants.map { |applicant| { 
@@ -43,6 +44,7 @@ class ApplicantsController < ApplicationController
       prev_ta: applicant.prev_ta,
       cert: applicant.cert } }
   end
+  
   def search_uin
     applicants = Applicant.where("uin LIKE ?", "%#{params[:term]}%").limit(10)
     render json: applicants.map { |applicant| { 
@@ -66,10 +68,13 @@ class ApplicantsController < ApplicationController
   # GET /applicants/new
   def new
     @applicant = Applicant.new
+    @courses = Course.all.map { |c| "#{c.course_number} - #{c.course_name} (Section: #{c.section})"}
   end
 
   # GET /applicants/1/edit
   def edit
+    @applicant = Applicant.find(params[:id])
+    @courses = Course.all.map { |c| "#{c.course_number} - #{c.course_name} (Section: #{c.section})"}
   end
 
   # POST /applicants or /applicants.json
@@ -84,13 +89,12 @@ class ApplicantsController < ApplicationController
 
     respond_to do |format|
       if @applicant.save
-        format.html {
-        redirect_to @applicant, notice: "Applicant was successfully created." }
+        format.html { redirect_to @applicant, notice: "Applicant was successfully created." }
         format.json { render :show, status: :created, location: @applicant }
       else
+        @courses = Course.all.map { |c| "#{c.course_number} - #{c.course_name} (Section: #{c.section})" }
         format.html { render :new, status: :unprocessable_entity }
-        format.json {
-        render json: @applicant.errors, status: :unprocessable_entity }
+        format.json { render json: @applicant.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -99,13 +103,12 @@ class ApplicantsController < ApplicationController
   def update
     respond_to do |format|
       if @applicant.update(applicant_params)
-        format.html {
- redirect_to @applicant, notice: "Applicant was successfully updated." }
+        format.html { redirect_to @applicant, notice: "Applicant was successfully updated." }
         format.json { render :show, status: :ok, location: @applicant }
       else
+        @courses = Course.all.map { |c| "#{c.course_number} - #{c.course_name} (Section: #{c.section})" }
         format.html { render :edit, status: :unprocessable_entity }
-        format.json {
- render json: @applicant.errors, status: :unprocessable_entity }
+        format.json { render json: @applicant.errors, status: :unprocessable_entity }
       end
     end
   end
