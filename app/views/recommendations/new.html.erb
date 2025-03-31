@@ -31,8 +31,8 @@
         </div>
 
         <div class="full-width">
-          <%= f.label :course, "Course (e.g. CSCE 421)" %>
-          <%= f.select :course, [], { include_blank: true }, { class: "course-select", id: "course-search" } %>
+          <%= f.label :course, "Course" %>
+         <%= f.select :course, [], { prompt: "Search for a course" }, class: "form-control", id: "course-search_recs" %>
         </div>
 
         <div class="full-width">
@@ -72,12 +72,12 @@
     });
 
     $(document).ready(function () {
-      if ($('#course-search').length) {
-        $('#course-search').select2({
+      if ($('#course-search_recs').length) {
+        $('#course-search_recs').select2({
           placeholder: "Search for a course...",
           minimumInputLength: 1,
           ajax: {
-            url: '/courses/search',
+            url: '/courses/search_recs',
             dataType: 'json',
             delay: 250,
             data: function (params) {
@@ -86,13 +86,16 @@
             processResults: function (data) {
               return {
                 results: data.map(course => ({
-                  id: course.id,
-                  text: course.name
+                  id: `CSCE ${course.course_number}`,
+                  text: `${course.course_number} - ${course.section}`
                 }))
               };
             },
             cache: true
           }
+          }).on("select2:select", function (e) {
+          var selected = e.params.data;
+          $("#course-section").val(selected.section);
         });
       }
 

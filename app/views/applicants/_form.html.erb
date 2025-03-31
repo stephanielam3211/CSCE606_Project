@@ -23,12 +23,13 @@
 
     <div>
       <%= form.label :degree, "Degree Type" %>
-      <%= form.select :degree, [['Bachelors'], ['Masters'], ['PhD']], prompt: "Select your Degree Type" %>
+      <%= form.select :degree, [['PhD'], ['Masters (Thesis)'], ['Masters (Non-Thesis)']], prompt: "Select your Degree Type" %>
     </div>
 
     <div>
       <%= form.label :positions, "Which position are you applying for?" %>
-      <%= form.select :positions, [['TA'], ['Grader'], ['Senior Grader'], ['TA and Grader']], prompt: "Select your Position" %>
+      <%= form.select :positions, [['TA'], ['Grader'], ['Senior Grader']], {}, { multiple: true, class: "positions-select" } %>
+      <%= form.hidden_field :positions, id: "positions_hidden" %>
     </div>
 
     <div>
@@ -100,6 +101,16 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
 <script>
+  const positionOrder = ["TA", "Senior Grader", "Grader"]; 
+    $(".positions-select").select2({
+      placeholder: "Select positions",
+      allowClear: true
+    }).on("change", function() {
+      let selectedValues = $(this).val() || [];
+      selectedValues.sort((a, b) => positionOrder.indexOf(a) - positionOrder.indexOf(b));
+      $("#positions_hidden").val(selectedValues.join(", "));
+    });
+
   $(document).ready(function() {
     // Initialize Select2 for all course-select dropdowns
     $('.course-select').select2({

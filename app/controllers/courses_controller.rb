@@ -11,6 +11,11 @@ class CoursesController < ApplicationController
       @courses = @q.result(distinct: true).order("#{sort_column} #{sort_direction}")
     end
 
+    def search_recs
+      courses = Course.where("course_number LIKE ?", "%#{params[:term]}%").limit(10)
+render json: courses.map { |course| { id: course.id, text: "#{course.course_number} - #{course.section}", course_number: course.course_number, section: course.section } }      
+    end
+
     def search
       if params[:term].present?
         courses = Course.where("course_name LIKE ? OR course_number LIKE ?", "%#{params[:term]}%", "%#{params[:term]}%")

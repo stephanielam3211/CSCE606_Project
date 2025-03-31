@@ -51,6 +51,7 @@ Rails.application.routes.draw do
       post :import
       delete :clear
       get :search
+      get :search_recs
     end
   end
 
