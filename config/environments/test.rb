@@ -70,4 +70,9 @@ Rails.application.configure do
 
   # Raise error when a before_action's only/except options reference missing actions.
   config.action_controller.raise_on_missing_callback_actions = true
+
+  config.middleware.use OmniAuth::Builder do
+    provider :google_oauth2, "FAKE_CLIENT_ID", "FAKE_CLIENT_SECRET"
+  end
+
 end

@@ -105,6 +105,7 @@ class ApplicantsController < ApplicationController
       if @applicant.update(applicant_params)
         format.html { redirect_to @applicant, notice: "Applicant was successfully updated." }
         format.json { render :show, status: :ok, location: @applicant }
+        flash[:notice] = "Applicant was successfully updated."
       else
         @courses = Course.all.map { |c| "#{c.course_number} - #{c.course_name} (Section: #{c.section})" }
         format.html { render :edit, status: :unprocessable_entity }

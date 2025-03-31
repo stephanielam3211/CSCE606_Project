@@ -57,6 +57,7 @@ render json: courses.map { |course| { id: course.id, text: "#{course.course_numb
           csv << row_values
         end
         else
+            Rails.logger.debug "Course failed to save: #{@course.errors.full_messages}"
           format.html { render :new, status: :unprocessable_entity }
           format.json { render json: @course.errors, status: :unprocessable_entity }
           format.js

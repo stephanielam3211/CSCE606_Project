@@ -15,6 +15,7 @@ class SessionsController < ApplicationController
   rescue => e
     redirect_to root_path, alert: e.message
   end
+  
 
   def destroy
     reset_session

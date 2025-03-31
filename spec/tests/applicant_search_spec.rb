@@ -14,7 +14,8 @@ RSpec.feature "Applicant Search", type: :feature do
       number: "1",
       hours: "40",
       citizenship: "US",
-      cert: "Certified"
+      cert: "Certified",
+      choice_1: "CSCE 606"
     )
   }
   let!(:applicant2) {
@@ -27,7 +28,8 @@ RSpec.feature "Applicant Search", type: :feature do
       number: "2",
       hours: "35",
       citizenship: "US",
-      cert: "Certified"
+      cert: "Certified",
+      choice_1: "CSCE 608" 
     )
   }
   let!(:applicant3) {
@@ -40,14 +42,16 @@ RSpec.feature "Applicant Search", type: :feature do
       number: "3",
       hours: "30",
       citizenship: "US",
-      cert: "Certified"
+      cert: "Certified",
+      choice_1: "CSCE 611" 
     )
   }
 
   scenario "User searches by Name" do
     visit applicants_path
-    fill_in "Enter Name, Email, or UIN", with: "Ayush"
-    click_button "Search"
+    save_and_open_page
+    fill_in "name_or_email_or_uin_or_degree_or_number_or_hours_or_prev_ta_or_advisor_or_cert_or_citizenship_cont", with: "abhijitrathore1@tamu.edu"
+    click_button "Search" # Ensure button label matches expected HTML
 
     expect(page).to have_content("Ayush Gautam")
     expect(page).not_to have_content("Abhijit Rathore")
@@ -56,11 +60,21 @@ RSpec.feature "Applicant Search", type: :feature do
 
   scenario "User searches by Email" do
     visit applicants_path
-    fill_in "Enter Name, Email, or UIN", with: "abhijitrathore1@tamu.edu"
-    click_button "Search"
+    find("input[placeholder='Enter Name, Email, UIN, Degree, etc']").set("abhijitrathore1@tamu.edu")
+    click_button "Search" # Ensure button label matches expected HTML
 
     expect(page).to have_content("Abhijit Rathore")
     expect(page).not_to have_content("Ayush Gautam")
     expect(page).not_to have_content("John Doe")
+  end
+
+  scenario "User searches by UIN" do
+    visit applicants_path
+    fill_in "Search for Applicant", with: "999" # Updated to match the actual field label
+    click_button "Search" # Ensure button label matches expected HTML
+
+    expect(page).to have_content("John Doe")
+    expect(page).not_to have_content("Ayush Gautam")
+    expect(page).not_to have_content("Abhijit Rathore")
   end
 end
