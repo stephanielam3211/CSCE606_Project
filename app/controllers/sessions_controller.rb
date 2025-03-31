@@ -7,6 +7,12 @@ class SessionsController < ApplicationController
   def create
     auth = request.env['omniauth.auth']
     user = User.from_google(auth)
+
+    if user.nil?
+      redirect_to root_path, alert: "Unauthorized login attempt."
+      return
+    end
+    
     session[:user_id] = user.id
     session[:email] = user.email
     session[:user] = user.name
