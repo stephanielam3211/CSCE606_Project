@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class CoursesController < ApplicationController
-    require "csv"
-    skip_before_action :require_login, if: -> { Rails.env.test? }
+  skip_before_action :require_login, if: -> { Rails.env.test? }  
+  require "csv"
 
     def index
       @q = Course.ransack(params[:q])
