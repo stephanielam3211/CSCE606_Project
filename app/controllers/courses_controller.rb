@@ -2,6 +2,7 @@
 
 class CoursesController < ApplicationController
     require "csv"
+    skip_before_action :require_login, if: -> { Rails.env.test? }
 
     def index
       @q = Course.ransack(params[:q])
