@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
+    has_one :applicant, foreign_key: 'confirm'
     has_many :recommendations, foreign_key: "faculty_id"
-
     validates :email, presence: true, uniqueness: true
 
     ADMIN_EMAILS = ['hz010627@tamu.edu','aaron_xu92@tamu.edu','yuvi@tamu.edu',

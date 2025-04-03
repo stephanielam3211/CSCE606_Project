@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class Applicant < ApplicationRecord
+    belongs_to :user, foreign_key: 'confirm', optional: true
+
+    validates :confirm, uniqueness: true
     has_many :recommendations
     
     validates :name, presence: true
