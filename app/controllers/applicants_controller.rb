@@ -142,8 +142,12 @@ class ApplicantsController < ApplicationController
 
     respond_to do |format|
       format.html {
-        redirect_to applicants_path, status: :see_other,
-        notice: "Applicant was successfully destroyed." }
+        if session[:role].to_s == "admin" 
+          redirect_to applicants_path,notice: "Applicant was successfully destroyed."
+        else 
+          redirect_to root_path,notice: "Applicant was successfully destroyed."
+        end 
+       }
       format.json { head :no_content }
     end
   end

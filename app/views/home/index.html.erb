@@ -22,7 +22,7 @@
         <!-- REMOVE AFTER TESTING-->
         <%= button_to "Clear All users", wipe_users_path, method: :delete, data: { turbo: false }, onclick: "return confirmClear();"%>
         <!-- REMOVE AFTER TESTING-->
-        <%= link_to "Submit Request for TA/Grader", new_applicant_path, class: "action-button"%>
+        <%= link_to "Submit Application for TA/Grader", new_applicant_path, class: "action-button"%>
         <%= link_to "Application Status", new_withdrawal_request_path, class: "action-button" %>
         <%= link_to "View My Applications", my_application_applicants_path, class: "action-button" %>
       </div>
@@ -45,7 +45,7 @@
         <button class="role-button" onclick="showButtons('admin')">Admin</button>
       </div>
       <div id="student-buttons" class="button-container hidden">
-        <%= link_to "Submit Request for TA/Grader", new_applicant_path, class: "action-button"%>
+        <%= link_to "Submit Application for TA/Grader", new_applicant_path, class: "action-button"%>
         <%= link_to "Application Status", new_withdrawal_request_path, class: "action-button" %>
         <%= link_to "View My Applications", my_application_applicants_path, class: "action-button" %>
       </div>
@@ -95,8 +95,13 @@
     // Automatically show admin buttons if the user is an admin
     document.addEventListener("DOMContentLoaded", function() {
       <% if session[:role].to_s == "admin" %>
+      const hash = window.location.hash.substring(1); // Remove #
+      if (["student", "faculty", "admin"].includes(hash)) {
+        showButtons(hash);
+      } else {
         showButtons('admin');
-      <% end %>
+      }
+    <% end %>
     });
   </script>
 </body>
