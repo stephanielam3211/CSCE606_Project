@@ -69,6 +69,7 @@ group :test do
   gem "database_cleaner-active_record"
   gem "devise"
   gem "rack_session_access"
+  gem "rails-controller-testing"
 end
 
 gem "rspec-rails", "~> 7.1", group: :test

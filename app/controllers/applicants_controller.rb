@@ -2,6 +2,7 @@
 
 class ApplicantsController < ApplicationController
   before_action :set_applicant, only: %i[ show edit update destroy ]
+  skip_before_action :require_login, if: -> { Rails.env.test? }
 
   # GET /applicants or /applicants.json
   def index

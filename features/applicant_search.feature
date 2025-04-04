@@ -4,7 +4,8 @@ Feature: Applicant Search by Name or Email
   I want to search applicants by Name or Email
 
   Background:
-    Given the following applicant records exist:
+    Given I am logged in as a TAMU user
+    And the following applicant records exist:
       | name         | email             | uin | degree    | positions  | number | hours | citizenship | cert      |
       | Alice Smith  | alice@example.com | 111 | Master's  | Developer  | 1      | 40    | US          | Certified |
       | Bob Johnson  | bob@example.com   | 222 | PhD       | Researcher | 2      | 30    | US          | Certified |
@@ -12,7 +13,7 @@ Feature: Applicant Search by Name or Email
 
   Scenario: Search by Name
     When I navigate to the applicant search page
-    And I enter "Alice" into the "Enter Name, Email, or UIN" field
+    And I enter "Alice" into the "Search for Applicant" field
     And I click the "Search" button
     Then I should see the applicant "Alice Smith"
     And I should not see the applicant "Bob Johnson"
@@ -20,7 +21,7 @@ Feature: Applicant Search by Name or Email
 
   Scenario: Search by Email
     When I navigate to the applicant search page
-    And I enter "bob@example.com" into the "Enter Name, Email, or UIN" field
+    And I enter "bob@example.com" into the "Search for Applicant" field
     And I click the "Search" button
     Then I should see the applicant "Bob Johnson"
     And I should not see the applicant "Alice Smith"

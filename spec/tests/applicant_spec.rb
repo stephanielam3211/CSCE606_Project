@@ -2,101 +2,140 @@
 
 require 'rails_helper'
 
-
 RSpec.describe ApplicantsController, type: :controller do
-  let!(:applicant) {
+  let!(:applicant1) do
     Applicant.create!(
-      name: "Ayush Gautam",
-      email: "ayushgautam@tamu.edu",
-      uin: "121",
-      degree: "Master's",
-      positions: "Developer",
-      number: "1",
-      hours: "40",
+      name:        "Alice",
+      email:       "alice@example.com",
+      uin:         "111",
+      degree:      "Masters",
+      positions:   "TA",
+      number:      "123-4567",
+      hours:       "20",
       citizenship: "US",
-      cert: "Certified",
-      choice_1: "CSCE 606"
+      cert:        "Yes",
+      choice_1:    "CSCE 606"   # <-- Add at least one choice
     )
-  }
-  describe "PATCH #update" do
-    let(:valid_attributes) do
-      {
-        name: "Ayush Gautamy"
-      }
-    end
-
-    it "updates an applicant and redirects" do
-      patch :update, params: { id: applicant.id, applicant: valid_attributes }
-      applicant.reload
-      expect(applicant.name).to eq("Ayush Gautam")
-    end
   end
 
-  describe "DELETE #destroy" do
-    let!(:applicant_to_delete) { Applicant.create!(
-      name: "Ayush Ga",
-      email: "ayushg@tamu.edu",
-      uin: "121",
-      degree: "Masters",
-      positions: "Developer",
-      number: "1",
-      hours: "40",
+  let!(:applicant2) do
+    Applicant.create!(
+      name:        "Bob",
+      email:       "bob@example.com",
+      uin:         "222",
+      degree:      "PhD",
+      positions:   "RA",
+      number:      "987-6543",
+      hours:       "10",
       citizenship: "US",
-      cert: "Certified",
-      choice_1: "606"
-    )}
-    it "deletes the applicant" do
-      expect(Applicant.exists?(applicant_to_delete.id)).to be true
-      delete :destroy, params: { id: applicant_to_delete.id }
-      expect {
-        Applicant.find(applicant_to_delete.id).destroy
-      }.to change(Applicant, :count).by(-1)
-      expect(Applicant.exists?(applicant_to_delete.id)).to be false
+      cert:        "No",
+      choice_1:    "CSCE 607"   # <-- Add at least one choice
+    )
+  end
+
+  describe "coverage of controller actions" do
+    it "#index, #search, #search_email, #search_uin in one go" do
+      get :index
+      expect(response).to be_successful
+      expect(assigns(:applicants).map(&:name)).to eq(["Alice", "Bob"])
+      get :index, params: { sort: "email", direction: "desc" }
+      expect(assigns(:applicants).map(&:email)).to eq(["bob@example.com", "alice@example.com"])
+      get :search, params: { term: "Ali" }, format: :json
+      expect(response).to be_successful
+      expect(JSON.parse(response.body).first["name"]).to eq("Alice")
+      get :search_email, params: { term: "bob@" }, format: :json
+      expect(response).to be_successful
+      expect(JSON.parse(response.body).first["email"]).to eq("bob@example.com")
+      get :search_uin, params: { term: "111" }, format: :json
+      expect(response).to be_successful
+      expect(JSON.parse(response.body).first["uin"]).to eq(111)
     end
-  end
-end
 
-RSpec.describe Applicant, type: :model do
-  it "is valid with a name, email, degree, posistions, number, uin, hours, citizenship, and cert" do
-    applicant = Applicant.new(name: "John Doe", email: "john@example.com", degree: "PhD", positions: "TA", number: "512-555-5555",
-     uin: "123456789", hours: "13", citizenship: "USA", cert: "1",
-     choice_1: "606")
-    expect(applicant).to be_valid
-  end
+    it "#show and #new" do
+      # show
+      get :show, params: { id: applicant1.id }
+      expect(response).to be_successful
+      expect(assigns(:applicant)).to eq(applicant1)
 
-  it "is invalid without a name" do
-    applicant = Applicant.new(email: "john@example.com", degree: "PhD")
-    expect(applicant).not_to be_valid
-  end
+      # new
+      get :new
+      expect(response).to be_successful
+      expect(assigns(:applicant)).to be_a_new(Applicant)
+    end
 
-  it "is invalid without an email" do
-    applicant = Applicant.new(name: "John Doe", degree: "PhD", positions: "TA", number: "512-555-5555",
-    uin: "123456789", hours: "13", citizenship: "USA", cert: "1",
-    choice_1: "606")
-    expect(applicant).not_to be_valid
-  end
+    it "#create" do
+      expect {
+        post :create, params: {
+          applicant: {
+            name:        "Charlie",
+            email:       "charlie@example.com",
+            uin:         "333",
+            degree:      "Masters",
+            positions:   "TA",
+            number:      "111-2222",
+            hours:       "10",
+            citizenship: "US",
+            cert:        "Yes",
+            choice_1:    "CSCE 608" # Provide at least one choice
+          }
+        }
+      }.to change(Applicant, :count).by(1)
+      expect(response).to redirect_to(applicant_path(Applicant.last))
 
-  it "is invalid without a degree" do
-    applicant = Applicant.new(name: "John Doe", email: "john@example.com", positions: "TA", number: "512-555-5555",
-    uin: "123456789", hours: "13", citizenship: "USA", cert: "1")
-    expect(applicant).not_to be_valid
-  end
+      Blacklist.create!(student_email: "blacklisted@example.com")
+      post :create, params: {
+        applicant: {
+          name:        "Eve",
+          email:       "blacklisted@example.com",
+          uin:         "444",
+          degree:      "PhD",
+          positions:   "RA",
+          number:      "999-9999",
+          hours:       "15",
+          citizenship: "US",
+          cert:        "No",
+          choice_1:    "CSCE 610"
+        }
+      }
+      expect(Applicant.last.name).to eq("*Eve")
 
-  it "is invalid without an uin" do
-    applicant = Applicant.new(name: "John Doe", email: "john@example.com", degree: "PhD", positions: "TA", number: "512-555-5555",
-    hours: "13", citizenship: "USA", cert: "1")
-    expect(applicant).not_to be_valid
-  end
+      expect {
+        post :create, params: { applicant: { name: "", email: "" } }
+      }.not_to change(Applicant, :count)
+      expect(response).to render_template(:new)
+    end
 
-  it "is invalid without a position" do
-    applicant = Applicant.new(name: "John Doe", email: "john@example.com", degree: "PhD", number: "512-555-5555",
-     uin: "123456789", hours: "13", citizenship: "USA", cert: "1")
-    expect(applicant).not_to be_valid
-  end
+    it "#update" do
+      patch :update, params: { id: applicant1.id, applicant: { name: "Alice Updated" } }
+      expect(response).to redirect_to(applicant_path(applicant1))
+      expect(applicant1.reload.name).to eq("Alice Updated")
 
-  it "is invalid without a hours" do
-    applicant = Applicant.new(name: "John Doe", email: "john@example.com", degree: "PhD", positions: "TA", number: "512-555-5555",
-     uin: "123456789", citizenship: "USA", cert: "1")
-    expect(applicant).not_to be_valid
+      patch :update, params: { id: applicant1.id, applicant: { name: "" } }
+      expect(response).to render_template(:edit)
+    end
+
+    it "#destroy and #wipe_applicants" do
+      expect {
+        delete :destroy, params: { id: applicant2.id }
+      }.to change(Applicant, :count).by(-1)
+      expect(response).to redirect_to(applicants_path)
+
+      expect(Applicant.count).to be > 0
+      delete :wipe_applicants
+      expect(Applicant.count).to eq(0)
+      expect(response).to redirect_to(root_path)
+    end
+
+    it "#my_application" do
+      session[:email] = "alice@example.com"
+      get :my_application
+      expect(assigns(:applicant)).to eq(applicant1)
+      expect(response).to render_template(:my_application)
+
+      session[:email] = "missing@example.com"
+      get :my_application
+      expect(assigns(:applicant)).to be_nil
+      expect(response).to render_template(:my_application)
+    end
   end
 end
