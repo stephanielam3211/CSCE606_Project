@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "active_support/core_ext/integer/time"
-require 'googleauth'
+require "googleauth"
 
 Rails.application.configure do
   # Configure 'rails notes' to inspect Cucumber files
@@ -88,11 +88,11 @@ Rails.application.configure do
 
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address: 'smtp.gmail.com',
+    address: "smtp.gmail.com",
     port: 587,
-    domain: 'gmail.com',
-    user_name: ENV['SMTP_EMAIL'],
-    password:ENV['SMTP_PASSWORD'],
+    domain: "gmail.com",
+    user_name: ENV["SMTP_EMAIL"],
+    password: ENV["SMTP_PASSWORD"],
     authentication: :plain,
     enable_starttls_auto: true,
     open_timeout: 30,

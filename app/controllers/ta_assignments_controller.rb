@@ -271,8 +271,8 @@ class TaAssignmentsController < ApplicationController
     Dir[Rails.root.join("app/Charizard/util/public/output/*.csv")].each do |file|
       File.delete(file)
     File.delete(Rails.root.join("tmp", "TA_Matches.csv")) if File.exist?(Rails.root.join("tmp", "TA_Matches.csv"))
-    File.delete(Rails.root.join("tmp", "Grader_Matches.csv")) if File.exist?(Rails.root.join("tmp", "Grader_Matches.csv"))  
-    File.delete(Rails.root.join("tmp", "Senior_Grader_Matches.csv")) if File.exist?(Rails.root.join("tmp", "Senior_Grader_Matches.csv"))  
+    File.delete(Rails.root.join("tmp", "Grader_Matches.csv")) if File.exist?(Rails.root.join("tmp", "Grader_Matches.csv"))
+    File.delete(Rails.root.join("tmp", "Senior_Grader_Matches.csv")) if File.exist?(Rails.root.join("tmp", "Senior_Grader_Matches.csv"))
     end
     GraderMatch.delete_all
     SeniorGraderMatch.delete_all
@@ -341,10 +341,10 @@ end
 
   def generate_csv_recommendations(records)
     CSV.generate(headers: true) do |csv|
-      csv << ["Timestamp", "Email Address", "Your Name (first and last)", "Select a TA/Grader", "Course (e.g. CSCE 421)", "Feedback", "Additional Feedback about this student"]
+      csv << [ "Timestamp", "Email Address", "Your Name (first and last)", "Select a TA/Grader", "Course (e.g. CSCE 421)", "Feedback", "Additional Feedback about this student" ]
       records.each do |record|
         csv << [
-          record.created_at.strftime('%m/%d/%Y %H:%M:%S'),
+          record.created_at.strftime("%m/%d/%Y %H:%M:%S"),
           record.email,
           record.name,
           record.selectionsTA,
@@ -390,5 +390,4 @@ end
       ]
     end
   end
-
 end

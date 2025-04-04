@@ -58,8 +58,6 @@ class WithdrawalRequestsController < ApplicationController
   end
 
   def confirm_app
-    
-
   end
 
 

@@ -2,7 +2,7 @@
 
 class Applicant < ApplicationRecord
     has_many :recommendations
-    
+
     validates :name, presence: true
     validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
     validates :degree, presence: true

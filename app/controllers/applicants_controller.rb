@@ -16,8 +16,8 @@ class ApplicantsController < ApplicationController
 
   def search
     applicants = Applicant.where("name LIKE ?", "%#{params[:term]}%").limit(10)
-    render json: applicants.map { |applicant| { 
-      id: applicant.id, 
+    render json: applicants.map { |applicant| {
+      id: applicant.id,
       text: "#{applicant.name} (#{applicant.email})",
       name: applicant.name,
       email: applicant.email,
@@ -29,11 +29,11 @@ class ApplicantsController < ApplicationController
       prev_ta: applicant.prev_ta,
       cert: applicant.cert } }
   end
-  
+
   def search_email
     applicants = Applicant.where("email LIKE ?", "%#{params[:term]}%").limit(10)
-    render json: applicants.map { |applicant| { 
-      id: applicant.id, 
+    render json: applicants.map { |applicant| {
+      id: applicant.id,
       text: "#{applicant.name} (#{applicant.email})",
       name: applicant.name,
       email: applicant.email,
@@ -45,11 +45,11 @@ class ApplicantsController < ApplicationController
       prev_ta: applicant.prev_ta,
       cert: applicant.cert } }
   end
-  
+
   def search_uin
     applicants = Applicant.where("uin LIKE ?", "%#{params[:term]}%").limit(10)
-    render json: applicants.map { |applicant| { 
-      id: applicant.id, 
+    render json: applicants.map { |applicant| {
+      id: applicant.id,
       text: "#{applicant.name} (#{applicant.email})",
       name: applicant.name,
       email: applicant.email,
@@ -69,13 +69,13 @@ class ApplicantsController < ApplicationController
   # GET /applicants/new
   def new
     @applicant = Applicant.new
-    @courses = Course.all.map { |c| "#{c.course_number} - #{c.course_name} (Section: #{c.section})"}
+    @courses = Course.all.map { |c| "#{c.course_number} - #{c.course_name} (Section: #{c.section})" }
   end
 
   # GET /applicants/1/edit
   def edit
     @applicant = Applicant.find(params[:id])
-    @courses = Course.all.map { |c| "#{c.course_number} - #{c.course_name} (Section: #{c.section})"}
+    @courses = Course.all.map { |c| "#{c.course_number} - #{c.course_name} (Section: #{c.section})" }
   end
 
   # POST /applicants or /applicants.json
@@ -129,7 +129,7 @@ class ApplicantsController < ApplicationController
 
   def wipe_applicants
     Applicant.delete_all
-    redirect_to root_path, notice: 'All Applicants have been cleared.'
+    redirect_to root_path, notice: "All Applicants have been cleared."
   end
 
   # for view my application
@@ -149,5 +149,4 @@ class ApplicantsController < ApplicationController
       params.require(:applicant).permit(:email, :name, :degree, :positions, :gpa,
 :number, :uin, :hours, :citizenship, :cert, :prev_course, :prev_uni, :prev_ta, :advisor, :choice_1, :choice_2, :choice_3, :choice_4, :choice_5, :choice_6, :choice_7, :choice_8, :choice_9, :choice_10)
     end
-
 end

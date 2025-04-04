@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # features/support/omniauth.rb
 require 'omniauth'
 

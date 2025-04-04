@@ -106,16 +106,15 @@ Rails.application.configure do
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address: 'smtp.gmail.com',
+    address: "smtp.gmail.com",
     port: 587,
-    domain: 'gmail.com',
-    user_name: ENV['SMTP_EMAIL'],
-    password:ENV['SMTP_PASSWORD'],
+    domain: "gmail.com",
+    user_name: ENV["SMTP_EMAIL"],
+    password: ENV["SMTP_PASSWORD"],
     authentication: :plain,
     enable_starttls_auto: true,
     open_timeout: 30,
     read_timeout: 30
   }
   config.action_mailer.default_url_options = { host: "tamu-ta.herokuapp.com" }
-
 end

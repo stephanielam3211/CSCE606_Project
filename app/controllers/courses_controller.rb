@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class CoursesController < ApplicationController
-  skip_before_action :require_login, if: -> { Rails.env.test? }  
+  skip_before_action :require_login, if: -> { Rails.env.test? }
   require "csv"
 
     def index
@@ -14,7 +14,7 @@ class CoursesController < ApplicationController
 
     def search_recs
       courses = Course.where("course_number LIKE ?", "%#{params[:term]}%").limit(10)
-render json: courses.map { |course| { id: course.id, text: "#{course.course_number} - #{course.section}", course_number: course.course_number, section: course.section } }      
+render json: courses.map { |course| { id: course.id, text: "#{course.course_number} - #{course.section}", course_number: course.course_number, section: course.section } }
     end
 
     def search
@@ -23,7 +23,7 @@ render json: courses.map { |course| { id: course.id, text: "#{course.course_numb
       else
         courses = Course.all
       end
-    
+
       render json: courses.map { |c| { id: c.id, name: "#{c.course_number} - #{c.course_name} (Section: #{c.section})" } }
     end
 

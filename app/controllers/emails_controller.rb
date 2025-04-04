@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class EmailsController < ApplicationController
   before_action :authenticate_user!
 
@@ -8,7 +10,7 @@ class EmailsController < ApplicationController
     recipient_email = params[:email]
     subject = params[:subject]
     message = params[:message]
-    sender_email = ENV['SMTP_EMAIL'] 
+    sender_email = ENV["SMTP_EMAIL"]
 
     Rails.logger.info "Attempting to send email from #{sender_email} to #{recipient_email} with subject '#{subject}'"
 
@@ -33,4 +35,3 @@ class EmailsController < ApplicationController
     redirect_to root_path, alert: "You must be logged in!" unless session[:user_id]
   end
 end
-
