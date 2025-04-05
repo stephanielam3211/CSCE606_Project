@@ -8,18 +8,40 @@ class WithdrawalRequestsController < ApplicationController
     @withdrawal_request = WithdrawalRequest.new
     @applicant = Applicant.find_by(email: session[:email])
 
-    if (ta_matches = TaMatch.find_by(stu_email: session[:email]))
+    if (ta_matches = TaMatch.find_by(stu_email: session[:email], assigned: true))
       @role = ta_matches
       @class = "ta_matches"
-    elsif (senior_grader_matches = SeniorGraderMatch.find_by(stu_email: session[:email]))
+    elsif (senior_grader_matches = SeniorGraderMatch.find_by(stu_email: session[:email], assigned: true))
       @role = senior_grader_matches
       @class = "senior_grader_matches"
-    elsif (grader_matches = GraderMatch.find_by(stu_email: session[:email]))
+    elsif (grader_matches = GraderMatch.find_by(stu_email: session[:email], assigned: true))
       @role = grader_matches
       @class = "grader_matches"
     else
       @role = "Not Found"
     end
+  end
+
+  def toggle_assignment
+    model = params[:table].classify.constantize
+    record = model.find(params[:id])
+    record.update(assigned: !record.assigned)
+    redirect_back fallback_location: root_path
+  end
+
+  def confirm_assignment
+    model = params[:file].classify.constantize
+    record = model.find(params[:id])
+    record.update(confirm: true)
+    redirect_to new_withdrawal_request_path
+  end
+
+  def revoke_assignment
+    model = params[:table].classify.constantize
+    record = model.find(params[:id])
+    record.update(confirm: false)
+    redirect_back(fallback_location: request.referer || root_path)
+
   end
 
   def create

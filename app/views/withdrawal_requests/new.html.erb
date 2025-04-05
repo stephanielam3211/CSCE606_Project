@@ -28,20 +28,29 @@
         "ins_email" => "Instructor Email",
       } %>
       <ul>
-        <% excluded_keys = ["created_at", "updated_at", "id"] %> 
+        <% excluded_keys = ["created_at", "updated_at", "id","score","assigned","confirm"] %> 
         <% @role.attributes.each do |key, value| %>
           <% next if excluded_keys.include?(key) %> 
           <li><strong><%= key_mapping[key] || key.humanize  %>:</strong> <%= value %></li>
         <% end %>
       </ul>
-      <%= button_to "Deny", 
-          ta_assignment_path(id: @role.id, file: @class, ins_email: @role.ins_email, ins_name: @role.ins_name, 
-                                  course_number: @role.course_number, stu_name: @role.stu_name, 
-                                  stu_email: @role.stu_email, uin: @role.uin, section: @role.section), 
-          method: :delete, 
-          class: "deny-button",
-          onclick: "return confirm('Warning!! This will permanently delete your assignments. There is no guarantee another posistion will be given');" %>
-    </div>
+      <% if !@role.confirm %>
+        <%= button_to "Accept",
+              confirm_assignment_path(id: @role.id, file: @class),
+              method: :post,
+              class: "confirm-button",
+              onclick: "return confirm(Are You Sure You Want To Accept This Position? This Can Not Be Changed!);" %>
+
+        <%= button_to "Deny", 
+              ta_assignment_path(id: @role.id, file: @class, ins_email: @role.ins_email, ins_name: @role.ins_name, 
+                                course_number: @role.course_number, stu_name: @role.stu_name, 
+                                stu_email: @role.stu_email, uin: @role.uin, section: @role.section), 
+              method: :delete, 
+              class: "deny-button",
+              onclick: "return confirm('Warning!! This will permanently delete your assignments. There is no guarantee another position will be given');" %>
+      <% else %>
+  <p class="status-confirmed">✅ You have confirmed your assignment.</p>
+<% end %>
     <% elsif @role == "Not Found" %>
     <p><strong>Your Application is being processed or rejected.</strong></p>
     <% end %>

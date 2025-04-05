@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_03_23_193318) do
+ActiveRecord::Schema[7.2].define(version: 2025_04_05_174409) do
   create_table "applicants", force: :cascade do |t|
     t.string "email"
     t.string "name"
@@ -83,6 +83,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_23_193318) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "uin"
+    t.boolean "assigned"
+    t.boolean "confirm"
     t.index ["uin"], name: "index_grader_matches_on_uin", unique: true
   end
 
@@ -108,6 +110,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_23_193318) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "uin"
+    t.boolean "assigned"
+    t.boolean "confirm"
     t.index ["uin"], name: "index_senior_grader_matches_on_uin", unique: true
   end
 
@@ -122,6 +126,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_23_193318) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "uin"
+    t.boolean "assigned"
+    t.boolean "confirm"
     t.index ["uin"], name: "index_ta_matches_on_uin", unique: true
   end
 

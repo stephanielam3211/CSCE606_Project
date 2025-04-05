@@ -101,6 +101,11 @@ Rails.application.routes.draw do
 
   # withdrawer
   resources :withdrawal_requests, only: [:new, :create, :index, :show]
+  post 'toggle_assignment', to: 'withdrawal_requests#toggle_assignment', as: :toggle_assignment
+  post 'confirm_assignment', to: 'withdrawal_requests#confirm_assignment', as: :confirm_assignment
+  post 'revoke_assignment', to: 'withdrawal_requests#revoke_assignment', as: :revoke_assignment
+
+
   post "export_final_csv", to: "ta_assignments#export_final_csv", as: "export_final_csv"
 
   delete 'wipe_users', to: 'application#wipe_users'
