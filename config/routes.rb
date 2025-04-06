@@ -73,6 +73,8 @@ Rails.application.routes.draw do
   get "ta_assignments/view_csv", to: "ta_assignments#view_csv", as: "view_csv"
   post "import_csv", to: "csv_imports#import", as: "import_csv"
   delete "delete_all_csvs", to: "ta_assignments#delete_all_csvs", as: "delete_all_csvs"
+  post "/ta_assignments/destroy_unconfirmed", to: "ta_assignments#destroy_unconfirmed", as: "destroy_unconfirmed_assignments"
+
 
 
   # TA reassignment
@@ -101,10 +103,12 @@ Rails.application.routes.draw do
 
   # withdrawer
   resources :withdrawal_requests, only: [:new, :create, :index, :show]
+
   post 'toggle_assignment', to: 'withdrawal_requests#toggle_assignment', as: :toggle_assignment
   post 'confirm_assignment', to: 'withdrawal_requests#confirm_assignment', as: :confirm_assignment
   post 'revoke_assignment', to: 'withdrawal_requests#revoke_assignment', as: :revoke_assignment
-
+  post 'mass_confirm', to: 'withdrawal_requests#mass_confirm', as: :mass_confirm
+  post 'mass_toggle_assignment', to: 'withdrawal_requests#mass_toggle_assignment', as: :mass_toggle_assignment
 
   post "export_final_csv", to: "ta_assignments#export_final_csv", as: "export_final_csv"
 

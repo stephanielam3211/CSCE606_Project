@@ -35,6 +35,7 @@
         <% end %>
       </ul>
       <% if !@role.confirm %>
+       <div class="button-group button-group--cta">
         <%= button_to "Accept",
               confirm_assignment_path(id: @role.id, file: @class),
               method: :post,
@@ -48,6 +49,7 @@
               method: :delete, 
               class: "deny-button",
               onclick: "return confirm('Warning!! This will permanently delete your assignments. There is no guarantee another position will be given');" %>
+      </div>
       <% else %>
   <p class="status-confirmed">✅ You have confirmed your assignment.</p>
 <% end %>

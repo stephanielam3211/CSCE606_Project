@@ -41,8 +41,32 @@ class WithdrawalRequestsController < ApplicationController
     record = model.find(params[:id])
     record.update(confirm: false)
     redirect_back(fallback_location: request.referer || root_path)
-
   end
+
+  def mass_confirm
+    model = params[:table].classify.constantize
+    model.find_each{ |record|
+      record.update(confirm: false)
+    }
+    redirect_back(fallback_location: request.referer || root_path)
+  end
+
+  def mass_toggle_assignment
+    model = params[:table].classify.constantize
+    if model.where(assigned: true).exists?
+      model.find_each{ |record|
+      record.update(assigned: false)
+      }
+      notice = "All assignments have been unsent."
+    else
+      model.find_each{ |record|
+      record.update(assigned: true)
+      }
+      notice = "All assignments have been sent."
+    end
+    redirect_back(fallback_location: request.referer || root_path)
+  end
+
 
   def create
     puts "DEBUG: create action triggered!"
