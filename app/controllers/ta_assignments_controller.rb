@@ -380,11 +380,11 @@ class TaAssignmentsController < ApplicationController
           }
   
           CSV.open(add_to_backup_csv, "a", headers: applicant_headers, write_headers: !File.exist?(add_to_backup_csv)) do |csv|
-            if model_record.present? && model_record.respond_to?(:attributes)
+            if applicant.present? && applicant.respond_to?(:attributes)
               # Create the row based on the direct mapping
-              row_values = new_column_order.map do |header|
+              row_values = applicant_headers.map do |header|
                 attribute = direct_mapping[header]  # Get the model attribute for this header
-                model_record.send(attribute) || ""  # Use the value from the model, or fallback to an empty string if nil
+                applicant.send(attribute) || ""  # Use the value from the model, or fallback to an empty string if nil
               end
               csv << row_values
             end
@@ -441,10 +441,12 @@ class TaAssignmentsController < ApplicationController
         )
 
       end
+      model_class.where(uin: uins).destroy_all
 
       flash[:notice] = "All unconfirmed assignments were deleted and processed."
       redirect_back fallback_location: view_csv_path
-      end
+  end
+
 
   def determine_assignment_type(record)
     case record
