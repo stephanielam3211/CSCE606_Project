@@ -23,7 +23,7 @@
         "stu_email" => "Student Email",
         "stu_name" => "Student Name",
         "course_number" => "Course Number",
-        "section" => "Section",
+        "section_id" => "Section",
         "ins_name" => "Instructor Name",
         "ins_email" => "Instructor Email",
       } %>
@@ -45,27 +45,27 @@
         <%= button_to "Deny", 
               ta_assignment_path(id: @role.id, file: @class, ins_email: @role.ins_email, ins_name: @role.ins_name, 
                                 course_number: @role.course_number, stu_name: @role.stu_name, 
-                                stu_email: @role.stu_email, uin: @role.uin, section: @role.section), 
+                                stu_email: @role.stu_email, uin: @role.uin, section_id: @role.section, deny: true), 
               method: :delete, 
               class: "deny-button",
               onclick: "return confirm('Warning!! This will permanently delete your assignments. There is no guarantee another position will be given');" %>
       </div>
       <% else %>
-  <p class="status-confirmed">✅ You have confirmed your assignment.</p>
-<% end %>
+        <p class="status-confirmed">✅ You have confirmed your assignment.</p>
+      <% end %>
     <% elsif @role == "Not Found" %>
-    <p><strong>Your Application is being processed or rejected.</strong></p>
+      <p><strong>Your Application is being processed or rejected.</strong></p>
     <% end %>
-  </div>
-  <div style="text-align: center; margin-top: 20px;">
-    <% if session[:role].to_s == "admin" %>
-      <%= link_to "Back to Home", root_path(anchor: "student"), class: "action-button" %>
-    <% else %>
-      <%= link_to "Back to Home", root_path, class: "action-button" %>
-    <% end %>
-  </div>
-  <div class="footer">
-    &copy; 2025 Texas A&M University. All Rights Reserved.
-  </div>
+    </div>
+    <div style="text-align: center; margin-top: 20px;">
+      <% if session[:role].to_s == "admin" %>
+        <%= link_to "Back to Home", root_path(anchor: "student"), class: "action-button" %>
+      <% else %>
+        <%= link_to "Back to Home", root_path, class: "action-button" %>
+      <% end %>
+    </div>
+    <div class="footer">
+      &copy; 2025 Texas A&M University. All Rights Reserved.
+    </div>
 </body>
 </html>

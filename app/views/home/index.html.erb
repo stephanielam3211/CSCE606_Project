@@ -68,6 +68,7 @@
           <%= button_to "Clear All Courses", clear_courses_path, method: :delete, data: { turbo: false }, onclick: "return confirmClear();"%>
         </div>
         <%= button_to 'Delete All Assignments', delete_all_csvs_path, method: :delete, class: 'btn btn--danger', data: { confirm: 'Are you sure you want to delete all CSV files and models?' } %>
+         <%= button_to 'Delete All Withdrawal Requests', clear_withdrawal_requests_path, method: :delete, class: 'btn btn--danger', data: { confirm: 'Are you sure you want to delete all Withdrawal Requests?' } %>
       </div>
     <% end %>
   </div>

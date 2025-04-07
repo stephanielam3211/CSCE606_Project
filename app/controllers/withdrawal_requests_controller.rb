@@ -22,6 +22,11 @@ class WithdrawalRequestsController < ApplicationController
     end
   end
 
+  def clear
+    WithdrawalRequest.delete_all
+    redirect_to root_path, notice: 'All Withdrawal Requests have been cleared.'
+  end
+
   def toggle_assignment
     model = params[:table].classify.constantize
     record = model.find(params[:id])
@@ -75,7 +80,7 @@ class WithdrawalRequestsController < ApplicationController
     if @withdrawal_request.save
       puts "DEBUG: Request saved successfully!"
 
-      append_matching_entries(@withdrawal_request)
+     # append_matching_entries(@withdrawal_request)
 
       flash[:notice] = "Withdrawal request submitted successfully."
       redirect_to root_path

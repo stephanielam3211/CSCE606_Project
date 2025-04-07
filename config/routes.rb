@@ -97,6 +97,7 @@ Rails.application.routes.draw do
       delete :clear
     end
   end
+
   get "recommendations/show", to: "recommendations#show", as: "recommendation_view"
   get "recommendations/mine", to: "recommendations#my_recommendations", as: "my_recommendations_view"
 
@@ -129,4 +130,5 @@ Rails.application.routes.draw do
   post "export_final_csv", to: "ta_assignments#export_final_csv", as: "export_final_csv"
 
   delete 'wipe_users', to: 'application#wipe_users'
+
 end
