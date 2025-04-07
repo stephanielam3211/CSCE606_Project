@@ -46,6 +46,14 @@ Rails.application.routes.draw do
     end
   end  
 
+  resources :unassigned_applicantsapplicants do
+    collection do
+      get :search
+      get :search_email
+      get :search_uin
+    end
+  end
+
   resources :courses, only: [ :index, :update, :destroy, :create ] do
     collection do
       post :import
@@ -94,6 +102,10 @@ Rails.application.routes.draw do
 
   get 'courses/search', to: 'courses#search'
   get 'applicants/search', to: 'applicants#search'
+
+  get 'unassigned_applicants/search', to: 'unassigned_applicants#search'
+  get 'unassigned_applicants/search_uin', to: 'unassigned_applicants#search_uin'
+  get 'unassigned_applicants/search_email', to: 'unassigned_applicants#search_email'
 
   # blacklist
   resources :blacklists, only: [ :index, :create, :destroy ]

@@ -46,10 +46,18 @@
                           class: "aux-button aux-button-primary aux-text-lg aux-font-bold aux-px-6 aux-py-3 aux-w-1/2",
                           style: "margin-left: 18%;",
                           onclick: "return confirm('Warning!! This action will reset any previous assignments.');" %>
-
-                    <%= button_to "Re-run Auto-Assign", reprocess_csvs_path, method: :post,
-                          class: "aux-button aux-button-primary aux-text-lg aux-font-bold aux-px-6 aux-py-3 aux-w-1/2",
-                          style: "margin-left: 18%;" %>
+                          
+                    <% if File.exist?(Rails.root.join("app/Charizard/util/public/output", "New_Needs.csv")) %>
+                      <%= button_to "Re-run Auto-Assign", reprocess_csvs_path, method: :post,
+                            class: "aux-button aux-button-primary aux-text-lg aux-font-bold aux-px-6 aux-py-3 aux-w-1/2",
+                            style: "margin-left: 18%;",
+                          onclick: "return confirm('Confirm. This will assign applicants to any remaining positions');" %>
+                    <% else %>
+                      <button class="aux-button aux-button-primary aux-text-lg aux-font-bold aux-px-6 aux-py-3 aux-w-1/2" 
+                              style="margin-left: 18%;" disabled>
+                        Re-run Auto-Assign
+                      </button>
+                    <% end %>
                   </div>
                 </div>
               </div>
