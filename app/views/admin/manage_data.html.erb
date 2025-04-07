@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Data Management</title>
+  <%= stylesheet_link_tag 'tamu', media: 'all', 'data-turbo-track': 'reload' %>
+
+  <style>
+  .modal {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  .modal.hidden {
+    display: none;
+  }
+
+  .modal-content {
+    background-color: #1a1a1a;
+    padding: 20px 30px;
+    border-radius: 10px;
+    text-align: center;
+    color: white;
+    max-width: 400px;
+    width: 90%;
+  }
+
+  .modal-content input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+  }
+
+  .modal-buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .modal-buttons button {
+    padding: 8px 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+  }
+
+  #cancelButton {
+    background-color: gray;
+    color: white;
+  }
+
+  #proceedButton {
+    background-color: #5B0000;
+    color: white;
+  }
+</style>
+
+  <style>
+    .admin-action-button {
+      background-color: #5B0000 !important;
+      color: white;
+      font-weight: bold;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+      transition: background-color 0.2s ease;
+    }
+
+    .admin-action-button:hover {
+      background-color: #7d0000;
+    }
+
+    .page-content {
+      margin-top: 100px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .back-link {
+      background-color: #333;
+      color: white;
+      font-weight: bold;
+      padding: 12px 24px;
+      border-radius: 6px;
+      text-decoration: none;
+      margin-top: 40px;
+      display: inline-block;
+    }
+
+    .logged-in-message {
+      text-align: center;
+      color: white;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <%= image_tag "logo.png", alt: "CSCE Logo", class: "logo" %>
+    <% if session[:user_id].present? %>
+      <%= link_to "logout", logout_path, method: :delete, class: "logout-button" %>
+    <% end %> 
+  </div>
+
+  <% if session[:user_id].present? && session[:role].to_s == "admin" %>
+    <p class="logged-in-message">Hello, <%= session[:user] %>! You are logged in as Admin.</p>
+
+    <div class="page-content">
+      <h1 style="color: white; text-align: center;">Manage Data (Wipe / Clear / Delete)</h1>
+
+      <%= button_to "Clear All Applicants", wipe_applicants_path, method: :delete, class: "admin-action-button confirm-before-submit", data: { turbo: false, confirm: "Are you sure you want to clear all applicants?" } %>
+      <%= button_to "Clear All Users", wipe_users_path, method: :delete, class: "admin-action-button confirm-before-submit", data: { turbo: false, confirm: "Are you sure you want to clear all users?" } %>
+      <%= button_to "Clear All Recommendations", clear_recommendations_path, method: :delete, class: "admin-action-button confirm-before-submit", data: { turbo: false, confirm: "Are you sure you want to clear all recommendations?" } %>
+      <%= button_to "Clear All Courses", clear_courses_path, method: :delete, class: "admin-action-button confirm-before-submit", data: { turbo: false, confirm: "Are you sure you want to clear all courses?" } %>
+      <%= button_to "Delete All Assignments", delete_all_csvs_path, method: :delete, class: "admin-action-button confirm-before-submit", data: { turbo: false, confirm: "Are you sure you want to delete all assignments and CSVs?" } %>
+
+      <%= link_to "← Back to Main Page", root_path, class: "back-link" %>
+    </div>
+  <% else %>
+    <p class="login-reminder">
+      You must be an admin to access this page.<br>
+      Please <%= link_to "Login", "/auth/google_oauth2", data: { turbo: false } %>.
+    </p>
+  <% end %>
+
+  <div class="footer">
+    &copy; 2025 Texas A&M University. All Rights Reserved.
+  </div>
+
+  <!-- Modal -->
+  <div id="confirmModal" class="modal hidden">
+    <div class="modal-content">
+      <h2>Confirmation Required</h2>
+      <p>This action is irreversible.</p>
+      <p>Please type <strong>CONFIRM</strong> to continue:</p>
+      <input type="text" id="confirmInput" />
+      <div class="modal-buttons">
+        <button id="cancelButton">Cancel</button>
+        <button id="proceedButton">Proceed</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    let formToSubmit = null;
+
+    const modal = document.getElementById("confirmModal");
+    const input = document.getElementById("confirmInput");
+    const cancel = document.getElementById("cancelButton");
+    const proceed = document.getElementById("proceedButton");
+
+    document.querySelectorAll(".confirm-before-submit").forEach(button => {
+      button.addEventListener("click", function (e) {
+        e.preventDefault();
+        formToSubmit = button.closest("form");
+        modal.classList.remove("hidden");
+        input.value = "";
+        input.focus();
+      });
+    });
+
+    cancel.addEventListener("click", function () {
+      modal.classList.add("hidden");
+      formToSubmit = null;
+    });
+
+    proceed.addEventListener("click", function () {
+      if (input.value === "CONFIRM" && formToSubmit) {
+        modal.classList.add("hidden");
+        formToSubmit.submit();
+      } else {
+        alert("❌ Incorrect confirmation. Action canceled.");
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

@@ -23,7 +23,7 @@ Rails.application.routes.draw do
 
   # Records
   get "all_records", to: "records#index"
-
+  
   # TA Assignments
 
   get "ta_assignments/new"
@@ -104,4 +104,7 @@ Rails.application.routes.draw do
   post "export_final_csv", to: "ta_assignments#export_final_csv", as: "export_final_csv"
 
   delete 'wipe_users', to: 'application#wipe_users'
+
+  # admin manage data
+  get 'admin/manage_data', to: 'admin#manage_data', as: :admin_manage_data
 end
