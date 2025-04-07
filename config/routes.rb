@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   get "/logout", to: "sessions#destroy", as: "logout"
 
   resources :sessions, only: [ :new, :create, :destroy ]
+  resources :sessions, only: [ :new, :create, :destroy ]
 
   # Records
   get "all_records", to: "records#index"
@@ -127,9 +128,16 @@ Rails.application.routes.draw do
   post 'mass_confirm', to: 'withdrawal_requests#mass_confirm', as: :mass_confirm
   post 'mass_toggle_assignment', to: 'withdrawal_requests#mass_toggle_assignment', as: :mass_toggle_assignment
 
+  resources :withdrawal_requests, only: [:new, :create, :index, :show] do
+    collection do
+      delete :clear
+    end
+  end
+
   post "export_final_csv", to: "ta_assignments#export_final_csv", as: "export_final_csv"
 
   delete 'wipe_users', to: 'application#wipe_users'
   #admin
   resources :admins, only: [:new, :create]
+  get 'admin/manage_data', to: 'admin#manage_data', as: :admin_manage_data
 end
