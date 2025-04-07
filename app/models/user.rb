@@ -19,14 +19,14 @@ class User < ApplicationRecord
         user = find_or_initialize_by(email: email)
         profs_record = Course&.find_by(faculty_email: email)
       
-        user.role = if ADMIN_EMAILS.include?(email)
-                      "admin"
-                    elsif profs_record.present?
-                      "faculty"
-                    else
-                      "student"
-                    end
-      
+        user.role = if ADMIN_EMAILS.include?(email) || Admin.exists?(email: email)
+            "admin"
+          elsif profs_record.present?
+            "faculty"
+          else
+            "student"
+          end
+
         user.name = auth.info.name
         user.email = email
         user.save!

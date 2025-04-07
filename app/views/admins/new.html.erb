@@ -1,0 +1,13 @@
+<h2>Add New Admin</h2>
+
+<%= form_with url: admins_path, method: :post do %>
+  <label>Email Address</label><br>
+  <%= text_field_tag :email, nil, required: true %><br><br>
+  <%= submit_tag "Add Admin", class: "action-button" %>
+<% end %>
+
+<% if flash[:notice] %>
+  <p class="success-message"><%= flash[:notice] %></p>
+<% elsif flash[:alert] %>
+  <p class="error-message"><%= flash[:alert] %></p>
+<% end %>
