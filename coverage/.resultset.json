@@ -2,6 +2,7 @@
   "RSpec": {
     "coverage": {
       "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/spec/tests/applicant_spec.rb": {
+      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/spec/tests/applicant_spec.rb": {
         "lines": [
           null,
           null,
@@ -147,6 +148,7 @@
         ]
       },
       "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/spec/rails_helper.rb": {
+      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/spec/rails_helper.rb": {
         "lines": [
           null,
           null,
@@ -249,6 +251,7 @@
         ]
       },
       "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/config/environment.rb": {
+      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/config/environment.rb": {
         "lines": [
           null,
           null,
@@ -259,6 +262,7 @@
           1
         ]
       },
+      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/config/application.rb": {
       "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/config/application.rb": {
         "lines": [
           null,
@@ -292,6 +296,7 @@
           null
         ]
       },
+      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/config/boot.rb": {
       "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/config/boot.rb": {
         "lines": [
           null,
@@ -385,6 +390,7 @@
         ]
       },
       "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/config/initializers/assets.rb": {
+      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/config/initializers/assets.rb": {
         "lines": [
           null,
           null,
@@ -402,6 +408,7 @@
           null
         ]
       },
+      "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/config/initializers/content_security_policy.rb": {
       "/Users/yuvaneshrajamani/Desktop/606 project/CSCE606_Project/config/initializers/content_security_policy.rb": {
         "lines": [
           null,

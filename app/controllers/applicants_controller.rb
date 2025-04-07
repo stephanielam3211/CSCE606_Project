@@ -15,7 +15,13 @@ class ApplicantsController < ApplicationController
   end
 
   def search
-    applicants = Applicant.where("name ILIKE ?", "%#{params[:term]}%").limit(10)
+    term = params[:term].to_s.strip.downcase
+    applicants = if term.present?
+                   Applicant.where("LOWER(name) LIKE ?", "%#{term}%").limit(10)
+                 else
+                   Applicant.limit(10)
+                 end
+  
     render json: applicants.map { |applicant| {
       id: applicant.id,
       text: "#{applicant.name} (#{applicant.email})",
@@ -27,7 +33,8 @@ class ApplicantsController < ApplicationController
       citizenship: applicant.citizenship,
       hours: applicant.hours,
       prev_ta: applicant.prev_ta,
-      cert: applicant.cert } }
+      cert: applicant.cert
+    } }
   end
 
   def search_email

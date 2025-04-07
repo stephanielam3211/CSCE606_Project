@@ -118,11 +118,12 @@ render json: courses.map { |course| { id: course.id, text: "#{course.course_numb
         redirect_to courses_path, alert: "Error importing file: #{e.message}"
       end
     end
+    
     def clear
         Course.delete_all
 
         if request
-            redirect_to courses_path, notice: "All courses have been deleted."
+            redirect_to root_path, notice: "All courses have been deleted."
         else
             puts "All courses have been deleted."
         end

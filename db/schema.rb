@@ -72,6 +72,18 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_07_062842) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "grader_backups", force: :cascade do |t|
+    t.string "course_number"
+    t.string "section"
+    t.string "ins_name"
+    t.string "ins_email"
+    t.string "stu_name"
+    t.string "stu_email"
+    t.integer "score"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "grader_matches", force: :cascade do |t|
     t.string "course_number"
     t.string "section"
@@ -100,6 +112,18 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_07_062842) do
     t.boolean "admin"
   end
 
+  create_table "senior_grader_backups", force: :cascade do |t|
+    t.string "course_number"
+    t.string "section"
+    t.string "ins_name"
+    t.string "ins_email"
+    t.string "stu_name"
+    t.string "stu_email"
+    t.integer "score"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "senior_grader_matches", force: :cascade do |t|
     t.string "course_number"
     t.string "section"
@@ -114,6 +138,18 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_07_062842) do
     t.boolean "assigned"
     t.boolean "confirm"
     t.index ["uin"], name: "index_senior_grader_matches_on_uin", unique: true
+  end
+
+  create_table "ta_backups", force: :cascade do |t|
+    t.string "course_number"
+    t.string "section"
+    t.string "ins_name"
+    t.string "ins_email"
+    t.string "stu_name"
+    t.string "stu_email"
+    t.integer "score"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "ta_matches", force: :cascade do |t|
