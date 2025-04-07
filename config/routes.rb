@@ -114,7 +114,11 @@ Rails.application.routes.draw do
   get "export_courses", to: "courses#export", as: :export_courses
 
   # withdrawer
-  resources :withdrawal_requests, only: [:new, :create, :index, :show]
+  resources :withdrawal_requests, only: [:new, :create, :index, :show] do
+    collection do
+      delete :clear
+    end
+  end
 
   post 'toggle_assignment', to: 'withdrawal_requests#toggle_assignment', as: :toggle_assignment
   post 'confirm_assignment', to: 'withdrawal_requests#confirm_assignment', as: :confirm_assignment
