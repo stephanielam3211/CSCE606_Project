@@ -10,28 +10,26 @@ class User < ApplicationRecord
 
     def self.from_google(auth)
         email = auth.info.email
-
+      
         unless email.ends_with?("@tamu.edu")
-            Rails.logger.info "Unauthorized login attemp with email: #{email}"
-            return nil
+          Rails.logger.info "Unauthorized login attempt with email: #{email}"
+          return nil
         end
-
-        where(email: email).first_or_initialize do |user|
-            profs_class = Course
-            profs_record = profs_class&.find_by(faculty_email: email)
-
-            role = if ADMIN_EMAILS.include?(email)
-                     "admin"
-            elsif profs_record.nil?
-                     "student"
-            else
-                     "faculty"
-            end
-
-            user.name = auth.info.name
-            user.email = email
-            user.role = role
-            user.save
-        end
-    end
+      
+        user = find_or_initialize_by(email: email)
+        profs_record = Course&.find_by(faculty_email: email)
+      
+        user.role = if ADMIN_EMAILS.include?(email)
+                      "admin"
+                    elsif profs_record.present?
+                      "faculty"
+                    else
+                      "student"
+                    end
+      
+        user.name = auth.info.name
+        user.email = email
+        user.save!
+        user
+    end      
 end
