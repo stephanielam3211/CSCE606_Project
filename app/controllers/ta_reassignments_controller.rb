@@ -11,7 +11,7 @@ class TaReassignmentsController < ApplicationController
         senior_grader_csv_path = Rails.root.join("app/Charizard/util/public/output", "Senior_Grader_Matches.csv")
         grader_csv_path = Rails.root.join("app/Charizard/util/public/output", "Grader_Matches.csv")
 
-        [ta_csv_path, senior_grader_csv_path, grader_csv_path].each do |file|
+        [ ta_csv_path, senior_grader_csv_path, grader_csv_path ].each do |file|
           if File.exist?(file)
             tmp_file_path = Rails.root.join("tmp", File.basename(file))
             FileUtils.cp(file, tmp_file_path)
@@ -22,7 +22,7 @@ class TaReassignmentsController < ApplicationController
         system("#{python_path} app/Charizard/main.py '#{apps_csv_path}' '#{needs_csv_path}' '#{recommendation_path}'")
 
         flash[:notice] = "CSV processing complete"
-        
+
         combined_data = { ta: [], senior_grader: [], grader: [] }
 
         { ta: ta_csv_path, senior_grader: senior_grader_csv_path, grader: grader_csv_path }.each do |key, file|
@@ -46,7 +46,7 @@ class TaReassignmentsController < ApplicationController
 
         File.delete(Rails.root.join("app/Charizard/util/public/output/New_Needs.csv"))
         system("rake import:csv")
- 
+
         redirect_to view_csv_path
     end
 

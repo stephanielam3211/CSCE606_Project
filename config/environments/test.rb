@@ -74,5 +74,4 @@ Rails.application.configure do
   config.middleware.use OmniAuth::Builder do
     provider :google_oauth2, "FAKE_CLIENT_ID", "FAKE_CLIENT_SECRET"
   end
-
 end

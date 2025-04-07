@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_03_23_193318) do
+ActiveRecord::Schema[7.2].define(version: 2025_04_07_062842) do
   create_table "applicants", force: :cascade do |t|
     t.string "email"
     t.string "name"
@@ -39,6 +39,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_23_193318) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.float "gpa"
+    t.integer "confirm", default: 0, null: false
   end
 
   create_table "assignments", force: :cascade do |t|
@@ -94,6 +95,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_23_193318) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "uin"
+    t.boolean "assigned"
+    t.boolean "confirm"
     t.index ["uin"], name: "index_grader_matches_on_uin", unique: true
   end
 
@@ -106,6 +109,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_23_193318) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "course"
+    t.boolean "admin"
   end
 
   create_table "senior_grader_backups", force: :cascade do |t|
@@ -131,6 +135,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_23_193318) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "uin"
+    t.boolean "assigned"
+    t.boolean "confirm"
     t.index ["uin"], name: "index_senior_grader_matches_on_uin", unique: true
   end
 
@@ -157,7 +163,39 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_23_193318) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "uin"
+    t.boolean "assigned"
+    t.boolean "confirm"
     t.index ["uin"], name: "index_ta_matches_on_uin", unique: true
+  end
+
+  create_table "unassigned_applicants", force: :cascade do |t|
+    t.string "email"
+    t.string "name"
+    t.string "degree"
+    t.string "positions"
+    t.text "number"
+    t.integer "uin"
+    t.integer "hours"
+    t.string "citizenship"
+    t.integer "cert"
+    t.text "prev_course"
+    t.text "prev_uni"
+    t.text "prev_ta"
+    t.string "advisor"
+    t.integer "choice_1"
+    t.integer "choice_2"
+    t.integer "choice_3"
+    t.integer "choice_4"
+    t.integer "choice_5"
+    t.integer "choice_6"
+    t.integer "choice_7"
+    t.integer "choice_8"
+    t.integer "choice_9"
+    t.integer "choice_10"
+    t.time "timestamp"
+    t.float "gpa"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|

@@ -34,9 +34,9 @@ RSpec.describe SessionsController, type: :request do
         })
         Rails.application.env_config["omniauth.auth"] = OmniAuth.config.mock_auth[:google]
       end
-  
+
       it "logs in the user and redirects to the home page" do
-        get "/auth/google/callback" 
+        get "/auth/google/callback"
         expect(session[:user_id]).not_to be_nil
         expect(session[:email]).to eq('test@tamu.edu')
         expect(response).to redirect_to(root_path)
@@ -47,7 +47,7 @@ RSpec.describe SessionsController, type: :request do
       it "redirects to the root path with an alert" do
         OmniAuth.config.mock_auth[:google] = :invalid_credentials
         Rails.application.env_config["omniauth.auth"] = nil
-        get "/auth/google/callback" 
+        get "/auth/google/callback"
         expect(session[:user_id]).to be_nil
       end
     end
@@ -58,7 +58,7 @@ RSpec.describe SessionsController, type: :request do
 
     it "logs out the user and redirects to the root path" do
       get logout_path
-      expect(session.keys - ["session_id", "flash"]).to be_empty
+      expect(session.keys - [ "session_id", "flash" ]).to be_empty
       expect(response).to redirect_to(root_path)
     end
 

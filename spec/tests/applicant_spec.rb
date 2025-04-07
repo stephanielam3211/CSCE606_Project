@@ -37,9 +37,9 @@ RSpec.describe ApplicantsController, type: :controller do
     it "#index, #search, #search_email, #search_uin in one go" do
       get :index
       expect(response).to be_successful
-      expect(assigns(:applicants).map(&:name)).to eq(["Alice", "Bob"])
+      expect(assigns(:applicants).map(&:name)).to eq([ "Alice", "Bob" ])
       get :index, params: { sort: "email", direction: "desc" }
-      expect(assigns(:applicants).map(&:email)).to eq(["bob@example.com", "alice@example.com"])
+      expect(assigns(:applicants).map(&:email)).to eq([ "bob@example.com", "alice@example.com" ])
       get :search, params: { term: "Ali" }, format: :json
       expect(response).to be_successful
       expect(JSON.parse(response.body).first["name"]).to eq("Alice")

@@ -76,12 +76,10 @@ gem "rspec-rails", "~> 7.1", group: :test
 
 gem "kaminari", "~> 1.2"
 
-gem 'omniauth-google-oauth2'
+gem "omniauth-google-oauth2"
 
-gem 'dotenv-rails'
+gem "dotenv-rails"
 
-gem 'googleauth'
+gem "googleauth"
 
-gem 'omniauth-oauth2'
-
-
+gem "omniauth-oauth2"

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class CoursesController < ApplicationController
-  skip_before_action :require_login, if: -> { Rails.env.test? }  
+  skip_before_action :require_login, if: -> { Rails.env.test? }
   require "csv"
 
     def index
@@ -14,18 +14,25 @@ class CoursesController < ApplicationController
 
     def search_recs
       courses = Course.where("course_number LIKE ?", "%#{params[:term]}%").limit(10)
-render json: courses.map { |course| { id: course.id, text: "#{course.course_number} - #{course.section}", course_number: course.course_number, section: course.section } }      
+      render json: courses.map { |course| { id: course.id, text: "#{course.course_number} - #{course.section}", course_number: course.course_number, section: course.section } }
     end
 
     def search
-      if params[:term].present?
-        courses = Course.where("course_name LIKE ? OR course_number LIKE ?", "%#{params[:term]}%", "%#{params[:term]}%")
-      else
-        courses = Course.all
-      end
+      term = params[:term].to_s.strip.downcase
     
-      render json: courses.map { |c| { id: c.id, name: "#{c.course_number} - #{c.course_name} (Section: #{c.section})" } }
-    end
+      courses = if term.present?
+                  Course.where("LOWER(course_number) LIKE ? OR LOWER(course_name) LIKE ?", "%#{term}%", "%#{term}%").limit(10)
+                else
+                  Course.limit(10)
+                end
+    
+      render json: courses.map { |c| {
+        id: c.id,
+        course_number: c.course_number,
+        section: c.section,
+        text: "#{c.course_number} - #{c.section}"
+      } }
+    end    
 
     def create
       @course = Course.new(course_params)
@@ -118,11 +125,12 @@ render json: courses.map { |course| { id: course.id, text: "#{course.course_numb
         redirect_to courses_path, alert: "Error importing file: #{e.message}"
       end
     end
+    
     def clear
         Course.delete_all
 
         if request
-            redirect_to courses_path, notice: "All courses have been deleted."
+            redirect_to root_path, notice: "All courses have been deleted."
         else
             puts "All courses have been deleted."
         end

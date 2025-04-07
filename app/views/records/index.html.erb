@@ -1,7 +1,29 @@
-<h1>Assignments</h1>
+
 <!-- Display selected table data -->
 <% if @table_name.present? %>
-  <h2><%= @table_name.titleize %></h2>
+  <h1><%= @table_name.titleize %> Assignments</h1>
+  <%= link_to "Back", view_csv_path, class: "aux-link aux-text-primary", style: "text-decoration: none;",class: 'btn btn--primary'%>
+  
+  <div class="button-group button-group--cta">
+    <% any_assigned = @records.any?(&:assigned) %>
+    <%= button_to(
+                  any_assigned ? "Unsend All Offers" : "Send All Offers",
+                  mass_toggle_assignment_path(table: @table_name),
+                  method: :post,
+                  class: "btn #{any_assigned ? 'btn-warning' : 'btn-success'}") %>
+     <%= button_to "Revoke Confirmation For All Applicants", 
+                  mass_confirm_path(table: @table_name), 
+                  method: :post, 
+                  class: "btn btn-warning",
+                  onclick: "return confirm('Warning!! This will reset the confirmation of all assignments');"  %>
+    <%= button_to "Delete All Unconfirmed Assignments",
+                  destroy_unconfirmed_assignments_path(type: @table_name),
+                  method: :post,
+                  data: { confirm: "Are you sure? This will remove all assignments marked as not confirmed." },
+                  class: "btn btn-danger" %>
+
+    </div>
+  
   <table border:"1">
     <thead>
       <tr>
@@ -13,6 +35,8 @@
           <th>Student</th>
           <th>Student Email</th>
           <th>UIN</th>
+          <th>Send Offer</th>
+          <th>Confirmation</th>
           <th>Actions</th>
         <% else %>
           <th>No records found</th>
@@ -29,6 +53,30 @@
           <td><%= record.stu_name %></td>
           <td><%= record.stu_email %></td>
           <td><%= record.uin %></td>
+          <td>
+           <% if record.assigned %>
+              <%= button_to "Unsend", 
+                  toggle_assignment_path(id: record.id, table: @table_name), 
+                  method: :post, 
+                  class: "btn btn-warning" %>
+            <% else %>
+              <%= button_to "Send", 
+                  toggle_assignment_path(id: record.id, table: @table_name), 
+                  method: :post, 
+                  class: "btn btn-success" %>
+            <% end %>
+          </td>
+          <td>
+            <% if record.confirm %>
+              <span class="status-confirmed">✅ Confirmed</span>
+              <%= button_to "Revoke confirmation", 
+                  revoke_assignment_path(id: record.id, table: @table_name), 
+                  method: :post, 
+                  class: "btn btn-warning" %>
+            <% else %>
+              <span class="status-pending">🔄 Pending</span>
+            <% end %>
+          </td>
           <td>
           <div class="button-group button-group--cta">
             <%= link_to "Edit", edit_ta_assignment_path(record, file: @table_name, uin: record.uin), method: :get, class: 'btn btn-danger' %>

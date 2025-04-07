@@ -95,8 +95,13 @@
     // Automatically show admin buttons if the user is an admin
     document.addEventListener("DOMContentLoaded", function() {
       <% if session[:role].to_s == "admin" %>
+      const hash = window.location.hash.substring(1); // Remove #
+      if (["student", "faculty", "admin"].includes(hash)) {
+        showButtons(hash);
+      } else {
         showButtons('admin');
-      <% end %>
+      }
+    <% end %>
     });
     </script>
 </body>

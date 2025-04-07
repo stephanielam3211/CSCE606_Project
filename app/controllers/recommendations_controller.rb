@@ -20,7 +20,7 @@ class RecommendationsController < ApplicationController
   def update
     @recommendation = Recommendation.find(params[:id])
     if @recommendation.update(recommendation_params)
-      redirect_to my_recommendations_view_path, notice: 'Recommendation updated successfully.'
+      redirect_to my_recommendations_view_path, notice: "Recommendation updated successfully."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -37,7 +37,7 @@ class RecommendationsController < ApplicationController
 
   def create
     @recommendation = Recommendation.new(recommendation_params)
-  
+
     if @recommendation.save
       respond_to do |format|
         format.html { redirect_to my_recommendations_view_path, notice: "Recommendation submitted successfully!" }
@@ -70,11 +70,11 @@ class RecommendationsController < ApplicationController
 
   def generate_csv
     CSV.generate(headers: true) do |csv|
-      csv << ["Timestamp", "Email Address", "Your Name (first and last)", "Select a TA/Grader", "Course (e.g. CSCE 421)", "Feedback", "Additional Feedback about this student"]
+      csv << [ "Timestamp", "Email Address", "Your Name (first and last)", "Select a TA/Grader", "Course (e.g. CSCE 421)", "Feedback", "Additional Feedback about this student" ]
 
       @recommendations.each do |recommendation|
         csv << [
-          recommendation.created_at.strftime('%m/%d/%Y %H:%M:%S'),
+          recommendation.created_at.strftime("%m/%d/%Y %H:%M:%S"),
           recommendation.email,
           recommendation.name,
           recommendation.selectionsTA,

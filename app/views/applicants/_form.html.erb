@@ -58,7 +58,7 @@
 
     <div>
       <%= form.label :cert, "English Language Certification Level" %>
-      <%= form.select :cert, [['Native Speaker'], ['1'], ['2'], ['3']], prompt: "Select your certification level" %>
+      <%= form.select :cert, [['1'], ['2'], ['3']], prompt: "Select your certification level" %>
     </div>
 
     <div class="full-width">
@@ -90,7 +90,11 @@
 
     <div class="full-width">
       <%= form.submit "Submit Application" %>
-      <%= link_to "Back to Home", request.referer || root_path, class: "action-button" %>
+        <% if session[:role].to_s == "admin" %>
+          <%= link_to "Back to Home", root_path(anchor: "student"), class: "action-button" %>
+        <% else %>
+          <%= link_to "Back to Home", request.referer || root_path, class: "action-button" %>
+        <% end %>
     </div>
   </div>
 <% end %>
