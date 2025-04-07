@@ -15,7 +15,7 @@ class ApplicantsController < ApplicationController
   end
 
   def search
-    applicants = Applicant.where("name LIKE ?", "%#{params[:term]}%").limit(10)
+    applicants = Applicant.where("name ILIKE ?", "%#{params[:term]}%").limit(10)
     render json: applicants.map { |applicant| {
       id: applicant.id,
       text: "#{applicant.name} (#{applicant.email})",
@@ -31,7 +31,7 @@ class ApplicantsController < ApplicationController
   end
 
   def search_email
-    applicants = Applicant.where("email LIKE ?", "%#{params[:term]}%").limit(10)
+    applicants = Applicant.where("email ILIKE ?", "%#{params[:term]}%").limit(10)
     render json: applicants.map { |applicant| {
       id: applicant.id,
       text: "#{applicant.name} (#{applicant.email})",
@@ -47,7 +47,7 @@ class ApplicantsController < ApplicationController
   end
 
   def search_uin
-    applicants = Applicant.where("uin LIKE ?", "%#{params[:term]}%").limit(10)
+    applicants = Applicant.where("uin ILIKE ?", "%#{params[:term]}%").limit(10)
     render json: applicants.map { |applicant| {
       id: applicant.id,
       text: "#{applicant.name} (#{applicant.email})",
