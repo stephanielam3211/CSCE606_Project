@@ -68,9 +68,23 @@ class ApplicantsController < ApplicationController
 
   # GET /applicants/new
   def new
-    @applicant = Applicant.new
-    @courses = Course.all.map { |c| "#{c.course_number} - #{c.course_name} (Section: #{c.section})" }
+    if session[:user_id].present?
+      # Check if the user has already submitted an application
+      user = User.find(session[:user_id])
+      if user.applicant
+        redirect_to user.applicant
+      else
+        @applicant = Applicant.new
+        @courses = Course.all.map { |c| "#{c.course_number} - #{c.course_name} (Section: #{c.section})"}
+      end
+    else
+      redirect_to root_path, alert: "Please log in to submit an application."
+    end
+  
   end
+
+
+
 
   # GET /applicants/1/edit
   def edit
@@ -80,23 +94,31 @@ class ApplicantsController < ApplicationController
 
   # POST /applicants or /applicants.json
   def create
-    if Blacklist.exists?(student_email: applicant_params[:email])
-      modified_params = applicant_params.merge(name: "*#{applicant_params[:name]}")
-    else
-      modified_params = applicant_params
-    end
-
-    @applicant = Applicant.new(modified_params)
-
-    respond_to do |format|
-      if @applicant.save
-        format.html { redirect_to @applicant, notice: "Applicant was successfully created." }
-        format.json { render :show, status: :created, location: @applicant }
-      else
-        @courses = Course.all.map { |c| "#{c.course_number} - #{c.course_name} (Section: #{c.section})" }
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @applicant.errors, status: :unprocessable_entity }
+    if session[:user_id].present?
+      user = User.find(session[:user_id])
+      if user.applicant
+        redirect_to user.applicant, alert: "You have already submitted an application."
+        return
       end
+  
+      modified_params = applicant_params
+      modified_params = modified_params.merge(name: "*#{modified_params[:name]}") if Blacklist.exists?(student_email: modified_params[:email])
+  
+      @applicant = Applicant.new(modified_params)
+      @applicant.confirm = user.id
+  
+      respond_to do |format|
+        if @applicant.save
+          format.html { redirect_to @applicant, notice: "Application submitted successfully." }
+          format.json { render :show, status: :created, location: @applicant }
+        else
+          @courses = Course.all.map { |c| "#{c.course_number} - #{c.course_name} (Section: #{c.section})" }
+          format.html { render :new, status: :unprocessable_entity }
+          format.json { render json: @applicant.errors, status: :unprocessable_entity }
+        end
+      end
+    else
+      redirect_to root_path, alert: "Please log in to submit an application."
     end
   end
 
@@ -121,8 +143,12 @@ class ApplicantsController < ApplicationController
 
     respond_to do |format|
       format.html {
-        redirect_to applicants_path, status: :see_other,
-        notice: "Applicant was successfully destroyed." }
+        if session[:role].to_s == "admin" 
+          redirect_to applicants_path,notice: "Applicant was successfully destroyed."
+        else 
+          redirect_to root_path,notice: "Applicant was successfully destroyed."
+        end 
+       }
       format.json { head :no_content }
     end
   end

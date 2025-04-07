@@ -6,15 +6,15 @@
   <%= f.hidden_field :course_number, value: @record["Course Number"]%> 
   <%= f.hidden_field :section, value: @record["Section ID"]%> 
   <label>Student Name:</label>
-  <%= f.select :stu_name, [], { prompt: "Search for a TA" }, class: "form-control", id: "ta-search" %>
+  <%= f.select :stu_name, [], { prompt: "Search for a TA" }, class: "form-control", id: "ta-search", required: true  %>
 
   <label>Student Email:</label>
-  <%= f.select :stu_email, [], { prompt: "Search for an Email" }, class: "form-control", id: "stu_email" %>
+  <%= f.select :stu_email, [], { prompt: "Search for an Email" }, class: "form-control", id: "stu_email", required: true  %>
 
   <label>UIN:</label>
-  <%= f.select :uin, [], { prompt: "Search for a UIN" }, class: "form-control", id: "uin" %>
+  <%= f.select :uin, [], { prompt: "Search for a UIN" }, class: "form-control", id: "uin", required: true  %>
 
-  <%= f.submit "Save Changes" %>
+  <%= f.submit "Save Changes", onclick: "redirect_back(fallback_location: '#{view_csv_path}')" %>
 <% end %>
 <%= link_to "Cancel", view_csv_path || root_path, class: "action-button" %>
 
@@ -70,13 +70,13 @@
     $('#uin').append(newOptionUIN).trigger('change');
   };
   $(document).ready(function () {
-    initializeSelect2('#ta-search', "Search for a TA...", '/applicants/search', function(data) {
+    initializeSelect2('#ta-search', "Search for a TA...", '/unassigned_applicants/search', function(data) {
       populateFields(data);
     });
-    initializeSelect2('#stu_email', "Search for an Email...", '/applicants/search_email', function(data) {
+    initializeSelect2('#stu_email', "Search for an Email...", '/unassigned_applicants/search_email', function(data) {
       populateFields(data);
     });
-    initializeSelect2('#uin', "Search for a UIN...", '/applicants/search_uin', function(data) {
+    initializeSelect2('#uin', "Search for a UIN...", '/unassigned_applicants/search_uin', function(data) {
       populateFields(data);
     });
   });

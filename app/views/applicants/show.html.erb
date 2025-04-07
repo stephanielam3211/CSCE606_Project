@@ -23,7 +23,11 @@
     <div class="button-container">
       <%= link_to "Edit this applicant", edit_applicant_path(@applicant), class: "action-button" %>
       <%= button_to "Destroy this applicant", @applicant, method: :delete, data: { confirm: "Are you sure?" }, class: "action-button" %>
-      <%= link_to "Back", request.referer || root_path, class: "action-button" %>
+      <% if session[:role].to_s == "admin" %>
+        <%= link_to "Back to Home", root_path(anchor: "student"), class: "action-button" %>
+      <% else %>
+        <%= link_to "Back", request.referer || root_path, class: "action-button" %>
+      <% end %>
     </div>
   </div>
 

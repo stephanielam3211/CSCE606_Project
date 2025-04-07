@@ -373,4 +373,41 @@ textarea {
   width: 100%;
   font-family: inherit;
 }
+.styled-table1 {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  text-decoration: none;
+}
+
+.styled-table1 th {
+  background-color: #500000;
+  color: #f0f0f0;
+  padding: 12px;
+  border: 1px solid #0c0303;
+  text-align: left;
+  text-decoration: none;
+}
+.styled-table1 th a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.styled-table1 td {
+  background-color: #500000; /* General background color */
+  color: #211e1e;
+  padding: 12px;
+  border: 1px solid #333;
+  text-align: left;
+}
+
+.styled-table1 tr.non-admin td {
+  background-color: rgb(162, 246, 156); /* Specific background for non-admin rows */
+  color: #211e1e; /* Text color */
+}
+
+.styled-table1 tr.admin td {
+  background-color: rgb(243, 169, 162); /* Specific background for admin rows */
+  color: #211e1e; /* Text color */
+}
 

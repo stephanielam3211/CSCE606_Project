@@ -15,8 +15,9 @@
   <div class="main-content">
   <h1>All Recommendations</h1>
 
-<table>
-  <thead>
+<div style="max-height: 800px; max-width:1500px;  overflow-y: auto;">
+<table class="styled-table1">
+  <thead style="position: sticky; top: 0; background-color: white; z-index: 100;">
     <tr>
       <th>Email</th>
       <th>Name</th>
@@ -29,21 +30,37 @@
   </thead>
   <tbody>
     <% @recommendations.each do |recommendation| %>
-      <tr>
-        <td><%= recommendation.email %></td>
-        <td><%= recommendation.name %></td>
-        <td><%= recommendation.course %></td>
-        <td><%= recommendation.selectionsTA %></td>
-        <td><%= recommendation.feedback %></td>
-        <td><%= recommendation.additionalfeedback %></td>
-        <td>
-            <%= link_to 'Delete', recommendation_path(recommendation), method: :delete, remote: true,  class: "action-button",
+      <% if recommendation.admin == false %>
+        <tr class="non-admin">
+          <td><%= recommendation.email %></td>
+          <td><%= recommendation.name %></td>
+          <td><%= recommendation.course %></td>
+          <td><%= recommendation.selectionsTA %></td>
+          <td><%= recommendation.feedback %></td>
+          <td><%= recommendation.additionalfeedback %></td>
+          <td>
+            <%= link_to 'Delete', recommendation_path(recommendation), method: :delete, remote: true, class: "action-button",
             onclick: "return confirm('Are you sure you want to delete this Recommendation?');" %>
-        </td>
-      </tr>
+          </td>
+        </tr>
+      <% else %>
+        <tr class="admin">
+          <td><%= recommendation.email %></td>
+          <td><%= recommendation.name %></td>
+          <td><%= recommendation.course %></td>
+          <td><%= recommendation.selectionsTA %></td>
+          <td><%= recommendation.feedback %></td>
+          <td><%= recommendation.additionalfeedback %></td>
+          <td>
+            <%= link_to 'Delete', recommendation_path(recommendation), method: :delete, remote: true, class: "action-button",
+            onclick: "return confirm('Are you sure you want to delete this Recommendation?');" %>
+          </td>
+        </tr>
+      <% end %>
     <% end %>
   </tbody>
 </table>
+</div>
 
 <%= link_to "Back to Home", root_path, class: "action-button" %>
 </div>
