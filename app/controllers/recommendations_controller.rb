@@ -29,15 +29,18 @@ class RecommendationsController < ApplicationController
   def destroy
     @recommendation = Recommendation.find(params[:id])
     @recommendation.destroy
-    respond_to do |format|
-      format.js
-      format.html { redirect_to my_recommendations_view_path, notice: "Course was successfully deleted." }
-    end
+    redirect_to my_recommendations_view_path, notice: "Recommendation was successfully deleted."
   end
 
   def create
     @recommendation = Recommendation.new(recommendation_params)
-
+  
+    # Check for duplicate (name + course)
+    if Recommendation.exists?(name: @recommendation.name, course: @recommendation.course)
+      @recommendation.errors.add(:base, "A recommendation already exists for this student and course.")
+      render :new, status: :unprocessable_entity and return
+    end
+  
     if @recommendation.save
       respond_to do |format|
         format.html { redirect_to my_recommendations_view_path, notice: "Recommendation submitted successfully!" }

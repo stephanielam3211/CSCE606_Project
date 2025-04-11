@@ -21,7 +21,7 @@
               return {
                 results: data.map(course => ({
                   id: `CSCE ${course.course_number}`,
-                  text: `${course.course_number} - ${course.section}`
+                  text: `${course.course_number} - ${course.section}: ${course.name}`
                 }))
               };
             },

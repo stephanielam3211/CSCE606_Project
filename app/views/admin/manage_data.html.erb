@@ -8,66 +8,55 @@
   <%= javascript_include_tag 'admin', 'data-turbo-track': 'reload' %>
 
   <style>
-  .modal {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background-color: rgba(0, 0, 0, 0.75);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
+    .modal {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0, 0, 0, 0.75);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
 
-  .modal.hidden {
-    display: none;
-  }
+    .modal.hidden { display: none; }
 
-  .modal-content {
-    background-color: #1a1a1a;
-    padding: 20px 30px;
-    border-radius: 10px;
-    text-align: center;
-    color: white;
-    max-width: 400px;
-    width: 90%;
-  }
+    .modal-content {
+      background-color: #1a1a1a;
+      padding: 20px 30px;
+      border-radius: 10px;
+      text-align: center;
+      color: white;
+      max-width: 400px;
+      width: 90%;
+    }
 
-  .modal-content input {
-    width: 100%;
-    padding: 10px;
-    margin-top: 10px;
-    font-size: 16px;
-    border-radius: 5px;
-    border: none;
-  }
+    .modal-content input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: none;
+    }
 
-  .modal-buttons {
-    margin-top: 20px;
-    display: flex;
-    justify-content: space-around;
-  }
+    .modal-buttons {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-around;
+    }
 
-  .modal-buttons button {
-    padding: 8px 16px;
-    font-weight: bold;
-    border-radius: 5px;
-    cursor: pointer;
-    border: none;
-  }
+    .modal-buttons button {
+      padding: 8px 16px;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+      border: none;
+    }
 
-  #cancelButton {
-    background-color: gray;
-    color: white;
-  }
+    #cancelButton { background-color: gray; color: white; }
+    #proceedButton { background-color: #5B0000; color: white; }
 
-  #proceedButton {
-    background-color: #5B0000;
-    color: white;
-  }
-</style>
-
-  <style>
     .admin-action-button {
       background-color: #5B0000 !important;
       color: white;
@@ -77,15 +66,15 @@
       border-radius: 6px;
       font-size: 16px;
       cursor: pointer;
-      text-decoration: none;
-      display: inline-block;
       text-align: center;
       transition: background-color 0.2s ease;
+      width: 100%;
+      max-width: 280px;
     }
 
-    .admin-action-button:hover {
-      background-color: #7d0000;
-    }
+    .admin-action-button:hover { 
+      background-color: #7d0000; 
+      }
 
     .page-content {
       margin-top: 100px;
@@ -106,10 +95,80 @@
       display: inline-block;
     }
 
+    .back-link:hover { 
+      background-color: #555; 
+      }
+
     .logged-in-message {
       text-align: center;
       color: white;
       margin-top: 20px;
+    }
+
+    .tabs-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .tab-buttons {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .tab {
+      padding: 10px 20px;
+      background-color: #222;
+      color: white;
+      font-weight: bold;
+      border: 2px solid #5B0000;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .tab.active { 
+      background-color: #5B0000;
+    }
+
+    .tab-content {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      width: 100%
+    }
+
+    .import-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 25px;
+      width: 100%;
+    }
+
+    .import-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .file-field {
+      background-color: #fff;
+      padding: 10px;
+      border-radius: 5px;
+      color: black;
+      font-weight: bold;
+      max-width: 250px;
+    }
+
+    .import-submit {
+      white-space: nowrap;
     }
   </style>
 </head>
@@ -128,19 +187,39 @@
     <div class="page-content">
       <h1 style="color: white; text-align: center;">Manage Data (Wipe / Clear / Delete)</h1>
 
-      <%= button_to 'CLEAR ALL DATA', clear_data_path, method: :post, class: "admin-action-button confirm-before-submit", data: { turbo: false, confirm: "Are you sure you want to clear everything?" } %>
-      <%= button_to "Clear All Applicants", wipe_applicants_path, method: :delete, class: "admin-action-button confirm-before-submit", data: { turbo: false, confirm: "Are you sure you want to clear all applicants?" } %>
-      <%= button_to "Clear All Users", wipe_users_path, method: :delete, class: "admin-action-button confirm-before-submit", data: { turbo: false, confirm: "Are you sure you want to clear all users?" } %>
-      <%= button_to "Clear All Recommendations", clear_recommendations_path, method: :delete, class: "admin-action-button confirm-before-submit", data: { turbo: false, confirm: "Are you sure you want to clear all recommendations?" } %>
-      <%= button_to "Clear All Courses", clear_courses_path, method: :delete, class: "admin-action-button confirm-before-submit", data: { turbo: false, confirm: "Are you sure you want to clear all courses?" } %>
-      <%= button_to "Delete All Assignments", delete_all_csvs_path, method: :delete, class: "admin-action-button confirm-before-submit", data: { turbo: false, confirm: "Are you sure you want to delete all assignments and CSVs?" } %>
-      <%= button_to 'Delete All Withdrawal Requests', clear_withdrawal_requests_path, method: :delete, class: "admin-action-button confirm-before-submit", data: { turbo: false, confirm: "Are you sure you want to delete all Withdrawa requests?" } %>
-      <%= link_to 'Export Data', export_admins_path(format: :csv), class: 'btn btn-primary' %>
+      <div class="tabs-container">
+        <div class="tab-buttons">
+          <button class="tab active" onclick="switchTab('clear')">Clear</button>
+          <button class="tab" onclick="switchTab('delete')">Delete</button>
+          <button class="tab" onclick="switchTab('import-export')">Import/Export</button>
+        </div>
 
-      <%= form_with url: import_path, local: true, html: { multipart: true } do |form| %>
-        <%= form.file_field :file %>
-        <%= form.submit "Import Data" %>
-      <% end %>
+        <div class="tab-content" id="clear" style="display: flex;">
+          <%= button_to "Clear All Applicants", wipe_applicants_path, method: :delete, class: "admin-action-button confirm-before-submit" %>
+          <%= button_to "Clear All Users", wipe_users_path, method: :delete, class: "admin-action-button confirm-before-submit" %>
+          <%= button_to "Clear All Recommendations", clear_recommendations_path, method: :delete, class: "admin-action-button confirm-before-submit" %>
+          <%= button_to "Clear All Courses", clear_courses_path, method: :delete, class: "admin-action-button confirm-before-submit" %>
+          <%= button_to 'Clear All Data', clear_data_path, method: :post, class: "admin-action-button confirm-before-submit" %>
+        </div>
+
+        <div class="tab-content" id="delete">
+          <%= button_to "Delete All Assignments", delete_all_csvs_path, method: :delete, class: "admin-action-button confirm-before-submit" %>
+          <%= button_to 'Delete All Withdrawal Requests', clear_withdrawal_requests_path, method: :delete, class: "admin-action-button confirm-before-submit" %>
+        </div>
+
+        <div class="tab-content" id="import-export">
+          <div class="import-section">
+            <%= form_with url: import_path, local: true, html: { multipart: true, class: "import-form" } do |form| %>
+              <div class="import-row">
+                <%= form.submit "Import Data", class: "admin-action-button import-submit" %>
+                <%= form.file_field :file, class: "file-field" %>
+              </div>
+            <% end %>
+        
+            <%= link_to 'Export Data', export_admins_path(format: :csv), class: 'admin-action-button export' %>
+          </div>
+        </div>
+      </div>
 
       <%= link_to "← Back to Main Page", root_path, class: "back-link" %>
     </div>
@@ -155,7 +234,6 @@
     &copy; 2025 Texas A&M University. All Rights Reserved.
   </div>
 
-  <!-- Modal -->
   <div id="confirmModal" class="modal hidden">
     <div class="modal-content">
       <h2>Confirmation Required</h2>
@@ -169,5 +247,15 @@
     </div>
   </div>
 
+  <script>
+    function switchTab(tabId) {
+      const tabs = document.querySelectorAll(".tab-content");
+      const buttons = document.querySelectorAll(".tab");
+      tabs.forEach(t => t.style.display = "none");
+      buttons.forEach(b => b.classList.remove("active"));
+      document.getElementById(tabId).style.display = "flex";
+      event.target.classList.add("active");
+    }
+  </script>
 </body>
 </html>

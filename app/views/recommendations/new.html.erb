@@ -19,6 +19,16 @@
       Recommend TA
     </h1>
 
+    <% if @recommendation.errors.any? %>
+      <div class="error-messages">
+        <ul>
+          <% @recommendation.errors.full_messages.each do |message| %>
+            <li style="color: red;"><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    
     <%= form_with model: @recommendation, local: true, html: { id: "recommendation_form" } do |f| %>
       <div class="form-grid">
         <div>

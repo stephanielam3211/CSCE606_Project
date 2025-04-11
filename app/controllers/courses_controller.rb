@@ -14,7 +14,13 @@ class CoursesController < ApplicationController
 
     def search_recs
       courses = Course.where("course_number LIKE ?", "%#{params[:term]}%").limit(10)
-render json: courses.map { |course| { id: course.id, text: "#{course.course_number} - #{course.section}", course_number: course.course_number, section: course.section } }
+      render json: courses.map { |course| { 
+        id: course.id, 
+        text: "#{course.course_number} - #{course.section}", 
+        course_number: course.course_number, 
+        section: course.section,
+        name: course.course_name 
+      } }
     end
 
     def search
