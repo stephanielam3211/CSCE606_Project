@@ -102,7 +102,7 @@
     .logged-in-message {
       text-align: center;
       color: white;
-      margin-top: 20px;
+      margin-top: 5px;
     }
 
     .tabs-container {
@@ -182,9 +182,8 @@
   </div>
 
   <% if session[:user_id].present? && session[:role].to_s == "admin" %>
-    <p class="logged-in-message">Hello, <%= session[:user] %>! You are logged in as Admin.</p>
-
     <div class="page-content">
+      <p class="logged-in-message">Hello, <%= session[:user] %>! You are logged in as Admin.</p>
       <h1 style="color: white; text-align: center;">Manage Data (Wipe / Clear / Delete)</h1>
 
       <div class="tabs-container">
@@ -209,9 +208,9 @@
 
         <div class="tab-content" id="import-export">
           <div class="import-section">
-            <%= form_with url: import_path, local: true, html: { multipart: true, class: "import-form" } do |form| %>
+            <%= form_with url: import_path, local: true, html: { multipart: true, class: "import-form", id: "importForm" } do |form| %>
               <div class="import-row">
-                <%= form.submit "Import Data", class: "admin-action-button import-submit" %>
+                <%= form.submit "Import Data", class: "admin-action-button import-submit", id: "importSubmitButton" %>
                 <%= form.file_field :file, class: "file-field" %>
               </div>
             <% end %>
@@ -220,7 +219,6 @@
           </div>
         </div>
       </div>
-
       <%= link_to "← Back to Main Page", root_path, class: "back-link" %>
     </div>
   <% else %>
@@ -243,6 +241,17 @@
       <div class="modal-buttons">
         <button id="cancelButton">Cancel</button>
         <button id="proceedButton">Proceed</button>
+      </div>
+    </div>
+  </div>
+  <!-- Import Modal -->
+  <div id="importConfirmModal" class="modal hidden">
+    <div class="modal-content">
+      <h2>Confirm Import</h2>
+      <p>Are you sure you want to import this data? This action WILL reset the the data and could potentially cause data corruption if improper.</p>
+      <div class="modal-buttons">
+        <button id="cancelImportButton">Cancel</button>
+        <button id="proceedImportButton">Proceed</button>
       </div>
     </div>
   </div>

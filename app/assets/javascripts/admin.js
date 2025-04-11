@@ -31,4 +31,29 @@ document.addEventListener("DOMContentLoaded", function () {
       alert("❌ Incorrect confirmation. Action canceled.");
     }
   });
+
+  const importForm = document.getElementById("importForm");
+    const importSubmitButton = document.getElementById("importSubmitButton");
+    const importModal = document.getElementById("importConfirmModal");
+    const cancelImportButton = document.getElementById("cancelImportButton");
+    const proceedImportButton = document.getElementById("proceedImportButton");
+
+    let formConfirmed = false;
+
+    importForm.addEventListener("submit", function (e) {
+      if (!formConfirmed) {
+        e.preventDefault(); 
+        importModal.classList.remove("hidden");
+      }
+    });
+
+    cancelImportButton.addEventListener("click", function () {
+      importModal.classList.add("hidden");
+    });
+
+    proceedImportButton.addEventListener("click", function () {
+      formConfirmed = true;
+      importModal.classList.add("hidden");
+      importForm.submit(); 
+    });
 });
