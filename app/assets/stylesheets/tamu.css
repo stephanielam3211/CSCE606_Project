@@ -411,3 +411,7 @@ textarea {
   color: #211e1e; /* Text color */
 }
 
+select, option {
+  color: black;
+  background-color: white;
+}
