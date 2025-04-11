@@ -31,32 +31,38 @@ render json: courses.map { |course| { id: course.id, text: "#{course.course_numb
       @course = Course.new(course_params)
       respond_to do |format|
         if @course.save
+          if TaMatch.count > 0 || GraderMatch.count > 0 || SeniorGraderMatch.count > 0
+            # Path to the CSV file
+            new_needs_path = Rails.root.join("app", "Charizard", "util", "public", "output", "New_Needs.csv")
+            
+            # Define fixed headers for the CSV file
+            column_order = [ "Course_Name", "Course_Number", "Section", "Instructor", "Faculty_Email",
+                             "TA", "Senior_Grader", "Grader", "Professor Pre-Reqs" ]
+            
+            # Check if headers need to be written (write headers only if file doesn't exist)
+            write_headers = !File.exist?(new_needs_path)
+            
+            # Prepare row values
+            row_values = [
+              @course.course_name,
+              @course.course_number,
+              @course.section,
+              @course.instructor,
+              @course.faculty_email,
+              @course.ta,
+              @course.senior_grader,
+              @course.grader,
+              @course.pre_reqs.presence || "N/A"
+            ]
+    
+            # Append to the CSV file
+            CSV.open(new_needs_path, "a", headers: column_order, write_headers: write_headers) do |csv|
+              csv << row_values
+            end
+          end
           format.html { redirect_to courses_path, notice: "Course was successfully created." }
-          format.json { render :show, status: :created, location: @course }
-          format.js
-
-          # Path to the CSV file
-          new_needs_path = Rails.root.join("app", "Charizard", "util", "public", "output", "New_Needs.csv")
-          # Define fixed headers for the CSV file
-          column_order = [ "Course_Name", "Course_Number", "Section", "Instructor", "Faculty_Email",
-          "TA", "Senior_Grader", "Grader", "Professor Pre-Reqs" ]
-
-          write_headers = !File.exist?(new_needs_path)
-          row_values = [
-            @course.course_name,
-            @course.course_number,
-            @course.section,
-            @course.instructor,
-            @course.faculty_email,
-            @course.ta,
-            @course.senior_grader,
-            @course.grader,
-            @course.pre_reqs.presence || "N/A"
-          ]
-
-        CSV.open(new_needs_path, "a", headers: column_order, write_headers: write_headers) do |csv|
-          csv << row_values
-        end
+      format.json { render :show, status: :created, location: @course }
+      format.js
         else
             Rails.logger.debug "Course failed to save: #{@course.errors.full_messages}"
           format.html { render :new, status: :unprocessable_entity }

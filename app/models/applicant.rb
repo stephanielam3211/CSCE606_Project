@@ -2,6 +2,7 @@
 
 class Applicant < ApplicationRecord
     belongs_to :user, foreign_key: 'confirm', optional: true
+    before_validation :ensure_timestamp
 
     validates :confirm, uniqueness: true
     has_many :recommendations
@@ -26,6 +27,9 @@ class Applicant < ApplicationRecord
     end
 
     private
+    def ensure_timestamp
+        self.timestamp ||= Time.current
+    end
 
     def min_course_choice
         course_choices = [

@@ -40,6 +40,7 @@ CSV.foreach(csv_file2, headers: true, col_sep: ",") do |row|
     prev_uni: row['Which courses have you taken at another university?'],
     prev_ta: row['Which courses have you TAd for?'],
     advisor: row['Who is your advisor (if applicable)?'],
-    positions: row['What position are you applying for?']
+    positions: row['What position are you applying for?'],
+    confirm: rand(1..1000)
   )
 end

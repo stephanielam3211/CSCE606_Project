@@ -74,15 +74,29 @@
         <tbody>
           <% @courses.each do |course| %>
             <tr data-course-id="<%= course.id %>">
-              <td contenteditable="true" class="editable" data-column="course_name"><%= course.course_name %></td>
-              <td contenteditable="true" class="editable" data-column="course_number"><%= course.course_number %></td>
-              <td contenteditable="true" class="editable" data-column="section"><%= course.section %></td>
-              <td contenteditable="true" class="editable" data-column="instructor"><%= course.instructor %></td>
-              <td contenteditable="true" class="editable" data-column="faculty_email"><%= course.faculty_email %></td>
-              <td contenteditable="true" class="editable" data-column="ta"><%= course.ta %></td>
-              <td contenteditable="true" class="editable" data-column="senior_grader"><%= course.senior_grader %></td>
-              <td contenteditable="true" class="editable" data-column="grader"><%= course.grader %></td>
-              <td contenteditable="true" class="editable" data-column="pre_reqs"><%= course.pre_reqs %></td>
+              <% if TaMatch.count == 0 || SeniorGraderMatch.count == 0 || GraderMatch.count == 0 %>
+                <!-- Editable fields if assignments are empty -->
+                <td contenteditable="true" class="editable" data-column="course_name"><%= course.course_name %></td>
+                <td contenteditable="true" class="editable" data-column="course_number"><%= course.course_number %></td>
+                <td contenteditable="true" class="editable" data-column="section"><%= course.section %></td>
+                <td contenteditable="true" class="editable" data-column="instructor"><%= course.instructor %></td>
+                <td contenteditable="true" class="editable" data-column="faculty_email"><%= course.faculty_email %></td>
+                <td contenteditable="true" class="editable" data-column="ta"><%= course.ta %></td>
+                <td contenteditable="true" class="editable" data-column="senior_grader"><%= course.senior_grader %></td>
+                <td contenteditable="true" class="editable" data-column="grader"><%= course.grader %></td>
+                <td contenteditable="true" class="editable" data-column="pre_reqs"><%= course.pre_reqs %></td>
+              <% else %>
+                <!-- Non-editable fields if assignments are not empty -->
+                <td><%= course.course_name %></td>
+                <td><%= course.course_number %></td>
+                <td><%= course.section %></td>
+                <td><%= course.instructor %></td>
+                <td><%= course.faculty_email %></td>
+                <td><%= course.ta %></td>
+                <td><%= course.senior_grader %></td>
+                <td><%= course.grader %></td>
+                <td><%= course.pre_reqs %></td>
+              <% end %>
               <td>
                 <%= button_to 'Delete Course', course_path(course), method: :delete, remote: true,
                       class: 'btn btn-danger',  onclick: "return confirm('Are you sure you want to delete this Course?');"  %>

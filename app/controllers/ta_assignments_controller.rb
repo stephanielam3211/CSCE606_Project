@@ -90,6 +90,13 @@ class TaAssignmentsController < ApplicationController
     
     Rails.logger.debug "Record index: #{record_index.inspect}"
     Rails.logger.debug "Records: #{records.inspect}"
+    modified_class_csv_path = Rails.root.join("app", "Charizard", "util", "public", "output", "Modified_assignments.csv")
+
+    CSV.open(modified_class_csv_path, "a", headers: records.first.keys, write_headers: !File.exist?(modified_class_csv_path)) do |csv|
+      if record_index
+        csv << records[record_index].values
+      end
+    end
 
     uin = records.first["UIN"]
 
@@ -118,16 +125,9 @@ class TaAssignmentsController < ApplicationController
         stu_email: params[:stu_email],
         uin: params[:uin]
       )
-      modified_class_csv_path = Rails.root.join("app", "Charizard", "util", "public", "output", "Modified_assignments.csv")
-
-    CSV.open(modified_class_csv_path, "a", headers: records.first.keys, write_headers: !File.exist?(modified_class_csv_path)) do |csv|
-      if record_index
-        csv << records[record_index].values
-      end
-    end
 
 
-    add_to_backup_csv = Rails.root.join("app", "Charizard", "util", "public", "output", "Unassigned_Applicants.csv")
+      add_to_backup_csv = Rails.root.join("app", "Charizard", "util", "public", "output", "Unassigned_Applicants.csv")
           column_order = [
             "Timestamp", "Email Address", "First and Last Name", "UIN", "Phone Number", "How many hours do you plan to be enrolled in?", 
             "Degree Type?", "1st Choice Course", "2nd Choice Course", "3rd Choice Course", "4th Choice Course", "5th Choice Course", 
@@ -433,18 +433,44 @@ class TaAssignmentsController < ApplicationController
   
     uin_to_record_map = records.index_by { |r| r["UIN"] }
     uins = unconfirmed.pluck(:uin)  
+
+    headers = records.first.keys
+
+      # Add removed records to Modified_assignments
+      CSV.open(modified_csv, "a", headers: headers, write_headers: !File.exist?(modified_csv)) do |csv|
+        uins.each do |uin|
+          model_record = model_class.find_by(uin: uin)
+          next unless model_record
+      
+          # Convert to string-keyed hash and rename keys to match CSV headers
+          row_data = {
+            "Course Number" => model_record.course_number,
+            "Section ID" => model_record.section,
+            "Instructor Name" => model_record.ins_name,
+            "Instructor Email" => model_record.ins_email,
+            "Student Name" => model_record.stu_name,
+            "Student Email" => model_record.stu_email,
+            "UIN" => model_record.uin.to_s,
+            "Calculated Score" => model_record.score
+          }
+      
+          csv << headers.map { |h| row_data[h] }
+        end
+      end
     # Update original CSV (remove unconfirmed)
     records.reject! { |r| uins.include?(r["UIN"]) }  
     CSV.open(file_path, "w", headers: records.first&.keys || [], write_headers: true) do |csv|
       records.each { |r| csv << r.values }
     end  
     # Add removed to Modified_assignments
-    CSV.open(modified_csv, "a", headers: records.first&.keys || [], write_headers: !File.exist?(modified_csv)) do |csv|
-      uins.each do |uin|
-        record = uin_to_record_map[uin]
-        csv << record.values if record
-      end
-    end  
+    # CSV.open(modified_csv, "a", headers: records.first&.keys || [], write_headers: !File.exist?(modified_csv)) do |csv|
+    #   uins.each do |uin|
+    #     record = uin_to_record_map[uin]
+    #     csv << record.values if record
+    #   end
+    # end  
+
+    
       uins.each do |uin|
         model_record = model_class.find_by(uin: uin)
         next unless model_record
@@ -595,25 +621,67 @@ class TaAssignmentsController < ApplicationController
   end
 
   def export_final_csv
-    headers = [ "Course Number", "Section ID", "Instructor Name", "Instructor Email", "Student Name", "Student Email", "Calculated Score" ]
-    final_csv_path = Rails.root.join("app", "Charizard", "util", "public", "output", "Assignments.csv")
+    headers = [ "Assignment", "Course Number", "Section ID", "Instructor Name",
+                "Instructor Email", "Student Name", "Student Email", "UIN", "Phone Number", 
+                "Enrollment hours","Degree","Country of Citizenship", "English Certification Level"]
 
+    final_csv_path = Rails.root.join("app", "Charizard", "util", "public", "output", "Assignments(#{Date.today}).csv")
+    
+    assignment_header_mapping = {
+      "Course Number" => "course_number",
+      "Section ID" => "section",
+      "Instructor Name" => "ins_name",
+      "Instructor Email" => "ins_email",
+      "Student Name" => "stu_name",
+      "Student Email" => "stu_email",
+      "UIN"=> "uin",
+    }
+
+    models = {
+      "TA" => TaMatch,
+      "Grader" => GraderMatch,
+      "Senior Grader" => SeniorGraderMatch
+    }
+  
+    applicants_by_uin = Applicant.all.index_by { |applicant| applicant.uin.to_s }
+  
     CSV.open(final_csv_path, "w") do |csv|
       csv << headers
-      [ "TA_Matches.csv", "Grader_Matches.csv", "Senior_Grader_Matches.csv" ].each do |file_name|
-        file_path = Rails.root.join("app", "Charizard", "util", "public", "output", file_name)
-        if File.exist?(file_path)
-          CSV.foreach(file_path, headers: true) do |row|
-            csv << row.values_at(*headers)
+  
+      models.each do |assignment_type, model|
+        model.find_each do |assignment|
+          uin = assignment.uin.to_i
+          applicant = applicants_by_uin[uin.to_s]
+          Rails.logger.debug("Applicant: #{applicant.inspect}")
+          
+          row_data = headers.map do |header|
+            case header
+            when "Assignment"
+              assignment_type
+            when *assignment_header_mapping.keys
+              assignment.send(assignment_header_mapping[header])
+            when "Phone Number"
+              applicant.number
+            when "Enrollment hours"
+              applicant.hours
+            when "Degree"
+              applicant.degree
+            when "Country of Citizenship"
+              applicant.citizenship
+            when "English Certification Level"
+              applicant.cert
+            else
+              ""
+            end
           end
-        else
-          Rails.logger.error "File not found: #{file_name}"
+  
+          csv << row_data
         end
       end
     end
-
+  
     flash[:notice] = "Assignments.csv has been successfully created!"
-    redirect_to view_csv_path
+    send_file final_csv_path, filename: "Assignments(#{Date.today}).csv", type: "text/csv", disposition: "attachment"
   end
 end
 

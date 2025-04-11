@@ -33,10 +33,14 @@ class TaReassignmentsController < ApplicationController
             end
           end
         end
-
+        
+        # Append to the original CSV files while ensuring headers are written correctly
         { ta: ta_csv_path, senior_grader: senior_grader_csv_path, grader: grader_csv_path }.each do |key, file|
           if combined_data[key].any?
-            CSV.open(file, "a", write_headers: false, headers: combined_data[key].first.keys) do |csv|
+            # Check if the file exists and if it is empty or not
+            write_headers = !File.exist?(file) || File.zero?(file)
+            
+            CSV.open(file, "a", write_headers: write_headers, headers: combined_data[key].first.keys) do |csv|
               combined_data[key].each do |row|
                 csv << row.values
               end
