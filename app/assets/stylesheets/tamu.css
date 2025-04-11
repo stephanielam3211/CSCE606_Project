@@ -415,3 +415,19 @@ select, option {
   color: black;
   background-color: white;
 }
+
+.intructions {
+
+  color: #f8f4f4; /* Dark text for contrast */
+  padding: 0.2rem 1rem;
+  border-radius: 6px;
+  margin-bottom: 0.2rem;
+  border: 1px solid #555;
+}
+
+.intructions p {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 13px;
+  margin: 0.1rem 0; 
+  line-height: 1.4;
+}

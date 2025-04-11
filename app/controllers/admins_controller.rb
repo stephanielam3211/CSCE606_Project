@@ -17,7 +17,16 @@ class AdminsController < ApplicationController
       Applicant.delete_all
       Blacklist.delete_all
       Recommendation.delete_all
-      redirect_to root_path, notice: 'All data has been cleared.'
+      Dir[Rails.root.join("app/Charizard/util/public/output/*.csv")].each do |file|
+        File.delete(file)
+      File.delete(Rails.root.join("tmp", "TA_Matches.csv")) if File.exist?(Rails.root.join("tmp", "TA_Matches.csv"))
+      File.delete(Rails.root.join("tmp", "Grader_Matches.csv")) if File.exist?(Rails.root.join("tmp", "Grader_Matches.csv"))
+      File.delete(Rails.root.join("tmp", "Senior_Grader_Matches.csv")) if File.exist?(Rails.root.join("tmp", "Senior_Grader_Matches.csv"))
+      end
+      unless skip_redirect
+        redirect_to root_path, notice: 'All data has been cleared.'
+        return
+      end
     end
 
     def export
@@ -26,9 +35,12 @@ class AdminsController < ApplicationController
         withdrawal_requests: WithdrawalRequest.all,
         courses: Course.all,
         blacklist: Blacklist.all,
-        admins: Admin.all,
         users: User.all,
-        recommendations: Recommendation.all
+        recommendations: Recommendation.all,
+        unassigned_applicants: UnassignedApplicant.all,
+        ta_matches: TaMatch.all,
+        senior_grader_matches: SeniorGraderMatch.all,
+        grader_matches: GraderMatch.all,
       }
     
       output_folder_path = Rails.root.join("app", "Charizard", "util", "public", "output")
@@ -43,10 +55,13 @@ class AdminsController < ApplicationController
           zip.get_output_stream("#{table_name}.csv") { |f| f.write(csv_data) }
         end
     
+        skip_files = ["Unassigned_Applicants.csv", "TA_Matches.csv", "Grader_Matches.csv", "Senior_Grader_Matches.csv"] # Add any files you want to skip
+
         Dir[output_folder_path.join("**", "*")].each do |file|
           next if File.directory?(file)
-    
           entry_name = Pathname.new(file).relative_path_from(output_folder_path).to_s
+          
+          next if skip_files.include?(File.basename(file))
           zip.add(entry_name, file) unless zip.find_entry(entry_name)
         end
       end
@@ -83,47 +98,6 @@ class AdminsController < ApplicationController
             ]
           end
         end
-      elsif table_name == :applicants
-        applicant_headers = [
-          "Timestamp", "Email Address", "First and Last Name", "UIN", "Phone Number", "How many hours do you plan to be enrolled in?", 
-          "Degree Type?", "1st Choice Course", "2nd Choice Course", "3rd Choice Course", "4th Choice Course", "5th Choice Course", 
-          "6th Choice Course", "7th Choice Course", "8th Choice Course", "9th Choice Course", "10th Choice Course", "GPA", 
-          "Country of Citizenship?", "English language certification level?", "Which courses have you taken at TAMU?", 
-          "Which courses have you taken at another university?", "Which courses have you TAd for?", "Who is your advisor (if applicable)?", 
-          "What position are you applying for?"
-        ]
-        CSV.generate(headers: true) do |csv|
-          csv << applicant_headers
-          records.each do |record|
-            csv << [
-              record.timestamp,
-              record.email,
-              record.name,
-              record.uin,
-              record.number,
-              record.hours,
-              record.degree,
-              record.choice_1,
-              record.choice_2,
-              record.choice_3,
-              record.choice_4,
-              record.choice_5,
-              record.choice_6,
-              record.choice_7,
-              record.choice_8,
-              record.choice_9,
-              record.choice_10,
-              record.gpa,
-              record.citizenship,
-              record.cert,
-              record.prev_course,
-              record.prev_uni,
-              record.prev_ta,
-              record.advisor,
-              record.positions
-            ]
-          end
-        end
       else
         CSV.generate(headers: true) do |csv|
           if records.any?
@@ -139,32 +113,39 @@ class AdminsController < ApplicationController
 
     def import
       clear(skip_redirect: true)
-
+    
       uploaded_file = params[:file]
-      return redirect_to(root_path, alert: "No file uploaded") unless uploaded_file
-
-      Zip::File.open(uploaded_file.path) do |zip_file|
-        zip_file.each do |entry|
-          next unless entry.name.ends_with?('.csv')
+      unless uploaded_file
+        redirect_to(root_path, alert: "No file uploaded")
+        return
+      end
     
-          table_name = File.basename(entry.name, ".csv").downcase.to_sym
-          csv_content = entry.get_input_stream.read
+      begin
+        Zip::File.open(uploaded_file.path) do |zip_file|
+          zip_file.each do |entry|
+            next unless entry.name.ends_with?('.csv')
     
-          case table_name
-          when :courses
-            import_courses(csv_content)
-          when :applicants
-            import_applicants(csv_content)
-          when :Modified_assignments
-            save_csv_to_file(table_name, csv_content)
-          when :New_Needs
-            save_csv_to_file(table_name, csv_content)
-          when :Assignments
-            save_csv_to_file(table_name, csv_content)
-          else
-            import_generic(table_name, csv_content)
+            table_name = File.basename(entry.name, ".csv").downcase.to_sym
+            csv_content = entry.get_input_stream.read
+    
+            case table_name
+            when :courses
+              import_courses(csv_content)
+            when :modified_assignments, :new_needs, :assignments
+              save_csv_to_file(table_name, csv_content)
+            when :unassigned_applicants
+              import_applicants(csv_content)
+            when :new_needs 
+              save_csv_to_file(table_name, csv_content)
+            else
+              import_generic(table_name, csv_content)
+            end
           end
         end
+      rescue => e
+        Rails.logger.error("Import failed: #{e.message}")
+        redirect_to root_path, alert: "Import failed: #{e.message}"
+        return
       end
     
       redirect_to root_path, notice: "Import completed successfully."
@@ -197,7 +178,7 @@ class AdminsController < ApplicationController
 
     def import_applicants(csv_data)
       CSV.parse(csv_data, headers: true) do |row|
-        Applicant.create!(
+        UnassignedApplicant.create!(
           timestamp: row["Timestamp"],
           email: row["Email Address"],
           name: row["First and Last Name"],
@@ -229,11 +210,47 @@ class AdminsController < ApplicationController
     def import_generic(table_name, csv_data)
       model = table_name.to_s.classify.safe_constantize
       return unless model
-
-      model.delete_all
     
       CSV.parse(csv_data, headers: true) do |row|
         model.create!(row.to_hash)
+      end
+      if [TaMatch, SeniorGraderMatch, GraderMatch].include?(model)
+        Rails.logger.debug "model: #{model}"
+        Rails.logger.debug "csv_data: #{csv_data}"
+    
+        records = model.all
+    
+        filename =
+          case model.name
+          when "TaMatch"
+            "TA_Matches.csv"
+          when "GraderMatch"
+            "Grader_Matches.csv"
+          when "SeniorGraderMatch"
+            "Senior_Grader_Matches.csv"
+          else
+            "Matches.csv"
+          end
+    
+        output_path = Rails.root.join("app", "Charizard", "util", "public", "output", filename)
+    
+        CSV.open(output_path, "w", write_headers: true, headers: [
+          "Course Number", "Section ID", "Instructor Name", "Instructor Email",
+           "Student Name", "Student Email", "UIN", "Calculated Score"
+           ]) do |csv|
+          records.each do |record|
+            csv << [
+              record.course_number,
+              record.section,
+              record.ins_name,
+              record.ins_email,
+              record.stu_name,
+              record.stu_email,
+              record.uin,
+              record.score
+            ]
+          end
+        end
       end
     end
   

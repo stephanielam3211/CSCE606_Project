@@ -9,8 +9,10 @@
 
 <body>
   <h1>Edit Student Information</h1>
+  <div class="intructions">
   <p>You can only choose from list of unassigned applicants!</p>
   <p>You must remove applicant from previous assignment if you want to assign them here</p>
+  </div>
   <%= javascript_include_tag 'edit_assignment', 'data-turbo-track': 'reload' %>
 
   <%= form_with url: ta_assignment_path(@record["Student Email"]), method: :patch, local: true do |f| %>

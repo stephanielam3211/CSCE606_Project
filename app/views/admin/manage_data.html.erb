@@ -109,7 +109,7 @@
     .logged-in-message {
       text-align: center;
       color: white;
-      margin-top: 20px;
+      margin-top: 5px;
     }
   </style>
 </head>
@@ -123,9 +123,8 @@
   </div>
 
   <% if session[:user_id].present? && session[:role].to_s == "admin" %>
-    <p class="logged-in-message">Hello, <%= session[:user] %>! You are logged in as Admin.</p>
-
     <div class="page-content">
+      <p class="logged-in-message">Hello, <%= session[:user] %>! You are logged in as Admin.</p>
       <h1 style="color: white; text-align: center;">Manage Data (Wipe / Clear / Delete)</h1>
 
       <%= button_to 'CLEAR ALL DATA', clear_data_path, method: :post, class: "admin-action-button confirm-before-submit", data: { turbo: false, confirm: "Are you sure you want to clear everything?" } %>
@@ -137,9 +136,9 @@
       <%= button_to 'Delete All Withdrawal Requests', clear_withdrawal_requests_path, method: :delete, class: "admin-action-button confirm-before-submit", data: { turbo: false, confirm: "Are you sure you want to delete all Withdrawa requests?" } %>
       <%= link_to 'Export Data', export_admins_path(format: :csv), class: 'btn btn-primary' %>
 
-      <%= form_with url: import_path, local: true, html: { multipart: true } do |form| %>
+      <%= form_with url: import_path, local: true, html: { multipart: true, id: "importForm" } do |form| %>
         <%= form.file_field :file %>
-        <%= form.submit "Import Data" %>
+        <%= form.submit "Import Data", id: "importSubmitButton" %>
       <% end %>
 
       <%= link_to "← Back to Main Page", root_path, class: "back-link" %>
@@ -165,6 +164,17 @@
       <div class="modal-buttons">
         <button id="cancelButton">Cancel</button>
         <button id="proceedButton">Proceed</button>
+      </div>
+    </div>
+  </div>
+  <!-- Import Modal -->
+  <div id="importConfirmModal" class="modal hidden">
+    <div class="modal-content">
+      <h2>Confirm Import</h2>
+      <p>Are you sure you want to import this data? This action WILL reset the the data and could potentially cause data corruption if improper.</p>
+      <div class="modal-buttons">
+        <button id="cancelImportButton">Cancel</button>
+        <button id="proceedImportButton">Proceed</button>
       </div>
     </div>
   </div>
