@@ -64,9 +64,20 @@ def main():
 
     Course.augment_courses_with_prefs(courses_np, prof_prefs)
 
-    Matching.compute_ta_matches(students_np, courses_np)
-    Matching.compute_senior_grader_matches(students_np, courses_np)
-    Matching.compute_grader_matches(students_np, courses_np)
+    try:
+        Matching.compute_ta_matches(students_np, courses_np)
+    except Exception as e:
+        print(f"[ERROR] TA matching failed: {e}")
+
+    try:
+        Matching.compute_senior_grader_matches(students_np, courses_np)
+    except Exception as e:
+        print(f"[ERROR] Senior Grader matching failed: {e}")
+
+    try:
+        Matching.compute_grader_matches(students_np, courses_np)
+    except Exception as e:
+        print(f"[ERROR] Grader matching failed: {e}")
 
     Matching.export_backups(students_np, courses_np)
 

@@ -27,9 +27,12 @@ class User < ApplicationRecord
             "student"
           end
 
+        Admin.create(email: email) if user.role == "admin" && !Admin.exists?(email: email)
+        
         user.name = auth.info.name
         user.email = email
         user.save!
         user
+
     end      
 end

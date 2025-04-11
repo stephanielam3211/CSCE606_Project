@@ -140,4 +140,8 @@ Rails.application.routes.draw do
   #admin
   resources :admins, only: [:new, :create]
   get 'admin/manage_data', to: 'admin#manage_data', as: :admin_manage_data
+  get 'admins/export', to: 'admins#export', as: 'export_admins'
+  post 'import', to: 'admins#import'
+  post 'admin/clear', to: 'admins#clear', as: 'clear_data'
+
 end

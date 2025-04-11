@@ -23,19 +23,48 @@ class DataModel(abc.ABC):
         """
         num_rows, _ = df.shape
         models = [get_empty_model() for _ in range(num_rows)]
+        
         for column in columns:
             for row_index in range(num_rows):
                 value = df[column].iloc[row_index]
                 if (isinstance(value, numbers.Number) and numpy.isnan(value)) or \
                         (isinstance(value, str) and len(value.strip()) == 0) or \
                         value is None:
-                    continue    # pragma: no cover
+                    continue 
+                
+                # Handle conversions based on column name
+                if column == 'Course_Name': 
+                    value = str(value).strip()
+
+                elif column == 'Course_Number':  
+                    value = str(value).strip() 
+                elif column == 'Section': 
+                    value = str(value).strip() 
+
+                elif column == 'Instructor':  
+                    value = str(value).strip()
+
+                elif column == 'Faculty_Email': 
+                    value = str(value).strip()
+
+                elif column in ['TA', 'Senior_Grader', 'Grader']: 
+                    try:
+                        value = int(float(value))  
+                    except ValueError:
+                        raise SystemExit(f"Error parsing row {row_index + 2} at column='{column}'. "
+                                          f"Invalid integer value: {repr(value)}")
+
+                elif column in ['Professor Pre-Reqs']:
+                    value = str(value).strip()
+
                 try:
                     models[row_index].set_by_column(column, value)
                 except Exception as e:
-                    row_index_offset = 2    # the 0-th entry is row 2 in a csv. First row is header, and it is 1-indexed
+                    row_index_offset = 2  
                     raise SystemExit(f"Error parsing row {row_index + row_index_offset} at column='{column}'. "
-                          f"Fix input formatting and re-run the program.")
+                                      f"Fix input formatting and re-run the program. "
+                                      f"Value: {repr(value)}. Error: {str(e)}")
+
         return models
 
     @classmethod

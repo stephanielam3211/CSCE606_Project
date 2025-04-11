@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TA Assignment Home Page</title>
   <%= stylesheet_link_tag 'tamu', media: 'all', 'data-turbo-track': 'reload' %>
+  <%= javascript_include_tag 'recommendations', 'data-turbo-track': 'reload' %>
 </head>
 
 <body>
@@ -67,67 +68,6 @@
       </div>
     <% end %>
   </div>
-
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      if (window.location.href.includes("notice=")) {
-        document.getElementById("recommendation_form").reset();
-      }
-    });
-
-    $(document).ready(function () {
-      if ($('#course-search_recs').length) {
-        $('#course-search_recs').select2({
-          placeholder: "Search for a course...",
-          minimumInputLength: 1,
-          ajax: {
-            url: '/courses/search_recs',
-            dataType: 'json',
-            delay: 250,
-            data: function (params) {
-              return { term: params.term };
-            },
-            processResults: function (data) {
-              return {
-                results: data.map(course => ({
-                  id: `CSCE ${course.course_number}`,
-                  text: `${course.course_number} - ${course.section}`
-                }))
-              };
-            },
-            cache: true
-          }
-          }).on("select2:select", function (e) {
-          var selected = e.params.data;
-          $("#course-section").val(selected.section);
-        });
-      }
-
-      if ($('#ta-search').length) {
-        $('#ta-search').select2({
-          placeholder: "Search for a TA...",
-          minimumInputLength: 1,
-          ajax: {
-            url: '/applicants/search',
-            dataType: 'json',
-            delay: 250,
-            data: function (params) {
-              return { term: params.term };
-            },
-            processResults: function (data) {
-              return {
-                results: data.map(ta => ({
-                  id: ta.text,
-                  text: `${ta.name} (${ta.email})`
-                }))
-              };
-            },
-            cache: true
-          }
-        });
-      }
-    });
-  </script>
   <div class="footer">
     &copy; 2025 Texas A&M University. All Rights Reserved.
   </div>
