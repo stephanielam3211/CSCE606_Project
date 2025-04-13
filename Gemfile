@@ -2,6 +2,7 @@
 
 source "https://rubygems.org"
 gem "csv"
+gem 'rubyzip', '~> 2.3'
 gem "ransack"
 ruby "3.4.1"
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"

@@ -482,6 +482,7 @@ DEPENDENCIES
   ransack
   rspec-rails (~> 7.1)
   rubocop-rails-omakase
+  rubyzip (~> 2.3)
   selenium-webdriver
   simplecov
   sprockets-rails
