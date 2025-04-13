@@ -24,14 +24,47 @@ class TaReassignmentsController < ApplicationController
         flash[:notice] = "CSV processing complete"
 
         combined_data = { ta: [], senior_grader: [], grader: [] }
+        ta_header_mapping = {
+            "Course Number" => "course_number",
+            "Section ID" => "section",
+            "Instructor Name" => "ins_name",
+            "Instructor Email" => "ins_email",
+            "Student Name" => "stu_name",
+            "Student Email" => "stu_email",
+            "UIN"=> "uin",
+            "Calculated Score" => "score"
+          }
+
+          csv_mappings = {
+            ta: TaMatch,
+            grader: GraderMatch,
+            senior_grader: SeniorGraderMatch,
+          }
 
         { ta: ta_csv_path, senior_grader: senior_grader_csv_path, grader: grader_csv_path }.each do |key, file|
           tmp_file_path = Rails.root.join("tmp", File.basename(file))
           if File.exist?(tmp_file_path)
+
             CSV.foreach(tmp_file_path, headers: true) do |row|
               combined_data[key] << row.to_h
             end
+
+            model = csv_mappings[key]
+
+            CSV.foreach(file, headers: true) do |row|
+              mapped_row = row.to_h.transform_keys { |key| ta_header_mapping[key] || key }
+              filtered_row = mapped_row.slice(*model.column_names)
+  
+              if filtered_row["uin"] && model.exists?(uin: filtered_row["uin"])
+                Rails.logger.debug "Skipping duplicate record for UIN: #{filtered_row['uin']}"
+                puts "Skipping #{filtered_row['uin']} import"
+                next
+              end
+  
+              model.create(mapped_row)
+            end
           end
+          
         end
         
         # Append to the original CSV files while ensuring headers are written correctly
@@ -49,7 +82,6 @@ class TaReassignmentsController < ApplicationController
         end
 
         File.delete(Rails.root.join("app/Charizard/util/public/output/New_Needs.csv"))
-        system("rake import:csv")
 
         redirect_to view_csv_path
     end
