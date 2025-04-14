@@ -8,6 +8,10 @@ body {
     min-height: 100vh;
     min-width: 100vh;
   }
+  h1, h2 {
+    color: #d6d3c4;  /* Example color */
+    font-weight: bold;  /* Bold text */
+  }
   
   .header {
     background-color: #500000;
@@ -418,7 +422,7 @@ select, option {
 
 .intructions {
 
-  color: #f8f4f4; /* Dark text for contrast */
+  color: #f8f4f4; 
   padding: 0.2rem 1rem;
   border-radius: 6px;
   margin-bottom: 0.2rem;
@@ -430,4 +434,20 @@ select, option {
   font-size: 13px;
   margin: 0.1rem 0; 
   line-height: 1.4;
+}
+.button-container-tables {
+  display: flex;
+  justify-content: center;
+  gap: 20px; /* space between buttons */
+  margin-top: 20px;
+}
+
+.button-container-tables form {
+  display: inline-block;
+}
+
+.button-container-tables button {
+  padding: 10px 15px;
+  font-size: 16px;
+  cursor: pointer;
 }

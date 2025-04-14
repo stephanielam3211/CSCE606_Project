@@ -23,6 +23,7 @@ class AdminsController < ApplicationController
       File.delete(Rails.root.join("tmp", "Grader_Matches.csv")) if File.exist?(Rails.root.join("tmp", "Grader_Matches.csv"))
       File.delete(Rails.root.join("tmp", "Senior_Grader_Matches.csv")) if File.exist?(Rails.root.join("tmp", "Senior_Grader_Matches.csv"))
       end
+      reset_session
       unless skip_redirect
         redirect_to root_path, notice: 'All data has been cleared.'
         return

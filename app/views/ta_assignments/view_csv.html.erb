@@ -7,50 +7,54 @@
   <%= stylesheet_link_tag 'tamu', media: 'all', 'data-turbo-track': 'reload' %>
 </head>
 
-<body>
+<body style="display: flex; flex-direction: column; min-height: 100vh;">
   <div class="header">
     <%= image_tag "logo.png", alt: "CSCE Logo", class: "logo" %>
     <%= link_to "logout", logout_path, method: :delete, class: "logout-button" %>
   </div>
 
-  <main style="margin-top: 100px;">
+  <main style="margin-top: 100px;flex: 1; padding-bottom: 80px;">
   <div class="aux-container">
-
-  <%= button_to 'Delete All CSV Files and Models', delete_all_csvs_path, method: :delete, class: 'btn btn--danger', onclick: "return confirm('Are you sure? This will reset all assignments.');" %>
   
-  <h2>Select a Table to View</h2>
-  <form method="get" action="<%= all_records_path %>">
-    <label for="table">Choose a table:</label>
-    <select name="table" id="table">
-      <option value="">-- Select --</option>
-      <option value="grader_matches">Grader Matches</option>
-      <option value="senior_grader_matches">Senior Grader Matches</option>
-      <option value="ta_matches">TA Matches</option>
-    </select>
-    <button type="submit">View</button>
-  </form>
+  <h1 style="text-align: center; margin-top: 24px;">Select a Table to View </h1>
 
-  <% if @csv_files.present? %>
-    <%= form_with url: view_csv_path, method: :get, local: true do %>
-      <label for="csv_file">Select CSV File:</label>
-      <%= select_tag :file, options_for_select([['Please select a file', '']] + @csv_files, @selected_csv), onchange: 'this.form.submit();' %>
-    <% end %>
+  <div class="button-container-tables">
+    <form method="get" action="<%= all_records_path %>">
+      <button type="submit" name="table" value="ta_matches">View TA Matches</button>
+    </form>
+    <form method="get" action="<%= all_records_path %>">
+      <button type="submit" name="table" value="senior_grader_matches">View Senior Grader Matches</button>
+    </form>
+    <form method="get" action="<%= all_records_path %>">
+      <button type="submit" name="table" value="grader_matches">View Grader Matches</button>
+    </form>
+  </div>
 
-    <% if @csv_content.present? %>
-      <h2>Showing: <%= @selected_csv %></h2>
-      <p>
-        <%= link_to "Download CSV", download_csv_ta_assignments_path(file: @selected_csv), class: "button", data: { turbo: false } %>
-      </p>
-      <%= form_with url: view_csv_path, method: :get, local: true do %>
-        <input type="hidden" name="file" value="<%= @selected_csv %>">
-        <label for="per_page">Rows per page:</label>
-        <%= select_tag :per_page, options_for_select([10, 25, 50], params[:per_page] || 10), onchange: 'this.form.submit();' %>
+  <h1 style="text-align: center; margin-top: 24px;">FILES FOR ADMIN</h1>
+
+  <% files_to_show = ["Unassigned_Applicants.csv", "Modified_assignments.csv", "New_Needs.csv"] %>
+
+
+<% if @csv_files.present? %>
+  <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 20px;">
+    <% files_to_show.each do |filename| %>
+      <% if @csv_files.include?(filename) %>
+        <%= form_with url: view_csv_path, method: :get, local: true do %>
+          <%= hidden_field_tag :file, filename %>
+          <%= submit_tag "View #{filename.titleize.gsub('.Csv', '')}" %>
+        <% end %>
       <% end %>
-      <% per_page = (params[:per_page] || 10).to_i %>
-      <% page = (params[:page] || 1).to_i %>
-      <% total_pages = (@csv_content.size.to_f / per_page).ceil %>
-      <% paginated_content = @csv_content[((page - 1) * per_page)...(page * per_page)] %>
-      <table border="1">
+    <% end %>
+  </div>
+
+  <% if @csv_content.present? %>
+    <h2><%= @selected_csv %></h2>
+    <p>
+      <%= link_to "Download CSV", download_csv_ta_assignments_path(file: @selected_csv), class: "button", data: { turbo: false } %>
+    </p>
+
+  <div style="overflow: auto; max-height: 600px; max-width: 100%; border: 1px solid #ccc;">
+    <table border="1" class="styled-table" style="min-width: 1000px; border-collapse: collapse;">
         <thead>
           <tr>
             <% @csv_content.first.keys.each do |header| %>
@@ -59,7 +63,7 @@
           </tr>
         </thead>
         <tbody>
-          <% paginated_content.each do |row| %>
+          <% @csv_content.each do |row| %>
             <tr>
               <% row.each do |_, value| %>
                 <td><%= value %></td>
@@ -68,27 +72,22 @@
           <% end %>
         </tbody>
       </table>
-      <div>
-        <% if page > 1 %>
-          <%= link_to "Previous", view_csv_path(file: @selected_csv, per_page: per_page, page: page - 1) %>
-        <% end %>
-
-        Page <%= page %> of <%= total_pages %>
-
-        <% if page < total_pages %>
-          <%= link_to "Next", view_csv_path(file: @selected_csv, per_page: per_page, page: page + 1) %>
-        <% end %>
-      </div>
-
-    <% else %>
-      <p>No content to display.</p>
-    <% end %>
-  <% else %>
-    <p>No CSV files found. Please process CSVs first.</p>
-  <% end %>
-  <div style="text-align: center; margin-top: 20px;">
-      <%= link_to "Back", ta_assignments_new_path || root_path, class: "action-button" %>
     </div>
+
+  <% else %>
+    <p style="display: flex; flex-direction: column; align-items: center; margin-top: 20px;">No content to display.</p>
+  <% end %>
+<% else %>
+  <p style="display: flex; flex-direction: column; align-items: center; margin-top: 20px;">No CSV files found. Please process CSVs first.</p>
+<% end %>
+      <div style="display: flex; flex-direction: column; align-items: center; margin-top: 20px;">
+        <div style="margin-bottom: 10px;">
+          <%= button_to 'Delete All CSV Files and Models', delete_all_csvs_path, method: :delete, class: 'btn btn--danger', onclick: "return confirm('Are you sure? This will reset all assignments.');" %>
+        </div>
+        <div>
+          <%= link_to "Back", ta_assignments_new_path || root_path, class: "action-button" %>
+        </div>
+      </div>
     </div>
   </div>
   </main>

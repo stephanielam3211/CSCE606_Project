@@ -5,6 +5,9 @@
   <%= text_field_tag :email, nil, required: true %><br><br>
   <%= submit_tag "Add Admin", class: "action-button" %>
 <% end %>
+ <div>
+  <%= link_to "Back", root_path, class: "action-button" %>
+</div>
 
 <% if flash[:notice] %>
   <p class="success-message"><%= flash[:notice] %></p>
