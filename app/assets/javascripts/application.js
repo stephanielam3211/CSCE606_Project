@@ -1,4 +1,5 @@
 import { Turbo } from "turbo-rails"
+//Turbo.session.drive = true;
 
 // If you're using other Rails JS features like UJS or ActiveStorage, you should import them as needed.
 // Rails UJS might still be needed for handling form submissions, etc.

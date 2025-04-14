@@ -1,4 +1,3 @@
-
 <!-- Display selected table data -->
 <% if @table_name.present? %>
   <h1><%= @table_name.titleize %> Assignments</h1>
@@ -16,12 +15,11 @@
                   method: :post, 
                   class: "btn btn-warning",
                   onclick: "return confirm('Warning!! This will reset the confirmation of all assignments');"  %>
-    <%= button_to "Delete All Unconfirmed Assignments",
-                  destroy_unconfirmed_assignments_path(type: @table_name),
-                  method: :post,
-                  data: { confirm: "Are you sure? This will remove all assignments marked as not confirmed." },
+    <%= button_to "Delete All Unconfirmed Assignments", 
+                  destroy_unconfirmed_assignments_path(type: @table_name), 
+                  method: :post, 
+                  data: { confirm: "Are you sure? This will remove all assignments marked as not confirmed." }, 
                   class: "btn btn-danger" %>
-
     </div>
   
   <table border:"1">
@@ -80,9 +78,9 @@
           <td>
           <div class="button-group button-group--cta">
             <%= link_to "Edit", edit_ta_assignment_path(record, file: @table_name, uin: record.uin), method: :get, class: 'btn btn-danger' %>
-            <%= button_to "Delete", ta_assignment_path(record, file: @table_name, uin: record.uin, section: record.section,
+            <%= button_to "Delete", record_path(record, file: @table_name, uin: record.uin, section: record.section,
                  course_number: record.course_number, stu_email: record.stu_email, stu_name: record.stu_name,
-                 ins_name: record.ins_name, ins_email: record.ins_email), method: :delete, class: 'btn btn--cta-secondary' %>
+                 ins_name: record.ins_name, ins_email: record.ins_email), method: :delete, remote: true, class: 'btn btn--cta-secondary' %>
           </div>
           </td>
         </tr>
