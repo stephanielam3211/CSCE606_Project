@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 
+# Used to manage some of the admin functionality of the application,
+# Mostly used to manage the users and their sessions
 class ApplicationController < ActionController::Base
   before_action :require_login
   before_action :set_cache_buster
   helper_method :current_user
 
+  # This will wipe the entire db of its users
   def wipe_users
     User.delete_all
     reset_session

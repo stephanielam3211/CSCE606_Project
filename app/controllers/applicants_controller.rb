@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Used to manage the applicants
 class ApplicantsController < ApplicationController
   before_action :set_applicant, only: %i[ show edit update destroy ]
   skip_before_action :require_login, if: -> { Rails.env.test? }
@@ -14,6 +15,7 @@ class ApplicantsController < ApplicationController
     @applicants = @q.result(distinct: true).order("#{sort_column} #{sort_direction}")
   end
 
+  # Search for applicants by name
   def search
     term = params[:term].to_s.strip.downcase
     applicants = if term.present?
@@ -37,6 +39,7 @@ class ApplicantsController < ApplicationController
     } }
   end
 
+  # Search for applicants by email
   def search_email
     applicants = Applicant.where("email ILIKE ?", "%#{params[:term]}%").limit(10)
     render json: applicants.map { |applicant| {
@@ -53,6 +56,7 @@ class ApplicantsController < ApplicationController
       cert: applicant.cert } }
   end
 
+  # Search for applicants by UIN
   def search_uin
     applicants = Applicant.where("uin ILIKE ?", "%#{params[:term]}%").limit(10)
     render json: applicants.map { |applicant| {
@@ -159,7 +163,7 @@ class ApplicantsController < ApplicationController
       format.json { head :no_content }
     end
   end
-
+  # Delete all applicants
   def wipe_applicants
     Applicant.delete_all
     redirect_to root_path, notice: "All Applicants have been cleared."

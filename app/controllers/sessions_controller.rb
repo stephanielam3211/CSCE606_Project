@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
+# This controller manages the sets the session of the application
 class SessionsController < ApplicationController
   protect_from_forgery except: :create
   skip_before_action :verify_authenticity_token, :require_login, only: [ :create ]
 
+  # This method is used to create a new session
   def create
     auth = request.env["omniauth.auth"]
     user = User.from_google(auth)

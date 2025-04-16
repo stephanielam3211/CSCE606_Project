@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 
+# This controller manages the the main assignment process of the application
+# It handles the CSV processing, viewing, editing, and updating of TA assignments.
 class TaAssignmentsController < ApplicationController
   require "csv"
 
+  # This is the main function that handles the CSV processing for the first time
   def process_csvs
-    delete_all_csvs(skip_redirect: true)  if File.exist?(Rails.root.join("app/Charizard/util/public/output/TA_Matches.csv"))
+    delete_all_csvs(skip_redirect: true) if File.exist?(Rails.root.join("app/Charizard/util/public/output/TA_Matches.csv"))
 
     apps_csv = generate_csv_apps(Applicant.all)
     apps_csv_path = Rails.root.join("tmp", "TA_Applicants.csv")
@@ -26,6 +29,7 @@ class TaAssignmentsController < ApplicationController
     redirect_to view_csv_path
   end
 
+  # This method is used to view the CSV files
   def view_csv
     csv_directory = Rails.root.join("app", "Charizard", "util", "public", "output")
     @csv_files = Dir.entries(csv_directory).select { |f| f.end_with?(".csv") }
@@ -35,7 +39,8 @@ class TaAssignmentsController < ApplicationController
       @csv_content = read_csv(File.join(csv_directory, @selected_csv))
     end
   end
-
+ 
+  # This is to edit the assignments and get the data from the model
   def edit
     csv_directory = Rails.root.join("app", "Charizard", "util", "public", "output")
 
@@ -61,6 +66,7 @@ class TaAssignmentsController < ApplicationController
     end
   end
 
+  # This method is used to update the assignments
   def update
     csv_directory = Rails.root.join("app", "Charizard", "util", "public", "output")
     file_key = params[:file].strip.downcase
@@ -208,7 +214,7 @@ class TaAssignmentsController < ApplicationController
     end
   end
 
-
+  # Used to download the CSV files
   def download_csv
     file_name = params[:file]
     file_path = Rails.root.join("app", "Charizard", "util", "public", "output", file_name)
@@ -218,7 +224,8 @@ class TaAssignmentsController < ApplicationController
       redirect_to root_path, alert: "File not found."
     end
   end
-
+  
+  # Deletes all of the relevant assignment csvs and models excluding withdrawls
   def delete_all_csvs(skip_redirect: false)
     Dir[Rails.root.join("app/Charizard/util/public/output/*.csv")].each do |file|
       File.delete(file)
@@ -234,13 +241,14 @@ class TaAssignmentsController < ApplicationController
     redirect_to ta_assignments_new_path, notice: "All CSV files and models have been deleted." unless skip_redirect
   end
 
+  # Used to get a final csvs with all of the assignments with relevant applicant data
   def export_final_csv
     headers = [ "Assignment", "Course Number", "Section ID", "Instructor Name",
                 "Instructor Email", "Student Name", "Student Email", "UIN", "Phone Number", 
                 "Enrollment hours","Degree","Country of Citizenship", "English Certification Level"]
 
     final_csv_path = Rails.root.join("app", "Charizard", "util", "public", "output", "Assignments(#{Date.today}).csv")
-    
+
     assignment_header_mapping = {
       "Course Number" => "course_number",
       "Section ID" => "section",
@@ -256,18 +264,17 @@ class TaAssignmentsController < ApplicationController
       "Grader" => GraderMatch,
       "Senior Grader" => SeniorGraderMatch
     }
-  
+
     applicants_by_uin = Applicant.all.index_by { |applicant| applicant.uin.to_s }
-  
+
     CSV.open(final_csv_path, "w") do |csv|
       csv << headers
-  
       models.each do |assignment_type, model|
         model.find_each do |assignment|
           uin = assignment.uin.to_i
           applicant = applicants_by_uin[uin.to_s]
           Rails.logger.debug("Applicant: #{applicant.inspect}")
-          
+
           row_data = headers.map do |header|
             case header
             when "Assignment"
@@ -288,7 +295,6 @@ class TaAssignmentsController < ApplicationController
               ""
             end
           end
-  
           csv << row_data
         end
       end
@@ -315,6 +321,7 @@ end
     csv_data
   end
 
+  # This method is used to generate the CSV files for the needs
   def generate_csv_needs(records)
     CSV.generate(headers: true) do |csv|
     csv << [ "Course_Name", "Course_Number", "Section", "Instructor", "Faculty_Email", "TA", "Senior_Grader", "Grader", "Professor Pre-Reqs" ]
@@ -334,6 +341,7 @@ end
     end
   end
 
+  # This method is used to generate the CSV files for the recommendations
   def generate_csv_recommendations(records)
     CSV.generate(headers: true) do |csv|
       csv << [ "Timestamp", "Email Address", "Your Name (first and last)", "Select a TA/Grader", "Course (e.g. CSCE 421)", "Feedback", "Additional Feedback about this student" ]
@@ -351,7 +359,7 @@ end
     end
   end
 
-
+  # This method is used to generate the CSV files for the applications
   def generate_csv_apps(records)
     CSV.generate(headers: true) do |csv|
     csv << [ "Timestamp", "Email Address", "First and Last Name", "UIN", "Phone Number", "How many hours do you plan to be enrolled in?", "Degree Type?", "1st Choice Course", "2nd Choice Course", "3rd Choice Course", "4th Choice Course", "5th Choice Course", "6th Choice Course", "7th Choice Course", "8th Choice Course", "9th Choice Course", "10th Choice Course", "GPA", "Country of Citizenship?", "English language certification level?", "Which courses have you taken at TAMU?", "Which courses have you taken at another university?", "Which courses have you TAd for?", "Who is your advisor (if applicable)?", "What position are you applying for?" ]
@@ -389,6 +397,6 @@ end
         record.advisor,
         record.positions
       ]
+      end
     end
   end
-end

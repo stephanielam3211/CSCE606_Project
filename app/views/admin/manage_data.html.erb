@@ -181,29 +181,34 @@
     <% end %> 
   </div>
 
+  <main style="margin-top: 100px;flex: 1; padding-bottom: 80px;">
+  <div class="aux-container">
+  
+
   <% if session[:user_id].present? && session[:role].to_s == "admin" %>
     <div class="page-content">
       <p class="logged-in-message">Hello, <%= session[:user] %>! You are logged in as Admin.</p>
-      <h1 style="color: white; text-align: center;">Manage Data (Wipe / Clear / Delete)</h1>
+      <h1>Manage Data</h1>
 
       <div class="tabs-container">
         <div class="tab-buttons">
           <button class="tab active" onclick="switchTab('clear')">Clear</button>
-          <button class="tab" onclick="switchTab('delete')">Delete</button>
+          <button class="tab" onclick="switchTab('delete')">Admin</button>
           <button class="tab" onclick="switchTab('import-export')">Import/Export</button>
         </div>
 
         <div class="tab-content" id="clear" style="display: flex;">
+          <%= button_to 'Clear All Data', clear_data_path, method: :post, class: "admin-action-button confirm-before-submit" %>
           <%= button_to "Clear All Applicants", wipe_applicants_path, method: :delete, class: "admin-action-button confirm-before-submit" %>
           <%= button_to "Clear All Users", wipe_users_path, method: :delete, class: "admin-action-button confirm-before-submit" %>
-          <%= button_to "Clear All Recommendations", clear_recommendations_path, method: :delete, class: "admin-action-button confirm-before-submit" %>
           <%= button_to "Clear All Courses", clear_courses_path, method: :delete, class: "admin-action-button confirm-before-submit" %>
-          <%= button_to 'Clear All Data', clear_data_path, method: :post, class: "admin-action-button confirm-before-submit" %>
+          <%= button_to "Clear All Assignments", delete_all_csvs_path, method: :delete, class: "admin-action-button confirm-before-submit" %>
+          <%= button_to "Clear All Recommendations", clear_recommendations_path, method: :delete, class: "admin-action-button confirm-before-submit" %>
+          <%= button_to 'Clear All Withdrawal Requests', clear_withdrawal_requests_path, method: :delete, class: "admin-action-button confirm-before-submit" %>
         </div>
 
         <div class="tab-content" id="delete">
-          <%= button_to "Delete All Assignments", delete_all_csvs_path, method: :delete, class: "admin-action-button confirm-before-submit" %>
-          <%= button_to 'Delete All Withdrawal Requests', clear_withdrawal_requests_path, method: :delete, class: "admin-action-button confirm-before-submit" %>
+          <%= link_to "Add New Admin", new_admin_path, class: "action-button" %>
         </div>
 
         <div class="tab-content" id="import-export">
@@ -219,7 +224,9 @@
           </div>
         </div>
       </div>
+      <div style="display: flex; flex-direction: column; align-items: center; margin-top: 20px;">
       <%= link_to "← Back to Main Page", root_path, class: "back-link" %>
+      </div>
     </div>
   <% else %>
     <p class="login-reminder">
@@ -266,5 +273,7 @@
       event.target.classList.add("active");
     }
   </script>
+  </div>
+  <>
 </body>
 </html>

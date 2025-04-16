@@ -42,10 +42,9 @@
               class: "confirm-button",
               onclick: "return confirm(Are You Sure You Want To Accept This Position? This Can Not Be Changed!);" %>
 
+
         <%= button_to "Deny", 
-              ta_assignment_path(id: @role.id, file: @class, ins_email: @role.ins_email, ins_name: @role.ins_name, 
-                                course_number: @role.course_number, stu_name: @role.stu_name, 
-                                stu_email: @role.stu_email, uin: @role.uin, section_id: @role.section, deny: true), 
+              record_path(id: @role.id, file: @class, uin: @role.uin, deny: true), 
               method: :delete, 
               class: "deny-button",
               onclick: "return confirm('Warning!! This will permanently delete your assignments. There is no guarantee another position will be given');" %>

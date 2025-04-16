@@ -16,70 +16,70 @@
   <main style="margin-top: 100px;flex: 1; padding-bottom: 80px;">
   <div class="aux-container">
   
-  <h1 style="text-align: center; margin-top: 24px;">Select a Table to View </h1>
+    <h1 style="text-align: center; margin-top: 24px;">Select a Table to View </h1>
 
-  <div class="button-container-tables">
-    <form method="get" action="<%= all_records_path %>">
-      <button type="submit" name="table" value="ta_matches">View TA Matches</button>
-    </form>
-    <form method="get" action="<%= all_records_path %>">
-      <button type="submit" name="table" value="senior_grader_matches">View Senior Grader Matches</button>
-    </form>
-    <form method="get" action="<%= all_records_path %>">
-      <button type="submit" name="table" value="grader_matches">View Grader Matches</button>
-    </form>
-  </div>
-
-  <h1 style="text-align: center; margin-top: 24px;">FILES FOR ADMIN</h1>
-
-  <% files_to_show = ["Unassigned_Applicants.csv", "Modified_assignments.csv", "New_Needs.csv"] %>
-
-
-<% if @csv_files.present? %>
-  <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 20px;">
-    <% files_to_show.each do |filename| %>
-      <% if @csv_files.include?(filename) %>
-        <%= form_with url: view_csv_path, method: :get, local: true do %>
-          <%= hidden_field_tag :file, filename %>
-          <%= submit_tag "View #{filename.titleize.gsub('.Csv', '')}" %>
-        <% end %>
-      <% end %>
-    <% end %>
-  </div>
-
-  <% if @csv_content.present? %>
-    <h2><%= @selected_csv %></h2>
-    <p>
-      <%= link_to "Download CSV", download_csv_ta_assignments_path(file: @selected_csv), class: "button", data: { turbo: false } %>
-    </p>
-
-  <div style="overflow: auto; max-height: 600px; max-width: 100%; border: 1px solid #ccc;">
-    <table border="1" class="styled-table" style="min-width: 1000px; border-collapse: collapse;">
-        <thead>
-          <tr>
-            <% @csv_content.first.keys.each do |header| %>
-              <th><%= header %></th>
-            <% end %>
-          </tr>
-        </thead>
-        <tbody>
-          <% @csv_content.each do |row| %>
-            <tr>
-              <% row.each do |_, value| %>
-                <td><%= value %></td>
-              <% end %>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
+    <div class="button-container-tables">
+      <form method="get" action="<%= all_records_path %>">
+        <button type="submit" name="table" value="ta_matches">View TA Matches</button>
+      </form>
+      <form method="get" action="<%= all_records_path %>">
+        <button type="submit" name="table" value="senior_grader_matches">View Senior Grader Matches</button>
+      </form>
+      <form method="get" action="<%= all_records_path %>">
+        <button type="submit" name="table" value="grader_matches">View Grader Matches</button>
+      </form>
     </div>
 
-  <% else %>
-    <p style="display: flex; flex-direction: column; align-items: center; margin-top: 20px;">No content to display.</p>
-  <% end %>
-<% else %>
-  <p style="display: flex; flex-direction: column; align-items: center; margin-top: 20px;">No CSV files found. Please process CSVs first.</p>
-<% end %>
+    <h1 style="text-align: center; margin-top: 24px;">FILES FOR ADMIN</h1>
+
+    <% files_to_show = ["Unassigned_Applicants.csv", "Modified_assignments.csv", "New_Needs.csv"] %>
+
+
+    <% if @csv_files.present? %>
+      <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 20px;">
+        <% files_to_show.each do |filename| %>
+          <% if @csv_files.include?(filename) %>
+            <%= form_with url: view_csv_path, method: :get, local: true do %>
+              <%= hidden_field_tag :file, filename %>
+              <%= submit_tag "View #{filename.titleize.gsub('.Csv', '')}" %>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
+
+      <% if @csv_content.present? %>
+        <h2><%= @selected_csv %></h2>
+        <p>
+          <%= link_to "Download CSV", download_csv_ta_assignments_path(file: @selected_csv), class: "button", data: { turbo: false } %>
+        </p>
+
+        <div style="overflow: auto; max-height: 600px; max-width: 100%; border: 1px solid #ccc;">
+          <table border="1" class="styled-table" style="min-width: 1000px; border-collapse: collapse;">
+            <thead>
+              <tr>
+                <% @csv_content.first.keys.each do |header| %>
+                  <th><%= header %></th>
+                <% end %>
+              </tr>
+            </thead>
+            <tbody>
+              <% @csv_content.each do |row| %>
+                <tr>
+                  <% row.each do |_, value| %>
+                    <td><%= value %></td>
+                  <% end %>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+
+      <% else %>
+        <p style="display: flex; flex-direction: column; align-items: center; margin-top: 20px;">No content to display.</p>
+      <% end %>
+    <% else %>
+      <p style="display: flex; flex-direction: column; align-items: center; margin-top: 20px;">No CSV files found. Please process CSVs first.</p>
+    <% end %>
       <div style="display: flex; flex-direction: column; align-items: center; margin-top: 20px;">
         <div style="margin-bottom: 10px;">
           <%= button_to 'Delete All CSV Files and Models', delete_all_csvs_path, method: :delete, class: 'btn btn--danger', onclick: "return confirm('Are you sure? This will reset all assignments.');" %>

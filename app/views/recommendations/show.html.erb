@@ -13,7 +13,7 @@
     <%= link_to "logout", logout_path, method: :delete, class: "logout-button" %>
   </div>
   <div class="main-content">
-  <h1>All Recommendations</h1>
+  <h1>All Recommendations </h1>
 
 <div style="max-height: 800px; max-width:1500px;  overflow-y: auto;">
 <table class="styled-table1">
@@ -39,8 +39,9 @@
           <td><%= recommendation.feedback %></td>
           <td><%= recommendation.additionalfeedback %></td>
           <td>
-            <%= link_to 'Delete', recommendation_path(recommendation), method: :delete, remote: true, class: "action-button",
-            onclick: "return confirm('Are you sure you want to delete this Recommendation?');" %>
+            <%= form_with url: recommendation_path(recommendation), method: :delete, local: true do %>
+              <%= submit_tag "Delete", data: { confirm: "Are you sure?" }, class: "action-button" %>
+            <% end %>
           </td>
         </tr>
       <% else %>
@@ -52,8 +53,9 @@
           <td><%= recommendation.feedback %></td>
           <td><%= recommendation.additionalfeedback %></td>
           <td>
-            <%= link_to 'Delete', recommendation_path(recommendation), method: :delete, remote: true, class: "action-button",
-            onclick: "return confirm('Are you sure you want to delete this Recommendation?');" %>
+            <%= form_with url: recommendation_path(recommendation), method: :delete, local: true do %>
+              <%= submit_tag "Delete", data: { confirm: "Are you sure?" }, class: "action-button" %>
+            <% end %>
           </td>
         </tr>
       <% end %>

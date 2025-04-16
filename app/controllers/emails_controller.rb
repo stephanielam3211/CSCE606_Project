@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
+# Used to send out emails from the App
 class EmailsController < ApplicationController
   before_action :authenticate_user!
 
-  def new
+  def new 
   end
 
+  # to send emails
   def create
     recipient_email = params[:email]
     subject = params[:subject]
