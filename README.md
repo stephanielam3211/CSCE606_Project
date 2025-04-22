@@ -53,11 +53,19 @@ For Heroku Setup
 ```sh
   git push heroku main
 ```
+* Go to your app console on your heroku dashboard and add Heroku Postgress Essential 0 to add-ons
+
 * add env var to heroku
 ```sh
   heroku config:set GOOGLE_CLIENT_ID="google client id" GOOGLE_CLIENT_SECRET="google client secret"
 ```
-
+* Run migrations on Heroku
+```sh
+  heroku run rails db:migrate
+```
+* Go to OAuth portal and update the redirect uir
+    * Fill out with this https://(Your APP URL)/auth/google_oauth2/callback
+            
 * How to run the test suites
 
 ```sh
