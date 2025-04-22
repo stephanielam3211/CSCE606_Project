@@ -22,6 +22,7 @@ class TaAssignmentsController < ApplicationController
     File.write(recs_csv_path, recs_csv)
 
     python_path = `which python3`.strip  # Find Python path dynamically
+    puts "Python Path: #{python_path}"  # Check if this is correct
     system("#{python_path} app/Charizard/main.py '#{apps_csv_path}' '#{needs_csv_path}' '#{recs_csv_path}'")
 
     flash[:notice] = "CSV processing complete"
