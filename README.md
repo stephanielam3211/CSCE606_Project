@@ -29,14 +29,35 @@ For Local setup:
         * Create .env file in root directory of project
             * add previously saved client id to GOOGLE_CLIENT_ID="CREDENTIALS"
             * add previously saved client secret GOOGLE_CLIENT_SECRET="CREDENTIALS"
-
-
-    * System dependencies
-
-    * Configuration  
+    * run rails migrations
         ```sh
-        bundle install
+          rails db:migrate
         ```
+    * run app locally
+        ```sh
+          rails server
+        ```
+For Heroku Setup
+
+* Ensure Heroku CLI is installed
+    * https://devcenter.heroku.com/articles/heroku-cli
+* Login to heroku
+```sh
+  heroku login
+```
+* Creat app in Heroku
+```sh
+  heroku create your-app-name
+```
+* Push Project to Heroku
+```sh
+  git push heroku main
+```
+* add env var to heroku
+```sh
+  heroku config:set GOOGLE_CLIENT_ID="google client id" GOOGLE_CLIENT_SECRET="google client secret"
+```
+
 * How to run the test suites
 
 ```sh
