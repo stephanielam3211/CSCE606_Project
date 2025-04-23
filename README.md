@@ -90,6 +90,7 @@ SMTP_PASSWORD='(App Password)'
         * Create .env file in root directory of project
             * add previously saved client id to GOOGLE_CLIENT_ID="CREDENTIALS"
             * add previously saved client secret GOOGLE_CLIENT_SECRET="CREDENTIALS"
+
     * run rails migrations
         ```sh
           rails db:migrate
@@ -119,6 +120,7 @@ SMTP_PASSWORD='(App Password)'
 * Add env var to heroku
 ```sh
   heroku config:set GOOGLE_CLIENT_ID="google client id" GOOGLE_CLIENT_SECRET="google client secret"
+  heroku config:set ADMIN_EMAILS="admin@email1.com,Admin@email2.com"
 ```
 * Add Python buildpack to heroku
 ```sh
