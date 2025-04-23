@@ -50,13 +50,14 @@
         <% end %>
       </div>
     <% else %>
-      <p class="notice-text">No application found for your email.</p>
     <% end %>
 
     <div class="button-container">
       <% if @applicant %>
         <div class="button-container">
+        <% if @role == "Not Found"%>
           <%= link_to "Edit My Application", edit_applicant_path(@applicant, from: "my_application"), class: "action-button" %>
+          <% end %>
           <% if session[:role].to_s == "admin" %>
             <%= link_to "Back to Home", root_path(anchor: "student"), class: "action-button" %>
           <% else %>

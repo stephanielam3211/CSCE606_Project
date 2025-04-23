@@ -7,9 +7,25 @@ class ApplicationController < ActionController::Base
   before_action :set_cache_buster
   helper_method :current_user
 
-  # This will wipe the entire db of its users
+  # This will wipe the entire db of its users and their data leaving only the classes and blacklist
   def wipe_users
     User.delete_all
+
+    master_emails = (ENV['ADMIN_EMAILS'] || "").split(",").map(&:strip)
+    Admin.where.not(email: master_emails).delete_all
+
+    GraderMatch.delete_all
+    SeniorGraderMatch.delete_all
+    TaMatch.delete_all
+    WithdrawalRequest.delete_all
+    Applicant.delete_all
+    Recommendation.delete_all
+    Dir[Rails.root.join("app/Charizard/util/public/output/*.csv")].each do |file|
+      File.delete(file)
+    File.delete(Rails.root.join("tmp", "TA_Matches.csv")) if File.exist?(Rails.root.join("tmp", "TA_Matches.csv"))
+    File.delete(Rails.root.join("tmp", "Grader_Matches.csv")) if File.exist?(Rails.root.join("tmp", "Grader_Matches.csv"))
+    File.delete(Rails.root.join("tmp", "Senior_Grader_Matches.csv")) if File.exist?(Rails.root.join("tmp", "Senior_Grader_Matches.csv"))
+    end
     reset_session
     redirect_to root_path, notice: "All users have been cleared."
   end

@@ -21,22 +21,17 @@
       
       <% if session[:role].to_s == "student" %>
         <div id="student-buttons" class="button-container">
-          <!-- REMOVE AFTER TESTING-->
-          <%= button_to "Clear All users", wipe_users_path, method: :delete, data: { turbo: false }, onclick: "return confirmClear();"%>
-          <!-- REMOVE AFTER TESTING-->
           <%= link_to "Submit Request for TA/Grader", new_applicant_path, class: "action-button"%>
           <%= link_to "Application Status", new_withdrawal_request_path, class: "action-button" %>
-          <%= link_to "View My Applications", my_application_applicants_path, class: "action-button" %>
+          <%= link_to "View My Application", my_application_applicants_path, class: "action-button" %>
         </div>
       <% end %>
       
       <% if session[:role].to_s == "faculty" %>
         <div id="faculty-buttons" class="button-container">
-          <!-- REMOVE AFTER TESTING-->
-          <%= button_to "Clear All users", wipe_users_path, method: :delete, data: { turbo: false }, onclick: "return confirmClear();"%>
-          <!-- REMOVE AFTER TESTING-->
           <%= link_to "Recomend a Student", new_recommendation_path, class: "action-button" %>
           <%= link_to "View My Recommendations", my_recommendations_view_path, class: "action-button" %> 
+          <%= link_to "View Applicants", applicants_path, class: "action-button" %>
         </div>
       <% end %>
       
@@ -50,12 +45,13 @@
         <div id="student-buttons" class="button-container hidden">
           <%= link_to "Submit Request for TA/Grader", new_applicant_path, class: "action-button"%>
           <%= link_to "Application Status", new_withdrawal_request_path, class: "action-button" %>
-          <%= link_to "View My Applications", my_application_applicants_path, class: "action-button" %>
+          <%= link_to "View My Application", my_application_applicants_path, class: "action-button" %>
         </div>
       
         <div id="faculty-buttons" class="button-container hidden">
           <%= link_to "Recomend a Student", new_recommendation_path, class: "action-button" %>
           <%= link_to "View My Recommendations", my_recommendations_view_path, class: "action-button" %> 
+          <%= link_to "View Applicants", applicants_path, class: "action-button" %>
         </div>
         
         <div id="admin-buttons" class="button-container hidden">

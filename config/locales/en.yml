@@ -29,3 +29,17 @@
 
 en:
   hello: "Hello world"
+  activerecord:
+    attributes:
+      applicant:
+        degree: "Degree Program"
+        positions: "Desired TA Positions"
+        number: "Phone Number"
+        uin: "UIN"
+        hours: "Hours enrolled"
+        citizenship: "Country of Citizenship"
+        cert: "English Certification Level"
+        gpa: "GPA"
+        prev_course: "Previous Courses"
+        prev_uni: "Previous Universities"
+        prev_ta: "Previous TA Experience"

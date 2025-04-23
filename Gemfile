@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 source "https://rubygems.org"
+gem 'country_select'
 gem "csv"
 gem 'rubyzip', '~> 2.3'
 gem "ransack"

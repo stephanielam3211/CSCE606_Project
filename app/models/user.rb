@@ -5,8 +5,7 @@ class User < ApplicationRecord
     has_many :recommendations, foreign_key: "faculty_id"
     validates :email, presence: true, uniqueness: true
 
-    ADMIN_EMAILS = [ "hz010627@tamu.edu", "aaron_xu92@tamu.edu", "yuvi@tamu.edu",
-    "oifekoya0@tamu.edu", "neel27@tamu.edu", "carlislem@tamu.edu", "stephanie.lam_3211@tamu.edu" ]
+    ADMIN_EMAILS = (ENV['ADMIN_EMAILS'] || "").split(",").map(&:strip)
 
     def self.from_google(auth)
         email = auth.info.email

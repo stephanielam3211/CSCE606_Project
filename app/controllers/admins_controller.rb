@@ -10,7 +10,8 @@ class AdminsController < ApplicationController
 
   # Used to clear out the database of all data and any files in the output folder
   def clear(skip_redirect: false)
-    Admin.where.not(email: ["carlislem@tamu.edu"]).delete_all
+    master_emails = (ENV['ADMIN_EMAILS'] || "").split(",").map(&:strip)
+    Admin.where.not(email: master_emails).delete_all
     User.delete_all
     GraderMatch.delete_all
     SeniorGraderMatch.delete_all
