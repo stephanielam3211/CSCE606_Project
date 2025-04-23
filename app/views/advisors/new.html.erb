@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advisors</title>
+  <%= stylesheet_link_tag 'tamu', media: 'all', 'data-turbo-track': 'reload' %>
+</head>
+
+<body>
+  <div class="header">
+    <%= image_tag "logo.png", alt: "CSCE Logo", class: "logo" %>
+    <%= link_to "logout", logout_path, method: :delete, class: "logout-button" %>
+  </div>
+
+  <div class="main-content">
+   <h1>Advisors</h1>
+    <%= form_with model: Advisor.new, url: advisors_path, method: :post do |form| %>
+    <label>Name</label><br>
+    <%= form.text_field :name, required: true %><br><br>
+
+    <label>Email Address</label><br>
+    <%= form.text_field :email, required: true %><br><br>
+
+    <%= form.submit "Add Advisor", class: "action-button" %>
+    <% end %>
+    <div>
+    <%= link_to "Back", root_path, class: "action-button" %>
+    </div>
+
+    <div style="max-height: 800px; overflow-y: auto; margin-top: 20px;">
+      <table class="styled-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @advisors.each do |advisor| %>
+            <tr>
+              <td><%= advisor.name %></td>
+              <td><%= advisor.email %></td>
+              <td>
+                <%= button_to "Remove", advisor_path(advisor), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="margin-top: 20px; text-align: center;">
+      <%= link_to "Return to Home Page", root_path, class: "action-button" %>
+    </div>
+  </div>
+
+  <div class="footer">
+    &copy; 2025 Texas A&M University. All Rights Reserved.
+  </div>
+</body>
+</html>

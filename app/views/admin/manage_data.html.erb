@@ -203,12 +203,15 @@
           <%= button_to "Clear All Users", wipe_users_path, method: :delete, class: "admin-action-button confirm-before-submit" %>
           <%= button_to "Clear All Courses", clear_courses_path, method: :delete, class: "admin-action-button confirm-before-submit" %>
           <%= button_to "Clear All Assignments", delete_all_csvs_path, method: :delete, class: "admin-action-button confirm-before-submit" %>
+          <%= button_to 'Clear All Advisors', clear_advisor_path, method: :post, class: "admin-action-button confirm-before-submit" %>
           <%= button_to "Clear All Recommendations", clear_recommendations_path, method: :delete, class: "admin-action-button confirm-before-submit" %>
           <%= button_to 'Clear All Withdrawal Requests', clear_withdrawal_requests_path, method: :delete, class: "admin-action-button confirm-before-submit" %>
+
         </div>
 
         <div class="tab-content" id="delete">
           <%= link_to "Add New Admin", new_admin_path, class: "action-button" %>
+          <%= link_to "Add New Advisor", new_advisor_path, class: "action-button" %>
         </div>
 
         <div class="tab-content" id="import-export">

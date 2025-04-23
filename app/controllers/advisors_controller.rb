@@ -1,0 +1,52 @@
+class AdvisorsController < ApplicationController
+  before_action :require_admin
+
+  def index
+    @advisors = Advisor.all
+  end
+
+  def new
+    @advisor = Advisor.new
+    @advisors = Advisor.all
+  end
+
+  def show
+  end
+
+  def create
+    @advisor = Advisor.new(advisor_params)
+    if @advisor.save
+      flash[:notice] = "Advisor added!"
+      redirect_to new_advisor_path
+    else
+      flash[:alert] = "There was a problem."
+      @advisors = Advisor.all
+      render :new
+    end
+  end
+
+  def clear(skip_redirect: false)
+    Advisor.delete_all
+    unless skip_redirect
+      redirect_to root_path, notice: 'All Advisors has been cleared.'
+      return
+    end
+  end
+
+  def destroy
+    @advisor = Advisor.find(params[:id])
+    @advisor.destroy
+    redirect_to new_advisor_path, notice: "Student removed from blacklist."
+  end
+
+  def require_admin
+    unless session[:role] == "admin"
+      redirect_to root_path, alert: "Access denied."
+    end
+  end 
+  private
+
+  def advisor_params
+    params.require(:advisor).permit(:name, :email)
+  end
+end

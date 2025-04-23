@@ -76,9 +76,11 @@
       <%= form.text_field :prev_ta %>
     </div>
 
-    <div class="full-width">
+     <div class="full-width">
       <%= form.label :advisor, "Who is Your Advisor?" %>
-      <%= form.text_field :advisor %>
+      <%= form.select :advisor_id,
+      Advisor.all.map { |a| ["#{a.name} (#{a.email})", a.id] },
+      prompt: "Select an Advisor" %>
     </div>
 
     <% (1..10).each do |i| %>
