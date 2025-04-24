@@ -13,6 +13,8 @@ class AdminsController < ApplicationController
     master_emails = (ENV['ADMIN_EMAILS'] || "").split(",").map(&:strip)
     Admin.where.not(email: master_emails).delete_all
     User.delete_all
+    UnassignedApplicant.delete_all
+    Advisor.delete_all
     GraderMatch.delete_all
     SeniorGraderMatch.delete_all
     TaMatch.delete_all
@@ -47,6 +49,8 @@ class AdminsController < ApplicationController
       ta_matches: TaMatch.all,
       senior_grader_matches: SeniorGraderMatch.all,
       grader_matches: GraderMatch.all,
+      advisors: Advisor.all,
+      admins: Admin.all
     }
   
     output_folder_path = Rails.root.join("app", "Charizard", "util", "public", "output")
@@ -62,7 +66,7 @@ class AdminsController < ApplicationController
       end
 
       # These are files that are not in the DB but are in the output folder, no need to output them
-      skip_files = ["Unassigned_Applicants.csv", "TA_Matches.csv", "Grader_Matches.csv", "Senior_Grader_Matches.csv"] # Add any files you want to skip
+      skip_files = ["Unassigned_Applicants.csv", "TA_Matches.csv", "Grader_Matches.csv", "Senior_Grader_Matches.csv"]
 
       Dir[output_folder_path.join("**", "*")].each do |file|
         next if File.directory?(file)

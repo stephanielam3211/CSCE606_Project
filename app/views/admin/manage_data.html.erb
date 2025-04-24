@@ -216,14 +216,14 @@
 
         <div class="tab-content" id="import-export">
           <div class="import-section">
+            <%= link_to 'Export Data', export_admins_path(format: :csv), class: 'admin-action-button export' %>
+            
             <%= form_with url: import_path, local: true, html: { multipart: true, class: "import-form", id: "importForm" } do |form| %>
               <div class="import-row">
                 <%= form.submit "Import Data", class: "admin-action-button import-submit", id: "importSubmitButton" %>
                 <%= form.file_field :file, class: "file-field" %>
               </div>
             <% end %>
-        
-            <%= link_to 'Export Data', export_admins_path(format: :csv), class: 'admin-action-button export' %>
           </div>
         </div>
       </div>

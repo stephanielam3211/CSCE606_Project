@@ -166,6 +166,15 @@ class ApplicantsController < ApplicationController
   # Delete all applicants
   def wipe_applicants
     Applicant.delete_all
+    UnassignedApplicant.delete_all
+    Recommendation.delete_all
+    WithdrawalRequest.delete_all
+    GraderMatch.delete_all
+    SeniorGraderMatch.delete_all
+    TaMatch.delete_all
+    Dir[Rails.root.join("app/Charizard/util/public/output/*.csv")].each do |file|
+      File.delete(file)
+    end
     redirect_to root_path, notice: "All Applicants have been cleared."
   end
 

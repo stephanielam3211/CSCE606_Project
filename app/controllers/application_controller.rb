@@ -19,6 +19,7 @@ class ApplicationController < ActionController::Base
     TaMatch.delete_all
     WithdrawalRequest.delete_all
     Applicant.delete_all
+    UnassignedApplicant.delete_all
     Recommendation.delete_all
     Dir[Rails.root.join("app/Charizard/util/public/output/*.csv")].each do |file|
       File.delete(file)
