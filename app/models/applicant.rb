@@ -18,9 +18,9 @@ class Applicant < ApplicationRecord
   validates :cert, presence: true
   validates :gpa, presence: true, numericality: { greater_than_or_equal_to: 0.0, less_than_or_equal_to: 4.0 }
   validate :min_course_choice
-  validates :prev_course, length: { maximum: 50, too_long: "%{count} characters is the maximum allowed" }
-  validates :prev_uni, length: { maximum: 50, too_long: "%{count} characters is the maximum allowed" }
-  validates :prev_ta, length: { maximum: 45, too_long: "%{count} characters is the maximum allowed" }
+  validates :prev_course, length: { maximum: 200, too_long: "%{count} characters is the maximum allowed" }
+  validates :prev_uni, length: { maximum: 200, too_long: "%{count} characters is the maximum allowed" }
+  validates :prev_ta, length: { maximum: 200, too_long: "%{count} characters is the maximum allowed" }
   
   def self.ransackable_attributes(auth_object = nil)
     super + [ "name", "email", "uin" ]

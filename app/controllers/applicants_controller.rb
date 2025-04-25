@@ -7,11 +7,12 @@ class ApplicantsController < ApplicationController
 
   # GET /applicants or /applicants.json
   def index
-    @applicants = Applicant.all
-    sort_column = params[:sort] || "name"
-    sort_direction = params[:direction] == "desc" ? "desc" : "asc"
-    @applicants = Applicant.order("#{sort_column} #{sort_direction}")
     @q = Applicant.ransack(params[:q])
+
+    permitted_columns = Applicant.column_names
+    sort_column = permitted_columns.include?(params[:sort]) ? params[:sort] : "name"
+    sort_direction = params[:direciton] == "desc" ? "desc" : "asc"
+
     @applicants = @q.result(distinct: true).order("#{sort_column} #{sort_direction}")
   end
 
