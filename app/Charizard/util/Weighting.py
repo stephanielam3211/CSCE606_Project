@@ -7,7 +7,7 @@ class Buckets:
     ENGL_LEVEL_1 = 4
     ENGL_LEVEL_2 = 5
 
-    DEG_TYPE_PHD = 1
+    DEG_TYPE_PHD = 10000
 
     PREV_TA_FOR_THIS_COURSE = 1
 
