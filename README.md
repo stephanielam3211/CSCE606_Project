@@ -134,6 +134,13 @@ The `Import Data` button takes in a zip file and will add all of the data from t
 
 * Ruby version  
     ruby "3.4.1" or higher
+* Python Version and libraries
+    Python 3.9
+
+    rich==13.3.2
+    scipy==1.7.1
+    pandas~=1.5.3
+    numpy~=1.22.4
 
 * Configuration  
     Run this to install all the right ruby dependencies
