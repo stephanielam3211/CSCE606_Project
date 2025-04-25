@@ -21,7 +21,11 @@ class Applicant < ApplicationRecord
   validates :prev_course, length: { maximum: 200, too_long: "%{count} characters is the maximum allowed" }
   validates :prev_uni, length: { maximum: 200, too_long: "%{count} characters is the maximum allowed" }
   validates :prev_ta, length: { maximum: 200, too_long: "%{count} characters is the maximum allowed" }
-  
+   # type casting
+  ransacker :uin do |parent| 
+    Arel.sql("CAST(#{parent.table.name}.uin AS TEXT)")
+  end
+
   def self.ransackable_attributes(auth_object = nil)
     super + [ "name", "email", "uin" ]
   end
