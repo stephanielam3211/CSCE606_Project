@@ -144,7 +144,11 @@ Rails.application.routes.draw do
   post "export_final_csv", to: "ta_assignments#export_final_csv", as: "export_final_csv"
 
   delete 'wipe_users', to: 'application#wipe_users'
-  resources :advisors, only: [:index, :new, :create, :destroy]
+  resources :advisors, only: [:index, :new, :create, :destroy] do
+    collection do
+      post :import_csv
+    end
+  end
   post 'advisors/clear', to: 'advisors#clear', as: 'clear_advisor'
 
   #admin

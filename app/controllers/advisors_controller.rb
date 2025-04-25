@@ -1,4 +1,5 @@
 class AdvisorsController < ApplicationController
+  require 'csv'
   before_action :require_admin
 
   def index
@@ -12,6 +13,22 @@ class AdvisorsController < ApplicationController
 
   def show
   end
+
+  def import_csv
+    if params[:file].present?
+      begin
+        CSV.foreach(params[:file].path, headers: true) do |row|
+          Advisor.create!(row.to_hash.slice("name", "email"))
+        end
+        redirect_to new_advisor_path, notice: "CSV imported successfully!"
+      rescue => e
+        redirect_to new_advisor_path, alert: "Import failed: #{e.message}"
+      end
+    else
+      redirect_to new_advisor_path, alert: "Please upload a CSV file."
+    end
+  end
+
 
   def create
     @advisor = Advisor.new(advisor_params)

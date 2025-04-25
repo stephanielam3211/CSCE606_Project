@@ -58,11 +58,11 @@
 
     <div>
       <%= form.label :cert, "English Language Certification Level" %>
-      <%= form.select :cert, [['1'], ['2'], ['3']], prompt: "Select your certification level" %>
+      <%= form.select :cert, [['1'], ['2'], ['3']], prompt: "Select your certification level(1 being Native)" %>
     </div>
 
     <div class="full-width">
-      <%= form.label :prev_course, "Previously Taken Courses" %>
+      <%= form.label :prev_course, "Previously Taken Courses (Ex: 121, 629, 410, etc)" %>
       <%= form.text_field :prev_course %>
     </div>
 
@@ -72,7 +72,7 @@
     </div>
 
     <div class="full-width">
-      <%= form.label :prev_ta, "Which Courses Have You TA’d for Previously?" %>
+      <%= form.label :prev_ta, "Which Courses Have You TA’d for Previously?  (Ex: 121, 629, 410, etc)" %>
       <%= form.text_field :prev_ta %>
     </div>
 

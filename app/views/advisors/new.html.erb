@@ -14,6 +14,13 @@
   </div>
 
   <div class="main-content">
+  <h2>Import Advisors via CSV</h2>
+
+<%= form_with url: import_csv_advisors_path, local: true, html: { multipart: true } do |form| %>
+  <%= form.file_field :file %>
+  <%= form.submit "Import CSV" %>
+<% end %>
+
    <h1>Advisors</h1>
     <%= form_with model: Advisor.new, url: advisors_path, method: :post do |form| %>
     <label>Name</label><br>
