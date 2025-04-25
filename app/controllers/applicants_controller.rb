@@ -86,7 +86,7 @@ class ApplicantsController < ApplicationController
         redirect_to user.applicant
       else
         @applicant = Applicant.new
-        @courses = Course.all.map { |c| "#{c.course_number} - #{c.course_name} (Section: #{c.section})"}
+        @courses = Course.select(:course_number, :course_name).distinct.map { |c| "#{c.course_number} - #{c.course_name}" }
       end
     else
       redirect_to root_path, alert: "Please log in to submit an application."
@@ -100,7 +100,7 @@ class ApplicantsController < ApplicationController
   # GET /applicants/1/edit
   def edit
     @applicant = Applicant.find(params[:id])
-    @courses = Course.all.map { |c| "#{c.course_number} - #{c.course_name} (Section: #{c.section})" }
+    @courses = Course.select(:course_number, :course_name).distinct.map { |c| "#{c.course_number} - #{c.course_name}" }
   end
 
   # POST /applicants or /applicants.json
@@ -120,10 +120,21 @@ class ApplicantsController < ApplicationController
   
       respond_to do |format|
         if @applicant.save
+          blacklist_entry = Blacklist.find_by(
+            'LOWER(student_name) = ? AND LOWER(student_email) = ?',
+            @applicant.name.downcase,
+            @applicant.email.downcase
+          )
+          if !TaMatch.nil? || !SeniorGraderMatch.nil? || !GraderMatch.nil? 
+            if blacklist_entry.present? &&  !@applicant.name.strip.downcase.start_with?("*")
+              # Backup the applicant to the unassigned applicants CSV and model
+              backup_unassigned_applicant(@applicant.uin)
+            end
+          end
           format.html { redirect_to @applicant, notice: "Application submitted successfully." }
           format.json { render :show, status: :created, location: @applicant }
         else
-          @courses = Course.all.map { |c| "#{c.course_number} - #{c.course_name} (Section: #{c.section})" }
+          @courses = Course.select(:course_number, :course_name).distinct.map { |c| "#{c.course_number} - #{c.course_name}" }
           format.html { render :new, status: :unprocessable_entity }
           format.json { render json: @applicant.errors, status: :unprocessable_entity }
         end
@@ -141,7 +152,7 @@ class ApplicantsController < ApplicationController
         format.json { render :show, status: :ok, location: @applicant }
         flash[:notice] = "Applicant was successfully updated."
       else
-        @courses = Course.all.map { |c| "#{c.course_number} - #{c.course_name} (Section: #{c.section})" }
+        @courses = Course.select(:course_number, :course_name).distinct.map { |c| "#{c.course_number} - #{c.course_name}" }
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @applicant.errors, status: :unprocessable_entity }
       end
@@ -188,6 +199,47 @@ class ApplicantsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_applicant
       @applicant = Applicant.find(params[:id])
+    end
+
+    def backup_unassigned_applicant(uin)
+      applicant = Applicant.find_by(uin: uin)
+      return unless applicant
+  
+      UnassignedApplicant.create(applicant.attributes.except("id", "created_at", "updated_at", "confirm"))
+  
+      column_order, mapping = backup_applicant_column_mapping
+      backup_path = Rails.root.join("app", "Charizard", "util", "public", "output", "Unassigned_Applicants.csv")
+  
+      CSV.open(backup_path, "a", headers: column_order, write_headers: !File.exist?(backup_path)) do |csv|
+        row = column_order.map { |h| applicant.send(mapping[h]) || "" }
+        csv << row
+      end
+    end
+  
+    # This is the column mappiing for adding a student to the unassigned applicants csv
+    # This is needed beacuse the table and the csv have different column names
+    def backup_applicant_column_mapping
+      column_order = [
+        "Timestamp", "Email Address", "First and Last Name", "UIN", "Phone Number", "How many hours do you plan to be enrolled in?",
+        "Degree Type?", "1st Choice Course", "2nd Choice Course", "3rd Choice Course", "4th Choice Course", "5th Choice Course",
+        "6th Choice Course", "7th Choice Course", "8th Choice Course", "9th Choice Course", "10th Choice Course", "GPA",
+        "Country of Citizenship?", "English language certification level?", "Which courses have you taken at TAMU?",
+        "Which courses have you taken at another university?", "Which courses have you TAd for?", "Who is your advisor (if applicable)?",
+        "What position are you applying for?"
+      ]
+  
+      mapping = {
+        "Timestamp" => "timestamp", "Email Address" => "email", "First and Last Name" => "name", "UIN" => "uin",
+        "Phone Number" => "number", "How many hours do you plan to be enrolled in?" => "hours", "Degree Type?" => "degree",
+        "1st Choice Course" => "choice_1", "2nd Choice Course" => "choice_2", "3rd Choice Course" => "choice_3",
+        "4th Choice Course" => "choice_4", "5th Choice Course" => "choice_5", "6th Choice Course" => "choice_6",
+        "7th Choice Course" => "choice_7", "8th Choice Course" => "choice_8", "9th Choice Course" => "choice_9",
+        "10th Choice Course" => "choice_10", "GPA" => "gpa", "Country of Citizenship?" => "citizenship",
+        "English language certification level?" => "cert", "Which courses have you taken at TAMU?" => "prev_course",
+        "Which courses have you taken at another university?" => "prev_uni", "Which courses have you TAd for?" => "prev_ta",
+        "Who is your advisor (if applicable)?" => "advisor", "What position are you applying for?" => "positions"
+      }
+      [column_order, mapping]
     end
 
     # Only allow a list of trusted parameters through.

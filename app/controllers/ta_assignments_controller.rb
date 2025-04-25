@@ -370,7 +370,7 @@ end
         record.name.downcase,
         record.email.downcase
       )
-      next if blacklist_entry
+      next if record.name.strip.downcase.start_with?("*")
       csv << [
         record.timestamp,
         record.email,

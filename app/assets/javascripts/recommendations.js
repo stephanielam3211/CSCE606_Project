@@ -8,7 +8,7 @@
     $(document).ready(function () {
       if ($('#course-search_recs').length) {
         $('#course-search_recs').select2({
-          placeholder: "Search for a course...",
+          placeholder: "Search for a Course...",
           minimumInputLength: 1,
           ajax: {
             url: '/courses/search_recs',
@@ -18,10 +18,21 @@
               return { term: params.term };
             },
             processResults: function (data) {
+              const repeat = new Set();
+
+              const nonRepeat = data.filter(course => {
+                const courseNumber = course.course_number;
+                if (repeat.has(courseNumber)) {
+                  return false;
+                } else {
+                  repeat.add(courseNumber);
+                  return true;
+                }
+              });
               return {
-                results: data.map(course => ({
+                results: nonRepeat.map(course => ({
                   id: `CSCE ${course.course_number}`,
-                  text: `${course.course_number} - ${course.section}: ${course.name}`
+                  text: `${course.name} ${course.course_number}`
                 }))
               };
             },
@@ -35,7 +46,7 @@
 
       if ($('#ta-search').length) {
         $('#ta-search').select2({
-          placeholder: "Search for a TA...",
+          placeholder: "Search for an Applicant...",
           minimumInputLength: 1,
           ajax: {
             url: '/applicants/search',

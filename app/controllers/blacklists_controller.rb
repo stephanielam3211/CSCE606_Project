@@ -2,6 +2,8 @@
 
 # This manages the blacklists of students
 class BlacklistsController < ApplicationController
+  before_save :normalize_fields
+
   def index
     @blacklisted_students = Blacklist.all
   end
@@ -27,5 +29,10 @@ class BlacklistsController < ApplicationController
 
   def blacklist_params
     params.require(:blacklist).permit(:student_name, :student_email)
+  end
+  # Normalize the student name and email before saving
+  def normalize_fields
+    self.student_name = student_name.strip.downcase.gsub(/\s+/, " ") if student_name
+    self.student_email = student_email.strip.downcase if student_email
   end
 end

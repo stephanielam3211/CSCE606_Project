@@ -4,10 +4,10 @@ class Buckets:
 
     GPA_ABOVE_3_5 = 2
 
-    ENGL_LEVEL_1 = 4
+    ENGL_LEVEL_1 = 3
     ENGL_LEVEL_2 = 5
 
-    DEG_TYPE_PHD = 10000
+    DEG_TYPE_PHD = 1
 
     PREV_TA_FOR_THIS_COURSE = 1
 

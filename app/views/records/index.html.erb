@@ -1,4 +1,31 @@
 <!-- Display selected table data -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Applicants</title>
+  <%= stylesheet_link_tag 'tamu', media: 'all', 'data-turbo-track': 'reload' %>
+  <style>
+    .styled-table th a {
+      text-decoration: none;
+      color: inherit;
+      display: inline-flex;
+      align-items: center; /* Align text and arrow vertically */
+      gap: 4px; /* Space between text and arrow */
+    }
+
+  </style>
+</head>
+<body style="min-width: 1000px;">
+  <div class="header">
+    <%= image_tag "logo.png", alt: "CSCE Logo", class: "logo" %>
+    <%= link_to "logout", logout_path, method: :delete, class: "logout-button" %>
+  </div>
+
+  <div class="main-content-records">
+    <p class="notice-text"><%= notice %></p>
+
 <% if @table_name.present? %>
   <h1><%= @table_name.titleize %> Assignments</h1>
   <%= link_to "Back", view_csv_path, class: "aux-link aux-text-primary", style: "text-decoration: none;",class: 'btn btn--primary'%>
@@ -18,12 +45,13 @@
     <%= button_to "Delete All Unconfirmed Assignments", 
                   destroy_unconfirmed_assignments_path(type: @table_name), 
                   method: :post, 
-                  data: { confirm: "Are you sure? This will remove all assignments marked as not confirmed." }, 
+                  onclick: "return confirm('Warning!! This action will remove any unconfirmed assignments.');", 
                   class: "btn btn-danger" %>
     </div>
-  
-  <table border:"1">
-    <thead>
+    <div style="max-height: 800px; overflow-y: auto;">
+      <table class="styled-table" style="min-width: 800px;" >
+
+     <thead style="position: sticky; top: 0; background-color: white; z-index: 100;">
       <tr>
         <% if @records.any? %>
           <th>Course Number</th>
@@ -86,4 +114,17 @@
     </tbody>
   </table>
 <% end %>
+</div>
+
+
+ <div style="display: flex; flex-direction: column; align-items: center; margin-top: 20px;">
+  <%= link_to "Back", view_csv_path, class: "aux-link aux-text-primary", style: "text-decoration: none;",class: 'btn btn--primary'%>
+  </div>
+
+  <div class="footer">
+    &copy; 2025 Texas A&M University. All Rights Reserved.
+  </div>
+</body>
+</html>
+
 

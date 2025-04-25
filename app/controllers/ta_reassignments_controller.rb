@@ -45,7 +45,7 @@ class TaReassignmentsController < ApplicationController
     csv_mappings = {
       ta: TaMatch,
       grader: GraderMatch,
-      senior_grader: SeniorGraderMatch,
+      senior_grader: SeniorGraderMatch
     }
 
     # This will combine the data from the tmp files and the original csv files
