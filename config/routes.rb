@@ -24,13 +24,13 @@ Rails.application.routes.draw do
 
   # Records
   get "all_records", to: "records#index"
-  resources :records, only: [:destroy]
-  post 'records/destroy_unconfirmed', to: 'records#destroy_unconfirmed', as: 'destroy_unconfirmed_assignments'
-  post 'toggle_assignment', to: 'records#toggle_assignment', as: :toggle_assignment
-  post 'revoke_assignment', to: 'records#revoke_assignment', as: :revoke_assignment
-  post 'mass_confirm', to: 'records#mass_confirm', as: :mass_confirm
-  post 'mass_toggle_assignment', to: 'records#mass_toggle_assignment', as: :mass_toggle_assignment
-  
+  resources :records, only: [ :destroy ]
+  post "records/destroy_unconfirmed", to: "records#destroy_unconfirmed", as: "destroy_unconfirmed_assignments"
+  post "toggle_assignment", to: "records#toggle_assignment", as: :toggle_assignment
+  post "revoke_assignment", to: "records#revoke_assignment", as: :revoke_assignment
+  post "mass_confirm", to: "records#mass_confirm", as: :mass_confirm
+  post "mass_toggle_assignment", to: "records#mass_toggle_assignment", as: :mass_toggle_assignment
+
 
   # TA Assignments
 
@@ -89,7 +89,7 @@ Rails.application.routes.draw do
   get "ta_assignments/view_csv", to: "ta_assignments#view_csv", as: "view_csv"
   post "import_csv", to: "csv_imports#import", as: "import_csv"
   delete "delete_all_csvs", to: "ta_assignments#delete_all_csvs", as: "delete_all_csvs"
-  #post "/ta_assignments/destroy_unconfirmed", to: "ta_assignments#destroy_unconfirmed", as: "destroy_unconfirmed_assignments"
+  # post "/ta_assignments/destroy_unconfirmed", to: "ta_assignments#destroy_unconfirmed", as: "destroy_unconfirmed_assignments"
 
 
 
@@ -112,9 +112,9 @@ Rails.application.routes.draw do
   get "courses/search", to: "courses#search"
   get "applicants/search", to: "applicants#search"
 
-  get 'unassigned_applicants/search', to: 'unassigned_applicants#search'
-  get 'unassigned_applicants/search_uin', to: 'unassigned_applicants#search_uin'
-  get 'unassigned_applicants/search_email', to: 'unassigned_applicants#search_email'
+  get "unassigned_applicants/search", to: "unassigned_applicants#search"
+  get "unassigned_applicants/search_uin", to: "unassigned_applicants#search_uin"
+  get "unassigned_applicants/search_email", to: "unassigned_applicants#search_email"
 
   # blacklist
   resources :blacklists, only: [ :index, :create, :destroy ]
@@ -123,19 +123,19 @@ Rails.application.routes.draw do
   get "export_courses", to: "courses#export", as: :export_courses
 
   # withdrawer
-  resources :withdrawal_requests, only: [:new, :create, :index, :show] do
+  resources :withdrawal_requests, only: [ :new, :create, :index, :show ] do
     collection do
       delete :clear
     end
   end
 
-  #post 'toggle_assignment', to: 'withdrawal_requests#toggle_assignment', as: :toggle_assignment
-  post 'confirm_assignment', to: 'withdrawal_requests#confirm_assignment', as: :confirm_assignment
-  #post 'revoke_assignment', to: 'withdrawal_requests#revoke_assignment', as: :revoke_assignment
-  #post 'mass_confirm', to: 'withdrawal_requests#mass_confirm', as: :mass_confirm
-  #post 'mass_toggle_assignment', to: 'withdrawal_requests#mass_toggle_assignment', as: :mass_toggle_assignment
+  # post 'toggle_assignment', to: 'withdrawal_requests#toggle_assignment', as: :toggle_assignment
+  post "confirm_assignment", to: "withdrawal_requests#confirm_assignment", as: :confirm_assignment
+  # post 'revoke_assignment', to: 'withdrawal_requests#revoke_assignment', as: :revoke_assignment
+  # post 'mass_confirm', to: 'withdrawal_requests#mass_confirm', as: :mass_confirm
+  # post 'mass_toggle_assignment', to: 'withdrawal_requests#mass_toggle_assignment', as: :mass_toggle_assignment
 
-  resources :withdrawal_requests, only: [:new, :create, :index, :show] do
+  resources :withdrawal_requests, only: [ :new, :create, :index, :show ] do
     collection do
       delete :clear
     end
@@ -143,19 +143,18 @@ Rails.application.routes.draw do
 
   post "export_final_csv", to: "ta_assignments#export_final_csv", as: "export_final_csv"
 
-  delete 'wipe_users', to: 'application#wipe_users'
-  resources :advisors, only: [:index, :new, :create, :destroy] do
+  delete "wipe_users", to: "application#wipe_users"
+  resources :advisors, only: [ :index, :new, :create, :destroy ] do
     collection do
       post :import_csv
     end
   end
-  post 'advisors/clear', to: 'advisors#clear', as: 'clear_advisor'
+  post "advisors/clear", to: "advisors#clear", as: "clear_advisor"
 
-  #admin
-  resources :admins, only: [:new, :create]
-  get 'admin/manage_data', to: 'admin#manage_data', as: :admin_manage_data
-  get 'admins/export', to: 'admins#export', as: 'export_admins'
-  post 'import', to: 'admins#import'
-  post 'admin/clear', to: 'admins#clear', as: 'clear_data'
-
+  # admin
+  resources :admins, only: [ :new, :create ]
+  get "admin/manage_data", to: "admin#manage_data", as: :admin_manage_data
+  get "admins/export", to: "admins#export", as: "export_admins"
+  post "import", to: "admins#import"
+  post "admin/clear", to: "admins#clear", as: "clear_data"
 end

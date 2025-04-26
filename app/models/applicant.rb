@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Applicant < ApplicationRecord
-  belongs_to :user, foreign_key: 'confirm', optional: true
+  belongs_to :user, foreign_key: "confirm", optional: true
   before_validation :ensure_timestamp
 
   validates :confirm, uniqueness: true
@@ -21,8 +21,8 @@ class Applicant < ApplicationRecord
   validates :prev_course, length: { maximum: 200, too_long: "%{count} characters is the maximum allowed" }
   validates :prev_uni, length: { maximum: 200, too_long: "%{count} characters is the maximum allowed" }
   validates :prev_ta, length: { maximum: 200, too_long: "%{count} characters is the maximum allowed" }
-   # type casting
-  ransacker :uin do |parent| 
+  # type casting
+  ransacker :uin do |parent|
     Arel.sql("CAST(#{parent.table.name}.uin AS TEXT)")
   end
 

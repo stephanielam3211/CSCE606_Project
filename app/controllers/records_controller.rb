@@ -31,7 +31,7 @@ class RecordsController < ApplicationController
   def revoke_assignment
     model = params[:table].classify.constantize
     record = model.find(params[:id])
-    #record.update(confirm: false)
+    # record.update(confirm: false)
     record.assigned = false
     record.confirm = false
     record.save!
@@ -41,7 +41,7 @@ class RecordsController < ApplicationController
   # Admin function to mass unconfirm assignment
   def mass_confirm
     model = params[:table].classify.constantize
-    model.find_each{ |record|
+    model.find_each { |record|
       record.update(confirm: false)
     }
     redirect_back(fallback_location: request.referer || root_path)
@@ -51,22 +51,22 @@ class RecordsController < ApplicationController
   def mass_toggle_assignment
     model = params[:table].classify.constantize
     if model.where(assigned: true).exists?
-      model.find_each{ |record|
+      model.find_each { |record|
       record.update(assigned: false)
       }
       notice = "All assignments have been unsent."
     else
-      model.find_each{ |record|
+      model.find_each { |record|
       record.update(assigned: true)
       }
       notice = "All assignments have been sent."
     end
     redirect_back(fallback_location: request.referer || root_path)
   end
-  
+
   def destroy_unconfirmed
     csv_directory = Rails.root.join("app", "Charizard", "util", "public", "output")
-  
+
     case params[:type]
     when "ta_matches"
       file_name = "TA_Matches.csv"
@@ -83,12 +83,12 @@ class RecordsController < ApplicationController
     end
 
     Rails.logger.debug "File name: #{file_name}, Model class: #{model_class}"
-  
+
     file_path = Rails.root.join(csv_directory, file_name)
     modified_csv = Rails.root.join(csv_directory, "Modified_assignments.csv")
     add_to_backup_csv = Rails.root.join(csv_directory, "Unassigned_Applicants.csv")
     new_needs_csv = Rails.root.join(csv_directory, "New_Needs.csv")
-  
+
     records = read_csv(file_name)
 
     unconfirmed = model_class.where(confirm: false)
@@ -98,9 +98,9 @@ class RecordsController < ApplicationController
       flash[:alert] = "No unconfirmed assignments found."
       redirect_back fallback_location: view_csv_path and return
     end
-  
+
     uin_to_record_map = records.index_by { |r| r["UIN"] }
-    uins = unconfirmed.pluck(:uin)  
+    uins = unconfirmed.pluck(:uin)
 
     headers = records.first.keys
 
@@ -109,7 +109,7 @@ class RecordsController < ApplicationController
         uins.each do |uin|
           model_record = model_class.find_by(uin: uin)
           next unless model_record
-      
+
           # Convert to string-keyed hash and rename keys to match CSV headers
           row_data = {
             "Course Number" => model_record.course_number,
@@ -121,24 +121,24 @@ class RecordsController < ApplicationController
             "UIN" => model_record.uin.to_s,
             "Calculated Score" => model_record.score
           }
-      
+
           csv << headers.map { |h| row_data[h] }
         end
       end
     # Update original CSV (remove unconfirmed)
-    records.reject! { |r| uins.include?(r["UIN"]) }  
+    records.reject! { |r| uins.include?(r["UIN"]) }
     CSV.open(file_path, "w", headers: records.first&.keys || [], write_headers: true) do |csv|
       records.each { |r| csv << r.values }
-    end  
-    # Add removed to Modified_assignments
-    # CSV.open(modified_csv, "a", headers: records.first&.keys || [], write_headers: !File.exist?(modified_csv)) do |csv|
-    #   uins.each do |uin|
-    #     record = uin_to_record_map[uin]
-    #     csv << record.values if record
-    #   end
-    # end  
+    end
+      # Add removed to Modified_assignments
+      # CSV.open(modified_csv, "a", headers: records.first&.keys || [], write_headers: !File.exist?(modified_csv)) do |csv|
+      #   uins.each do |uin|
+      #     record = uin_to_record_map[uin]
+      #     csv << record.values if record
+      #   end
+      # end
 
-    
+
       uins.each do |uin|
         model_record = model_class.find_by(uin: uin)
         next unless model_record
@@ -146,13 +146,13 @@ class RecordsController < ApplicationController
         # Add to Unassigned_Applicants.csv
         applicant = Applicant.find_by(uin: uin)
         if applicant
-          UnassignedApplicant.create(applicant.attributes.except("id", "created_at", "updated_at","confirm"))
+          UnassignedApplicant.create(applicant.attributes.except("id", "created_at", "updated_at", "confirm"))
           applicant_headers = [
-            "Timestamp", "Email Address", "First and Last Name", "UIN", "Phone Number", "How many hours do you plan to be enrolled in?", 
-            "Degree Type?", "1st Choice Course", "2nd Choice Course", "3rd Choice Course", "4th Choice Course", "5th Choice Course", 
-            "6th Choice Course", "7th Choice Course", "8th Choice Course", "9th Choice Course", "10th Choice Course", "GPA", 
-            "Country of Citizenship?", "English language certification level?", "Which courses have you taken at TAMU?", 
-            "Which courses have you taken at another university?", "Which courses have you TAd for?", "Who is your advisor (if applicable)?", 
+            "Timestamp", "Email Address", "First and Last Name", "UIN", "Phone Number", "How many hours do you plan to be enrolled in?",
+            "Degree Type?", "1st Choice Course", "2nd Choice Course", "3rd Choice Course", "4th Choice Course", "5th Choice Course",
+            "6th Choice Course", "7th Choice Course", "8th Choice Course", "9th Choice Course", "10th Choice Course", "GPA",
+            "Country of Citizenship?", "English language certification level?", "Which courses have you taken at TAMU?",
+            "Which courses have you taken at another university?", "Which courses have you TAd for?", "Who is your advisor (if applicable)?",
             "What position are you applying for?"
           ]
           direct_mapping = {
@@ -182,7 +182,7 @@ class RecordsController < ApplicationController
             "Who is your advisor (if applicable)?" => "advisor",
             "What position are you applying for?" => "positions"
           }
-  
+
           CSV.open(add_to_backup_csv, "a", headers: applicant_headers, write_headers: !File.exist?(add_to_backup_csv)) do |csv|
             if applicant.present? && applicant.respond_to?(:attributes)
               # Create the row based on the direct mapping
@@ -194,10 +194,10 @@ class RecordsController < ApplicationController
             end
           end
         end
-  
+
         # Update New_Needs.csv
         course = Course.where("course_number LIKE ?", "%#{model_record.course_number}%")
-                       .where("section LIKE ?", "%#{model_record.section}%").first  
+                       .where("section LIKE ?", "%#{model_record.section}%").first
         if course
           assignment_type = determine_assignment_type(file_name)
 
@@ -205,14 +205,14 @@ class RecordsController < ApplicationController
             "Course_Name", "Course_Number", "Section", "Instructor", "Faculty_Email",
             "TA", "Senior_Grader", "Grader", "Professor Pre-Reqs"
           ]
-  
+
           existing_data = []
           if File.exist?(new_needs_csv)
             CSV.foreach(new_needs_csv, headers: true) { |row| existing_data << row.to_h }
           end
-  
+
           entry = existing_data.find { |r| r["Course_Number"] == course.course_number && r["Section"] == course.section }
-  
+
           if entry
             current_val = entry[assignment_type].to_i
             entry[assignment_type] = (current_val + 1).to_s
@@ -229,12 +229,12 @@ class RecordsController < ApplicationController
             new_entry[assignment_type] = "1"
             existing_data << new_entry
           end
-  
+
           CSV.open(new_needs_csv, "w", headers: column_order, write_headers: true) do |csv|
             existing_data.each { |row| csv << row.values_at(*column_order) }
           end
         end
-  
+
         # Create Recommendation
         Recommendation.create(
           email: model_record.ins_email,
@@ -245,7 +245,6 @@ class RecordsController < ApplicationController
           additionalfeedback: "Auto Generated by Admin for Algorithm",
           admin: true
         )
-
       end
       model_class.where(uin: uins).destroy_all
 
@@ -256,7 +255,7 @@ class RecordsController < ApplicationController
   # This method is used to delete a record from the database
   def destroy
     file_name = normalize_filename(params[:file])
-    model_class = model_class_for(file_name)  #This gets the model based on file name
+    model_class = model_class_for(file_name)  # This gets the model based on file name
 
     unless model_class
       Rails.logger.error "No model class found for file: #{file_name}"
@@ -269,7 +268,7 @@ class RecordsController < ApplicationController
     if @role.nil?
       Rails.logger.error "No Role: #{@role.inspect}"
       flash[:alert] = "No Role: #{@role.inspect}"
-      redirect_to all_records_path(table: 'ta_matches') and return
+      redirect_to all_records_path(table: "ta_matches") and return
     end
     Rails.logger.debug "Role: #{@role.inspect}"
     create_recommendation(@role)
@@ -288,7 +287,7 @@ class RecordsController < ApplicationController
     move_to_modified_assignments(file_name, record)
     update_csv(file_name, @role.uin)
 
-    # Find the record in the DB 
+    # Find the record in the DB
     model_record = model_class.find_by(uin: @role.uin)
     if model_record
       # This creates a backup of the unassigned applicant in DB and csv
@@ -300,7 +299,7 @@ class RecordsController < ApplicationController
 
       respond_to do |format|
         format.js
-        format.html { redirect_to all_records_path(table: 'ta_matches') }
+        format.html { redirect_to all_records_path(table: "ta_matches") }
       end
       Rails.logger.debug "Record with UIN #{@role.uin} destroyed."
     else
@@ -438,7 +437,7 @@ class RecordsController < ApplicationController
       "Who is your advisor (if applicable)?" => "advisor", "What position are you applying for?" => "positions"
     }
 
-    [column_order, mapping]
+    [ column_order, mapping ]
   end
 
   # This updates the new needs file accordingly
@@ -452,7 +451,7 @@ class RecordsController < ApplicationController
 
     assignment_type = determine_assignment_type(file_name)
     path = Rails.root.join("app", "Charizard", "util", "public", "output", "New_Needs.csv")
-    column_order = ["Course_Name", "Course_Number", "Section", "Instructor", "Faculty_Email", "TA", "Senior_Grader", "Grader", "Professor Pre-Reqs"]
+    column_order = [ "Course_Name", "Course_Number", "Section", "Instructor", "Faculty_Email", "TA", "Senior_Grader", "Grader", "Professor Pre-Reqs" ]
 
     data = File.exist?(path) ? CSV.read(path, headers: true).map(&:to_h) : []
     entry = data.find { |row| row["Course_Number"] == course.course_number && row["Section"] == course.section }

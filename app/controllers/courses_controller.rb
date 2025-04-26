@@ -16,7 +16,7 @@ class CoursesController < ApplicationController
 
   # Will search for courses based on params
   def search_recs
-    courses = Course.where("course_name LIKE ? OR course_number LIKE ?", "%#{params[:term]}%", "%#{params[:term]}%").limit(10)
+    courses = Course.where("course_name ILIKE ? OR course_number LIKE ?", "%#{params[:term]}%", "%#{params[:term]}%").limit(10)
     render json: courses.map { |course| {
       id: course.id,
       text: "#{course.course_number} - #{course.section}",
@@ -65,7 +65,7 @@ class CoursesController < ApplicationController
             @course.grader,
             @course.pre_reqs.presence || "N/A"
           ]
-  
+
           # Append to the CSV file
           CSV.open(new_needs_path, "a", headers: column_order, write_headers: write_headers) do |csv|
             csv << row_values
@@ -138,7 +138,7 @@ class CoursesController < ApplicationController
       redirect_to courses_path, alert: "Error importing file: #{e.message}"
     end
   end
-  
+
   # Will clear all the courses in the database
   def clear
     Course.delete_all
@@ -147,11 +147,10 @@ class CoursesController < ApplicationController
     else
       puts "All courses have been deleted."
     end
-  
   end
 
   private
-   
+
   # Requires course params for creation
   def course_params
     params.require(:course).permit(:course_name, :course_number, :section, :instructor, :faculty_email,

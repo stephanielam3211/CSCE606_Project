@@ -40,7 +40,7 @@ class TaAssignmentsController < ApplicationController
       @csv_content = read_csv(File.join(csv_directory, @selected_csv))
     end
   end
- 
+
   # This is to edit the assignments and get the data from the model
   def edit
     csv_directory = Rails.root.join("app", "Charizard", "util", "public", "output")
@@ -91,10 +91,10 @@ class TaAssignmentsController < ApplicationController
     model_class = csv_mappings[file_name]
     file_path = File.join(csv_directory, file_name)
 
-    
+
     records = read_csv(file_name)
     record_index = records.index { |r| r["Course Number"] == params[:course_number] && r["Section ID"] == params[:section] }
-    
+
     Rails.logger.debug "Record index: #{record_index.inspect}"
     Rails.logger.debug "Records: #{records.inspect}"
     modified_class_csv_path = Rails.root.join("app", "Charizard", "util", "public", "output", "Modified_assignments.csv")
@@ -107,14 +107,14 @@ class TaAssignmentsController < ApplicationController
 
     uin = records.first["UIN"]
 
-   
+
     applicant_record = Applicant.find_by(uin: uin)
     Rails.logger.debug "Applicant record: #{applicant_record.inspect}"
 
     if applicant_record.nil?
       Rails.logger.debug "No applicant record found with UIN: #{uin}"
     else
-      UnassignedApplicant.create(applicant_record.attributes.except("id", "created_at", "updated_at","confirm"))
+      UnassignedApplicant.create(applicant_record.attributes.except("id", "created_at", "updated_at", "confirm"))
       Rails.logger.debug "Unassigned applicant created: #{applicant_record.inspect}"
     end
 
@@ -136,11 +136,11 @@ class TaAssignmentsController < ApplicationController
 
       add_to_backup_csv = Rails.root.join("app", "Charizard", "util", "public", "output", "Unassigned_Applicants.csv")
           column_order = [
-            "Timestamp", "Email Address", "First and Last Name", "UIN", "Phone Number", "How many hours do you plan to be enrolled in?", 
-            "Degree Type?", "1st Choice Course", "2nd Choice Course", "3rd Choice Course", "4th Choice Course", "5th Choice Course", 
-            "6th Choice Course", "7th Choice Course", "8th Choice Course", "9th Choice Course", "10th Choice Course", "GPA", 
-            "Country of Citizenship?", "English language certification level?", "Which courses have you taken at TAMU?", 
-            "Which courses have you taken at another university?", "Which courses have you TAd for?", "Who is your advisor (if applicable)?", 
+            "Timestamp", "Email Address", "First and Last Name", "UIN", "Phone Number", "How many hours do you plan to be enrolled in?",
+            "Degree Type?", "1st Choice Course", "2nd Choice Course", "3rd Choice Course", "4th Choice Course", "5th Choice Course",
+            "6th Choice Course", "7th Choice Course", "8th Choice Course", "9th Choice Course", "10th Choice Course", "GPA",
+            "Country of Citizenship?", "English language certification level?", "Which courses have you taken at TAMU?",
+            "Which courses have you taken at another university?", "Which courses have you TAd for?", "Who is your advisor (if applicable)?",
             "What position are you applying for?"
           ]
           direct_mapping = {
@@ -225,7 +225,7 @@ class TaAssignmentsController < ApplicationController
       redirect_to root_path, alert: "File not found."
     end
   end
-  
+
   # Deletes all of the relevant assignment csvs and models excluding withdrawls
   def delete_all_csvs(skip_redirect: false)
     Dir[Rails.root.join("app/Charizard/util/public/output/*.csv")].each do |file|
@@ -245,8 +245,8 @@ class TaAssignmentsController < ApplicationController
   # Used to get a final csvs with all of the assignments with relevant applicant data
   def export_final_csv
     headers = [ "Assignment", "Course Number", "Section ID", "Instructor Name",
-                "Instructor Email", "Student Name", "Student Email", "UIN", "Phone Number", 
-                "Enrollment hours","Degree","Country of Citizenship", "English Certification Level"]
+                "Instructor Email", "Student Name", "Student Email", "UIN", "Phone Number",
+                "Enrollment hours", "Degree", "Country of Citizenship", "English Certification Level" ]
 
     final_csv_path = Rails.root.join("app", "Charizard", "util", "public", "output", "Assignments(#{Date.today}).csv")
 
@@ -257,7 +257,7 @@ class TaAssignmentsController < ApplicationController
       "Instructor Email" => "ins_email",
       "Student Name" => "stu_name",
       "Student Email" => "stu_email",
-      "UIN"=> "uin",
+      "UIN"=> "uin"
     }
 
     models = {
@@ -300,7 +300,7 @@ class TaAssignmentsController < ApplicationController
         end
       end
     end
-  
+
     flash[:notice] = "Assignments.csv has been successfully created!"
     send_file final_csv_path, filename: "Assignments(#{Date.today}).csv", type: "text/csv", disposition: "attachment"
   end
@@ -366,7 +366,7 @@ end
     csv << [ "Timestamp", "Email Address", "First and Last Name", "UIN", "Phone Number", "How many hours do you plan to be enrolled in?", "Degree Type?", "1st Choice Course", "2nd Choice Course", "3rd Choice Course", "4th Choice Course", "5th Choice Course", "6th Choice Course", "7th Choice Course", "8th Choice Course", "9th Choice Course", "10th Choice Course", "GPA", "Country of Citizenship?", "English language certification level?", "Which courses have you taken at TAMU?", "Which courses have you taken at another university?", "Which courses have you TAd for?", "Who is your advisor (if applicable)?", "What position are you applying for?" ]
     records.each do |record|
       blacklist_entry = Blacklist.find_by(
-        'LOWER(student_name) = ? AND LOWER(student_email) = ?',
+        "LOWER(student_name) = ? AND LOWER(student_email) = ?",
         record.name.downcase,
         record.email.downcase
       )

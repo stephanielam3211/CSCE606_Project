@@ -2,7 +2,6 @@
 
 # This manages the blacklists of students
 class BlacklistsController < ApplicationController
-
   def index
     @blacklisted_students = Blacklist.all
   end

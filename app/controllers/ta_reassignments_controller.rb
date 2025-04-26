@@ -2,8 +2,8 @@
 
 # This controller manages the reassignment process of the application
 # This is used to process the db after the admin as made modifications to the assignments
-# and there ends up being a need for reassignment such as a student or admin deleting their 
-# assignment. This will allow the algorithm to run again and reassign the students that are 
+# and there ends up being a need for reassignment such as a student or admin deleting their
+# assignment. This will allow the algorithm to run again and reassign the students that are
 # Left over to classes that still need to be filled out while saving the previous confirmed assignments
 class TaReassignmentsController < ApplicationController
   require "csv"
@@ -17,7 +17,7 @@ class TaReassignmentsController < ApplicationController
     senior_grader_csv_path = Rails.root.join("app/Charizard/util/public/output", "Senior_Grader_Matches.csv")
     grader_csv_path = Rails.root.join("app/Charizard/util/public/output", "Grader_Matches.csv")
 
-    [ta_csv_path, senior_grader_csv_path, grader_csv_path].each do |file|
+    [ ta_csv_path, senior_grader_csv_path, grader_csv_path ].each do |file|
       if File.exist?(file)
         tmp_file_path = Rails.root.join("tmp", File.basename(file))
         FileUtils.cp(file, tmp_file_path)

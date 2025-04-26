@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
   def wipe_users
     User.delete_all
 
-    master_emails = (ENV['ADMIN_EMAILS'] || "").split(",").map(&:strip)
+    master_emails = (ENV["ADMIN_EMAILS"] || "").split(",").map(&:strip)
     Admin.where.not(email: master_emails).delete_all
 
     GraderMatch.delete_all

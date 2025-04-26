@@ -58,7 +58,7 @@ namespace :import do
         model.destroy_all
         puts "Importing #{file_name} into #{model.table_name}..."
 
-        if file_name == "Unassigned_Applicants.csv"  
+        if file_name == "Unassigned_Applicants.csv"
           Rails.logger.debug "Processing #{file_name}..."
 
           CSV.foreach(file_path, headers: true) do |row|
@@ -67,7 +67,7 @@ namespace :import do
             raw_row.each do |key, value|
               normalized_key = key.strip.downcase
               model_key = unassigned_applicants_mapping[normalized_key]
-        
+
               if model_key
                 mapped_row[model_key] = value
               else

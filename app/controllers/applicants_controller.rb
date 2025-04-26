@@ -8,24 +8,24 @@ class ApplicantsController < ApplicationController
   # GET /applicants or /applicants.json
   def index
     @q = Applicant.ransack(params[:q] || {})
-  
+
     # Sort fallback
     permitted_columns = Applicant.column_names
     sort_column = permitted_columns.include?(params[:sort]) ? params[:sort] : "name"
     sort_direction = params[:direction] == "desc" ? "desc" : "asc"
-  
+
     @applicants = @q.result(distinct: true).order("#{sort_column} #{sort_direction}")
-  end  
+  end
 
   # Search for applicants by name
   def search
     term = params[:term].to_s.strip.downcase
     applicants = if term.present?
                    Applicant.where("LOWER(name) LIKE ?", "%#{term}%").limit(10)
-                 else
+    else
                    Applicant.limit(10)
-                 end
-  
+    end
+
     render json: applicants.map { |applicant| {
       id: applicant.id,
       text: "#{applicant.name} (#{applicant.email})",
@@ -93,7 +93,6 @@ class ApplicantsController < ApplicationController
     else
       redirect_to root_path, alert: "Please log in to submit an application."
     end
-  
   end
 
 
@@ -113,21 +112,21 @@ class ApplicantsController < ApplicationController
         redirect_to user.applicant, alert: "You have already submitted an application."
         return
       end
-  
+
       modified_params = applicant_params
       modified_params = modified_params.merge(name: "*#{modified_params[:name]}") if Blacklist.exists?(student_email: modified_params[:email])
-  
+
       @applicant = Applicant.new(modified_params)
       @applicant.confirm = user.id
-  
+
       respond_to do |format|
         if @applicant.save
           blacklist_entry = Blacklist.find_by(
-            'LOWER(student_name) = ? AND LOWER(student_email) = ?',
+            "LOWER(student_name) = ? AND LOWER(student_email) = ?",
             @applicant.name.downcase,
             @applicant.email.downcase
           )
-          if !TaMatch.nil? || !SeniorGraderMatch.nil? || !GraderMatch.nil? 
+          if !TaMatch.nil? || !SeniorGraderMatch.nil? || !GraderMatch.nil?
             if blacklist_entry.present? &&  !@applicant.name.strip.downcase.start_with?("*")
               # Backup the applicant to the unassigned applicants CSV and model
               backup_unassigned_applicant(@applicant.uin)
@@ -167,11 +166,11 @@ class ApplicantsController < ApplicationController
 
     respond_to do |format|
       format.html {
-        if session[:role].to_s == "admin" 
-          redirect_to applicants_path,notice: "Applicant was successfully destroyed."
-        else 
-          redirect_to root_path,notice: "Applicant was successfully destroyed."
-        end 
+        if session[:role].to_s == "admin"
+          redirect_to applicants_path, notice: "Applicant was successfully destroyed."
+        else
+          redirect_to root_path, notice: "Applicant was successfully destroyed."
+        end
        }
       format.json { head :no_content }
     end
@@ -206,18 +205,18 @@ class ApplicantsController < ApplicationController
     def backup_unassigned_applicant(uin)
       applicant = Applicant.find_by(uin: uin)
       return unless applicant
-  
+
       UnassignedApplicant.create(applicant.attributes.except("id", "created_at", "updated_at", "confirm"))
-  
+
       column_order, mapping = backup_applicant_column_mapping
       backup_path = Rails.root.join("app", "Charizard", "util", "public", "output", "Unassigned_Applicants.csv")
-  
+
       CSV.open(backup_path, "a", headers: column_order, write_headers: !File.exist?(backup_path)) do |csv|
         row = column_order.map { |h| applicant.send(mapping[h]) || "" }
         csv << row
       end
     end
-  
+
     # This is the column mappiing for adding a student to the unassigned applicants csv
     # This is needed beacuse the table and the csv have different column names
     def backup_applicant_column_mapping
@@ -229,7 +228,7 @@ class ApplicantsController < ApplicationController
         "Which courses have you taken at another university?", "Which courses have you TAd for?", "Who is your advisor (if applicable)?",
         "What position are you applying for?"
       ]
-  
+
       mapping = {
         "Timestamp" => "timestamp", "Email Address" => "email", "First and Last Name" => "name", "UIN" => "uin",
         "Phone Number" => "number", "How many hours do you plan to be enrolled in?" => "hours", "Degree Type?" => "degree",
@@ -241,7 +240,7 @@ class ApplicantsController < ApplicationController
         "Which courses have you taken at another university?" => "prev_uni", "Which courses have you TAd for?" => "prev_ta",
         "Who is your advisor (if applicable)?" => "advisor", "What position are you applying for?" => "positions"
       }
-      [column_order, mapping]
+      [ column_order, mapping ]
     end
 
     # Only allow a list of trusted parameters through.

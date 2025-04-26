@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 # Used to manage the admin side of the application
-class AdminsController < ApplicationController 
-  require 'zip'
+class AdminsController < ApplicationController
+  require "zip"
   before_action :require_admin
 
   def new
@@ -10,7 +10,7 @@ class AdminsController < ApplicationController
 
   # Used to clear out the database of all data and any files in the output folder
   def clear(skip_redirect: false)
-    master_emails = (ENV['ADMIN_EMAILS'] || "").split(",").map(&:strip)
+    master_emails = (ENV["ADMIN_EMAILS"] || "").split(",").map(&:strip)
     Admin.where.not(email: master_emails).delete_all
     User.delete_all
     UnassignedApplicant.delete_all
@@ -31,11 +31,11 @@ class AdminsController < ApplicationController
     end
     reset_session
     unless skip_redirect
-      redirect_to root_path, notice: 'All data has been cleared.'
-      return
+      redirect_to root_path, notice: "All data has been cleared."
+      nil
     end
   end
-  
+
   # This will export all the data in the database to a zip file
   def export
     data = {
@@ -52,13 +52,13 @@ class AdminsController < ApplicationController
       advisors: Advisor.all,
       admins: Admin.all
     }
-  
+
     output_folder_path = Rails.root.join("app", "Charizard", "util", "public", "output")
     buffer = StringIO.new
-  
-    Zip::OutputStream.write_buffer(buffer) {} 
+
+    Zip::OutputStream.write_buffer(buffer) { }
     buffer.rewind
-  
+
     Zip::File.open_buffer(buffer) do |zip|
       data.each do |table_name, records|
         csv_data = generate_table_csv(table_name, records)
@@ -66,19 +66,19 @@ class AdminsController < ApplicationController
       end
 
       # These are files that are not in the DB but are in the output folder, no need to output them
-      skip_files = ["Unassigned_Applicants.csv", "TA_Matches.csv", "Grader_Matches.csv", "Senior_Grader_Matches.csv"]
+      skip_files = [ "Unassigned_Applicants.csv", "TA_Matches.csv", "Grader_Matches.csv", "Senior_Grader_Matches.csv" ]
 
       Dir[output_folder_path.join("**", "*")].each do |file|
         next if File.directory?(file)
         entry_name = Pathname.new(file).relative_path_from(output_folder_path).to_s
-        
+
         next if skip_files.include?(File.basename(file))
         zip.add(entry_name, file) unless zip.find_entry(entry_name)
       end
     end
-  
+
     buffer.rewind
-    send_data buffer.read, type: 'application/zip', filename: "Data_Export_(#{Date.today}).zip"
+    send_data buffer.read, type: "application/zip", filename: "Data_Export_(#{Date.today}).zip"
   end
 
   # This method generates a CSV string for the given table name and records used by the export method
@@ -87,7 +87,7 @@ class AdminsController < ApplicationController
 
     if table_name == :courses
       course_headers = [
-        "Course_Name", "Course_Number", "Section", "Instructor", "Faculty_Email", "TA?", 
+        "Course_Name", "Course_Number", "Section", "Instructor", "Faculty_Email", "TA?",
         "Senior_Grader", "Grader", "Professor Pre-Reqs"
       ]
       CSV.generate(headers: true) do |csv|
@@ -112,7 +112,7 @@ class AdminsController < ApplicationController
           csv << records.first.attributes.keys
           records.each { |record| csv << record.attributes.values }
         else
-          csv << ["No records for #{table_name}"]
+          csv << [ "No records for #{table_name}" ]
         end
       end
     end
@@ -123,21 +123,21 @@ class AdminsController < ApplicationController
   # this will clear the db and files before importing
   def import
     clear(skip_redirect: true)
-  
+
     uploaded_file = params[:file]
     unless uploaded_file
       redirect_to(root_path, alert: "No file uploaded")
       return
     end
-  
+
     begin
       Zip::File.open(uploaded_file.path) do |zip_file|
         zip_file.each do |entry|
-          next unless entry.name.ends_with?('.csv')
-  
+          next unless entry.name.ends_with?(".csv")
+
           table_name = File.basename(entry.name, ".csv").downcase.to_sym
           csv_content = entry.get_input_stream.read
-  
+
           case table_name
           when :courses
             import_courses(csv_content)
@@ -145,7 +145,7 @@ class AdminsController < ApplicationController
             save_csv_to_file(table_name, csv_content)
           when :unassigned_applicants
             import_applicants(csv_content)
-          when :new_needs 
+          when :new_needs
             save_csv_to_file(table_name, csv_content)
           else
             import_generic(table_name, csv_content)
@@ -157,14 +157,14 @@ class AdminsController < ApplicationController
       redirect_to root_path, alert: "Import failed: #{e.message}"
       return
     end
-  
+
     redirect_to root_path, notice: "Import completed successfully."
   end
 
   def save_csv_to_file(table_name, csv_content)
     output_path = Rails.root.join("app", "Charizard", "util", "public", "output")
     FileUtils.mkdir_p(output_path)
-  
+
     file_path = output_path.join("#{table_name}.csv")
     File.write(file_path, csv_content)
   end
@@ -224,16 +224,16 @@ class AdminsController < ApplicationController
   def import_generic(table_name, csv_data)
     model = table_name.to_s.classify.safe_constantize
     return unless model
-  
+
     CSV.parse(csv_data, headers: true) do |row|
       model.create!(row.to_hash)
     end
-    if [TaMatch, SeniorGraderMatch, GraderMatch].include?(model)
+    if [ TaMatch, SeniorGraderMatch, GraderMatch ].include?(model)
       Rails.logger.debug "model: #{model}"
       Rails.logger.debug "csv_data: #{csv_data}"
-  
+
       records = model.all
-  
+
       filename =
         case model.name
         when "TaMatch"
@@ -245,9 +245,9 @@ class AdminsController < ApplicationController
         else
           "Matches.csv"
         end
-  
+
       output_path = Rails.root.join("app", "Charizard", "util", "public", "output", filename)
-  
+
       CSV.open(output_path, "w", write_headers: true, headers: [
         "Course Number", "Section ID", "Instructor Name", "Instructor Email",
          "Student Name", "Student Email", "UIN", "Calculated Score"
@@ -289,5 +289,5 @@ class AdminsController < ApplicationController
     unless session[:role] == "admin"
       redirect_to root_path, alert: "Access denied."
     end
-  end 
+  end
 end

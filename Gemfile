@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 source "https://rubygems.org"
-gem 'country_select'
+gem "country_select"
 gem "csv"
-gem 'rubyzip', '~> 2.3'
+gem "rubyzip", "~> 2.3"
 gem "ransack"
 ruby "3.4.1"
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"

@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class AdvisorsController < ApplicationController
-  require 'csv'
+  require "csv"
   before_action :require_admin
 
   def index
@@ -45,8 +47,8 @@ class AdvisorsController < ApplicationController
   def clear(skip_redirect: false)
     Advisor.delete_all
     unless skip_redirect
-      redirect_to root_path, notice: 'All Advisors has been cleared.'
-      return
+      redirect_to root_path, notice: "All Advisors has been cleared."
+      nil
     end
   end
 
@@ -60,7 +62,7 @@ class AdvisorsController < ApplicationController
     unless session[:role] == "admin"
       redirect_to root_path, alert: "Access denied."
     end
-  end 
+  end
   private
 
   def advisor_params

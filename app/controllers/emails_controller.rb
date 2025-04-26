@@ -4,7 +4,7 @@
 class EmailsController < ApplicationController
   before_action :authenticate_user!
 
-  def new 
+  def new
   end
 
   # to send emails

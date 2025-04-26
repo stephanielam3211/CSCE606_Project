@@ -28,7 +28,7 @@ class WithdrawalRequestsController < ApplicationController
   # This clears all the withdrawal requests from the database
   def clear
     WithdrawalRequest.delete_all
-    redirect_to root_path, notice: 'All Withdrawal Requests have been cleared.'
+    redirect_to root_path, notice: "All Withdrawal Requests have been cleared."
   end
 
   # This is used to confirm the applicants assignment
@@ -39,7 +39,7 @@ class WithdrawalRequestsController < ApplicationController
     redirect_to new_withdrawal_request_path
   end
 
-  #def show
+  # def show
   #  @applicant = Applicant.find_by(email: session[:email])
 
   #  if (ta_matches = TaMatch.find_by(stu_email: session[:email]))
@@ -54,7 +54,7 @@ class WithdrawalRequestsController < ApplicationController
   #  else
   #    @role = "Not Found"
   #  end
-  #end
+  # end
 
   def confirm_app
   end

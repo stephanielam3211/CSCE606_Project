@@ -10,11 +10,13 @@ RSpec.describe ApplicantsController, type: :controller do
       uin:         "111",
       degree:      "Masters",
       positions:   "TA",
-      number:      "123-4567",
-      hours:       "20",
+      number:      "123-456-7899",
+      hours:       "11",
       citizenship: "US",
       cert:        "Yes",
-      choice_1:    "CSCE 606"   # <-- Add at least one choice
+      gpa:        "3.8",
+      choice_1:    "CSCE 606",# <-- Add at least one choice
+      confirm: SecureRandom.hex(10)
     )
   end
 
@@ -25,11 +27,13 @@ RSpec.describe ApplicantsController, type: :controller do
       uin:         "222",
       degree:      "PhD",
       positions:   "RA",
-      number:      "987-6543",
+      number:      "123-987-6543",
       hours:       "10",
       citizenship: "US",
       cert:        "No",
-      choice_1:    "CSCE 607"   # <-- Add at least one choice
+      gpa:        "3.9",
+      choice_1:    "CSCE 607",   # <-- Add at least one choice
+      confirm: SecureRandom.hex(4)
     )
   end
 
@@ -53,9 +57,21 @@ RSpec.describe ApplicantsController, type: :controller do
 
     it "#show and #new" do
       # show
-      get :show, params: { id: applicant1.id }
+      applicant = Applicant.create!(name: "test",
+        email: "test@example.com",
+        uin: "123",
+        degree: "PhD",
+        positions: "TA",
+        number: "123-234-4444",
+        hours: "10",
+        citizenship: "US",
+        cert:        "No",
+        gpa:        "3.9",
+        choice_1:    "CSCE 607",   # <-- Add at least one choice
+        confirm: SecureRandom.hex(10))
+      get :show, params: { id: applicant.id }
       expect(response).to be_successful
-      expect(assigns(:applicant)).to eq(applicant1)
+      expect(assigns(:applicant)).to eq(applicant)
 
       # new
       get :new
@@ -64,6 +80,9 @@ RSpec.describe ApplicantsController, type: :controller do
     end
 
     it "#create" do
+    stub_const("TaMatch", nil)
+    stub_const("SeniorGraderMatch", nil)
+    stub_const("GraderMatch", nil)
       expect {
         post :create, params: {
           applicant: {
@@ -72,11 +91,13 @@ RSpec.describe ApplicantsController, type: :controller do
             uin:         "333",
             degree:      "Masters",
             positions:   "TA",
-            number:      "111-2222",
+            number:      "000-111-2222",
             hours:       "10",
             citizenship: "US",
             cert:        "Yes",
-            choice_1:    "CSCE 608" # Provide at least one choice
+            choice_1:    "CSCE 608", # Provide at least one choice
+            gpa:        "3.5",
+            confirm: SecureRandom.hex(4)
           }
         }
       }.to change(Applicant, :count).by(1)
@@ -90,15 +111,16 @@ RSpec.describe ApplicantsController, type: :controller do
           uin:         "444",
           degree:      "PhD",
           positions:   "RA",
-          number:      "999-9999",
+          number:      "888-999-9999",
           hours:       "15",
           citizenship: "US",
           cert:        "No",
-          choice_1:    "CSCE 610"
+          choice_1:    "CSCE 610",
+          confirm: SecureRandom.hex(4)
         }
       }
-      expect(Applicant.last.name).to eq("*Eve")
-
+      applicant = Applicant.find_by(email: "blacklisted@example.com")
+      expect(applicant.name).to eq("*Eve")
       expect {
         post :create, params: { applicant: { name: "", email: "" } }
       }.not_to change(Applicant, :count)
@@ -118,7 +140,7 @@ RSpec.describe ApplicantsController, type: :controller do
       expect {
         delete :destroy, params: { id: applicant2.id }
       }.to change(Applicant, :count).by(-1)
-      expect(response).to redirect_to(applicants_path)
+      expect(response).to redirect_to(root_path)
 
       expect(Applicant.count).to be > 0
       delete :wipe_applicants
