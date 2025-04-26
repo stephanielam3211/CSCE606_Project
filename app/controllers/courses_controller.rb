@@ -16,7 +16,7 @@ class CoursesController < ApplicationController
 
   # Will search for courses based on params
   def search_recs
-    courses = Course.where("course_name ILIKE ? OR course_number LIKE ?", "%#{params[:term]}%", "%#{params[:term]}%").limit(10)
+    courses = Course.where("LOWER(course_name) LIKE ? OR course_number LIKE ?", "%#{params[:term]}%", "%#{params[:term]}%").limit(10)
     render json: courses.map { |course| {
       id: course.id,
       text: "#{course.course_number} - #{course.section}",

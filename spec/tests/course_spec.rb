@@ -62,7 +62,7 @@ RSpec.describe CoursesController, type: :controller do
         delete :clear
       }.to change(Course, :count).to(0)
 
-      expect(response).to redirect_to(courses_path)
+      expect(response).to redirect_to(root_path)
       expect(flash[:notice]).to eq("All courses have been deleted.")
     end
   end
