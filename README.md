@@ -121,7 +121,7 @@ This will cover all of the functionality in the function tab.
 #### Add New Admin
 The `Add New Admin` page is how you add new admins. This is for admins that aren't in the ENV as those are reserved as a master admin and will always persist regardless of applications wipes/clears.
 #### Add New Advisor
-The `Add new Advisor` page is how you can add, view and remove advisors.
+The `Add New Advisor` page is how you can add, view and remove advisors. You can import advisors via csv using the import functionality. There is an example in the documentation folder. The exact format matters.
 
 
 ### Import/Export
