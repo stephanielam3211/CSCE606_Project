@@ -28,8 +28,12 @@
 
   <div class="main-content">
     <p class="notice-text"><%= notice %></p>
-
-    <h1><%= link_to "Applicants", root_path, class: "action-button" %></h1>
+    <div style="display: flex; align-items: center; justify-content: space-between;">
+      <h1><%= link_to "Applicants", root_path, class: "action-button" %></h1>
+      <% if session[:role].to_s == "admin" %>
+        <h2>Applicants: <%= Applicant.count %> / <%= @total_jobs %></h2> 
+      <% end %>
+    </div>
 
     <div class="search search--slim">
       <%= search_form_for @q, url: applicants_path, method: :get do |f| %>

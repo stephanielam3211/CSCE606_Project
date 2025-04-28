@@ -27,9 +27,18 @@
     <p class="notice-text"><%= notice %></p>
 
 <% if @table_name.present? %>
-  <h1><%= @table_name.titleize %> Assignments</h1>
-  <%= link_to "Back", view_csv_path, class: "aux-link aux-text-primary", style: "text-decoration: none;",class: 'btn btn--primary'%>
-  
+    <h1><%= @table_name.titleize %> Assignments</h1>
+    
+  <div style="display: flex; align-items: center; justify-content: space-between;">
+    <%= link_to "Back", view_csv_path, class: "aux-link aux-text-primary", style: "text-decoration: none;",class: 'btn btn--primary'%>
+    <%if @table_name == "ta_matches" %>
+      <h2>Assignments: <%= @table_name.classify.constantize.count%> / <%=@ta%></h2>
+    <%elsif @table_name == "senior_grader_matches" %>
+       <h2>Assignments: <%= @table_name.classify.constantize.count%> / <%=@senior_grader%></h2>
+    <%elsif @table_name == "grader_matches" %>
+       <h2>Assignments: <%= @table_name.classify.constantize.count%> / <%=@grader%></h2>
+    <%end%>
+   </div>
   <div class="button-group button-group--cta">
     <% any_assigned = @records.any?(&:assigned) %>
     <%= button_to(

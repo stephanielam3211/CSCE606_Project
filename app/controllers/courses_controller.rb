@@ -12,6 +12,11 @@ class CoursesController < ApplicationController
     sort_direction = params[:direction] == "desc" ? "desc" : "asc"
 
     @courses = @q.result(distinct: true).order("#{sort_column} #{sort_direction}")
+    @ta = Course.sum(:ta).to_i
+    @senior_grader = Course.sum(:senior_grader).to_i
+    @grader = Course.sum(:grader).to_i
+    @total = @ta + @senior_grader + @grader
+
   end
 
   # Will search for courses based on params

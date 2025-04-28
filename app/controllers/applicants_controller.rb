@@ -15,6 +15,9 @@ class ApplicantsController < ApplicationController
     sort_direction = params[:direction] == "desc" ? "desc" : "asc"
 
     @applicants = @q.result(distinct: true).order("#{sort_column} #{sort_direction}")
+    @total_jobs = Course.sum(:ta) + Course.sum(:senior_grader) + Course.sum(:grader)
+    @total_jobs = @total_jobs.to_i
+
   end
 
   # Search for applicants by name

@@ -17,6 +17,10 @@ class RecordsController < ApplicationController
       @records = []
     end
     @records = @records.sort_by { |r| r.confirm ? 0 : 1 } if @records.present?
+
+    @ta = Course.sum(:ta).to_i
+    @senior_grader = Course.sum(:senior_grader).to_i
+    @grader = Course.sum(:grader).to_i
   end
 
   # Admin function to toggle assignment

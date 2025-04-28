@@ -23,8 +23,13 @@
       </div>
     <% end %>
 
+<div style="display: flex; align-items: center; justify-content: space-between;">
     <%= button_to "Clear All Courses", clear_courses_path, method: :delete, data: { turbo: false },  onclick: "return confirm('Are you sure you want to delete All Courses?');" , class: "action-button" %>
-
+    <h2>Total: <%= @total %> </h2>
+    <h2>TAs: <%= @ta %> </h2>
+    <h2>Senior Graders: <%= @senior_grader %> </h2>
+    <h2>Graders: <%= @grader %> </h2>
+</div>
     <div class="search search--slim">
       <%= search_form_for @q, url: courses_path, method: :get do |f| %>
         <div class="search-container">
