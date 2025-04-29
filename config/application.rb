@@ -25,5 +25,22 @@ module TaAssignmentApp
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    config.before_configuration do
+      if (Rails.env.production? || Rails.env.staging?) && ENV['BUCKETEER_AWS_REGION'].present?
+        require Rails.root.join('lib/s3_downloader')
+
+        Rails.logger.info "Downloading CSV files from S3 (early boot)..."
+
+        directory_path = Rails.root.join("app/Charizard/util/public/output")
+        FileUtils.mkdir_p(directory_path)
+
+        downloader = S3Downloader.new(
+          bucket_name: ENV['BUCKETEER_BUCKET_NAME'],
+          directory_path: directory_path
+        )
+        downloader.download_files
+      end
+    end
   end
 end
