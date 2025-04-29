@@ -30,7 +30,7 @@ module TaAssignmentApp
       if (Rails.env.production? || Rails.env.staging?) && ENV['BUCKETEER_AWS_REGION'].present?
         require Rails.root.join('lib/s3_downloader')
 
-        Rails.logger.info "Downloading CSV files from S3 (early boot)..."
+        puts "Downloading CSV files from S3 (early boot)..."
 
         directory_path = Rails.root.join("app/Charizard/util/public/output")
         FileUtils.mkdir_p(directory_path)
