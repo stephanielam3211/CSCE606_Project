@@ -1,7 +1,7 @@
 require 'aws-sdk-s3'
 
 
-class S3FileDownloader
+class S3Downloader
   def initialize(bucket_name:, directory_path:)
     @bucket_name = bucket_name
     @directory_path = directory_path

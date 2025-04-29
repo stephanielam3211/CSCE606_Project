@@ -6,7 +6,7 @@ Rails.application.config.after_initialize do
   
       directory_path = Rails.root.join("app/Charizard/util/public/output")
   
-      downloader = S3FileDownloader.new(
+      downloader = S3Downloader.new(
         bucket_name: ENV['BUCKETEER_BUCKET_NAME'],
         directory_path: directory_path
       )
