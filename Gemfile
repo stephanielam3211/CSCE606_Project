@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 source "https://rubygems.org"
+gem 'aws-sdk-s3', require: false
 gem "country_select"
 gem "csv"
 gem "rubyzip", "~> 2.3"
