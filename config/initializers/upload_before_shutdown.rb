@@ -16,7 +16,7 @@ end
 
 def upload_all_files_to_s3(directory_path)
   s3 = Aws::S3::Client.new(
-    region: ENV['BUCKETEER_REGION'],
+    region: ENV['BUCKETEER_AWS_REGION'],
     access_key_id: ENV['BUCKETEER_AWS_ACCESS_KEY_ID'],
     secret_access_key: ENV['BUCKETEER_AWS_SECRET_ACCESS_KEY']
   )
