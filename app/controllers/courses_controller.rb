@@ -124,8 +124,13 @@ class CoursesController < ApplicationController
       redirect_to courses_path, alert: "No file selected"
       return
     end
-    begin
-      CSV.foreach(file.path, headers: true) do |row|
+    begin  
+      csv_data = CSV.read(file.path, headers: true)
+      headers = csv_data.headers.map(&:strip)
+      # Process each row, cleaning up the values as well
+      csv_data.each do |row|
+        row = row.to_h.transform_keys(&:strip).transform_values { |value| value.strip if value.respond_to?(:strip) }
+        # Create the course with cleaned data
         Course.create!(
           course_name: row["Course_Name"],
           course_number: row["Course_Number"],
@@ -140,7 +145,10 @@ class CoursesController < ApplicationController
       end
       redirect_to courses_path, notice: "Courses imported successfully!"
     rescue StandardError => e
-      redirect_to courses_path, alert: "Error importing file: #{e.message}"
+      Rails.logger.error "Error importing CSV: #{e.message}"
+      Rails.logger.error "Check Headers: #{csv_data.headers.inspect}"
+      session[:notice] = "Error importing file: #{e.message}, Check headers for proper capitalization and whitespace"
+      redirect_to courses_path, notice: "Error importing CSV: Check headers for proper capitalization and whitespace"
     end
   end
 
