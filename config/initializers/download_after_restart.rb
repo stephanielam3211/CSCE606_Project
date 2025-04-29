@@ -1,3 +1,4 @@
+require Rails.root.join('lib/s3_downloader')
 
 Rails.application.config.after_initialize do
     if Rails.env.production? || Rails.env.staging?

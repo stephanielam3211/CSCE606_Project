@@ -1,6 +1,5 @@
 require 'aws-sdk-s3'
 
-require Rails.root.join('lib/s3_downloader')
 
 class S3FileDownloader
   def initialize(bucket_name:, directory_path:)
