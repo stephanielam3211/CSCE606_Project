@@ -1,10 +1,10 @@
 require 'aws-sdk-s3'
-
+require 'fileutils'
 
 class S3Downloader
-  def initialize(bucket_name:, directory_path:)
+  def initialize(bucket_name:)
     @bucket_name = bucket_name
-    @directory_path = directory_path
+    @directory_path = Rails.root.join("public/s3_output") 
     @s3_client = Aws::S3::Client.new(
       region: ENV['BUCKETEER_AWS_REGION'],
     )
