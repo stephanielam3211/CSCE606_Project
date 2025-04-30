@@ -5,6 +5,9 @@ class ApplicantsController < ApplicationController
   before_action :set_applicant, only: %i[ show edit update destroy ]
   skip_before_action :require_login, if: -> { Rails.env.test? }
 
+  before_action :authorize_admin_or_faculty!, only: [:index]
+
+
   # GET /applicants or /applicants.json
   def index
     @q = Applicant.ransack(params[:q] || {})
@@ -210,6 +213,11 @@ class ApplicantsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_applicant
       @applicant = Applicant.find(params[:id])
+    end
+    def authorize_admin_or_faculty!
+      unless %w[admin faculty].include?(session[:role].to_s)
+        redirect_to root_path, alert: "Unauthorized access."
+      end
     end
 
     def backup_unassigned_applicant(uin)
