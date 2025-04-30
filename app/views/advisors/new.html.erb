@@ -5,6 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Advisors</title>
   <%= stylesheet_link_tag 'tamu', media: 'all', 'data-turbo-track': 'reload' %>
+  <style>
+    .notice {
+      background-color: #f8d7da;
+      color: #721c24;
+      padding: 15px;
+      margin: 10px 0;
+      border: 1px solid #f5c6cb;
+      border-radius: 5px;
+      display: inline-block;
+      width: 100%;
+      max-width: 500px;
+    }
+    .notice button {
+      background: none;
+      border: none;
+      color: #721c24;
+      font-size: 18px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 
 <body>
@@ -15,6 +35,13 @@
 
   <div class="main-content">
   <h2>Import Advisors via CSV</h2>
+  <% if session[:notice] %>
+      <div class="notice" id="notice">
+        <%= session[:notice] %>
+        <button onclick="document.getElementById('notice').remove()">✖</button>
+      </div>
+      <% session.delete(:notice) %> 
+    <% end %>
 
 <%= form_with url: import_csv_advisors_path, local: true, html: { multipart: true } do |form| %>
   <%= form.file_field :file %>
@@ -65,5 +92,16 @@
   <div class="footer">
     &copy; 2025 Texas A&M University. All Rights Reserved.
   </div>
+
+  <script>
+   document.addEventListener("DOMContentLoaded", function() {
+      var notice = document.getElementById("notice");
+      if (notice) {
+        setTimeout(function() {
+          notice.style.display = "none";
+        }, 100000);
+      }
+    });
+    </script>
 </body>
 </html>

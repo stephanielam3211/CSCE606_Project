@@ -18,16 +18,35 @@ class AdvisorsController < ApplicationController
 
   def import_csv
     if params[:file].present?
+      file = params[:file]
+      # Check if the file is a CSV
+      if file.content_type != "text/csv"
+        session[:notice] = "Error importing file: Please Upload a CVS file"
+        redirect_to new_advisor_path, notice: "Please upload a CSV file."
+        return
+      end
       begin
-        CSV.foreach(params[:file].path, headers: true) do |row|
-          Advisor.create!(row.to_hash.slice("name", "email"))
+        csv_data = CSV.read(file.path, headers: true)
+        csv_data.each do |row|
+          # Normalize the headers
+          row = row.to_h.transform_keys { |key| key.strip.downcase }.transform_values { |value| value.strip if value.respond_to?(:strip)}
+          advisor_attrs = {
+            name: row["name"],
+            email: row["email"] || row["email address"]
+          }
+
+        Advisor.create!(advisor_attrs)
         end
         redirect_to new_advisor_path, notice: "CSV imported successfully!"
-      rescue => e
-        redirect_to new_advisor_path, alert: "Import failed: #{e.message}"
+      rescue StandardError => e
+        Rails.logger.error "Error importing CSV: #{e.message}"
+        Rails.logger.error "Check Headers: #{csv_data.headers.inspect}"
+        session[:notice] = "Error importing file: #{e.message}, Check headers for proper capitalization and whitespace"
+        redirect_to new_advisor_path, notice: "Import failed: #{e.message}"
       end
     else
-      redirect_to new_advisor_path, alert: "Please upload a CSV file."
+      session[:notice] = "Error importing file: Please Upload a CVS file"
+      redirect_to new_advisor_path, notice: "Please upload a CSV file."
     end
   end
 

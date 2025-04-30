@@ -123,6 +123,8 @@ The `Add New Admin` page is how you add new admins. This is for admins that aren
 #### Add New Advisor
 The `Add New Advisor` page is how you can add, view and remove advisors. You can import advisors via csv using the import functionality. There is an example in the documentation folder. The exact format matters.
 
+!!! IMPORTANT!!! This is also how you set the faculty roles for the application.
+
 
 ### Import/Export
 #### Export Data
@@ -202,9 +204,9 @@ The `Import Data` button takes in a zip file and will add all of the data from t
 ```sh
   heroku addons:create bucketeer
 ```
-  This will automatical set the env variables in heroku. These are not needed for local deployment.
+  This will automatically set the env variables in heroku. These are not needed for local deployment.
 * Increase Dyno Timeout
-  This is just an extra precausion
+  This is just an extra precaution
 ```sh
   heroku config:set WEB_TIMEOUT=60
 ```

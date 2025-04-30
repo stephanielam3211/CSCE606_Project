@@ -16,7 +16,7 @@ class User < ApplicationRecord
         end
 
         user = find_or_initialize_by(email: email)
-        profs_record = Course&.find_by(faculty_email: email)
+        profs_record = Advisor&.find_by(email: email)
 
         user.role = if ADMIN_EMAILS.include?(email) || Admin.exists?(email: email)
             "admin"
