@@ -126,21 +126,21 @@ class CoursesController < ApplicationController
     end
     begin  
       csv_data = CSV.read(file.path, headers: true)
-      headers = csv_data.headers.map(&:strip)
+      normalize_headers = csv_data.headers.map { |h| h.strip.downcase }
       # Process each row, cleaning up the values as well
       csv_data.each do |row|
-        row = row.to_h.transform_keys(&:strip).transform_values { |value| value.strip if value.respond_to?(:strip) }
+        row = row.to_h.transform_keys { |key| key.strip.downcase }.transform_values { |value| value.strip if value.respond_to?(:strip) }
         # Create the course with cleaned data
         Course.create!(
-          course_name: row["Course_Name"],
-          course_number: row["Course_Number"],
-          section: row["Section"],
-          instructor: row["Instructor"],
-          faculty_email: row["Faculty_Email"],
-          ta: row["TA"].to_f,
-          senior_grader: row["Senior_Grader"].to_f,
-          grader: row["Grader"].to_f,
-          pre_reqs: row["Professor Pre_Reqs"]
+          course_name: row["course_name"],
+          course_number: row["course_number"],
+          section: row["section"],
+          instructor: row["instructor"],
+          faculty_email: row["faculty_email"],
+          ta: row["ta"].to_f,
+          senior_grader: row["senior_grader"].to_f,
+          grader: row["grader"].to_f,
+          pre_reqs: row["professor pre_reqs"]
         )
       end
       redirect_to courses_path, notice: "Courses imported successfully!"
