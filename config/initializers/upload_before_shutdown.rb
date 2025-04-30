@@ -2,13 +2,11 @@ require 'aws-sdk-s3'
 require 'fileutils'
 
 at_exit do
-  # Check if this is a dyno restart or shutdown
   if Rails.env.production? || Rails.env.staging?
     puts "Application is shutting down. Uploading files to S3..."
-        
-    # Path to the directory where your CSV files are stored
+
     directory_path = Rails.root.join("app/Charizard/util/public/output")
-        
+
     # Call method to upload the CSV files to S3
     upload_all_files_to_s3(directory_path)
   end

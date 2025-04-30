@@ -31,6 +31,7 @@ class TaAssignmentsController < ApplicationController
 
     redirect_to view_csv_path
   end
+  
   def import_csv
 
     csv_mappings = {
@@ -376,7 +377,8 @@ class TaAssignmentsController < ApplicationController
 end
 
   private
-
+  # These are the methods used to import the csvs into the models from the algorithm
+  # This method is used to import the unassigned applicants
   def import_unassigned_applicants(file_path, model, mapping)
     Rails.logger.debug "Processing Unassigned_Applicants.csv..."
     CSV.foreach(file_path, headers: true) do |row|
@@ -402,7 +404,7 @@ end
       model.create!(filtered_row)
     end
   end
-
+  # This method is used to import the model csvs
   def import_standard_csv(file_path, model, mapping)
     CSV.foreach(file_path, headers: true) do |row|
       mapped_row = row.to_h.transform_keys { |key| mapping[key] || key }
@@ -416,6 +418,7 @@ end
       model.create(mapped_row)
     end
   end
+
   def save_uploaded_file(file)
     path = Rails.root.join("tmp", file.original_filename)
     File.open(path, "wb") { |f| f.write(file.read) }

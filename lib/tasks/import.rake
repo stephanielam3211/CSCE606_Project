@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+# NOT USED ANYMORE
+# Keeping just incase
+# was moved inside of ta_assignments controller
 namespace :import do
   desc "Import CSV files into the database"
   task csv: :environment do

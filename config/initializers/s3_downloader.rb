@@ -1,6 +1,6 @@
 require 'aws-sdk-s3'
 require 'fileutils'
-
+# This sets up the method for file downloads from s3 aws
 class S3Downloader
   def initialize(bucket_name:)
     @bucket_name = bucket_name
@@ -12,15 +12,14 @@ class S3Downloader
     bucket = s3.bucket(@bucket_name)
 
     bucket.objects.each do |obj|
-      # Build the directory path dynamically using the key
       directory_path = Rails.root.join('app', 'Charizard', 'util', 'public', 'output')
-      filename = File.join(directory_path, File.basename(obj.key)) # Use the object's key here
+      filename = File.join(directory_path, File.basename(obj.key))
 
-      puts "Downloading: #{obj.key} -> #{filename}"  # 🔹 Add log here
-      FileUtils.mkdir_p(File.dirname(filename))  # Ensure the directory exists
-      obj.get(response_target: filename)  # Download the file
+      puts "Downloading: #{obj.key} -> #{filename}"
+      FileUtils.mkdir_p(File.dirname(filename))
+      obj.get(response_target: filename)
     rescue => e
-      puts "Failed to download #{obj.key}: #{e.message}"  # 🔹 Log errors too
+      puts "Failed to download #{obj.key}: #{e.message}" 
     end
   end
 end

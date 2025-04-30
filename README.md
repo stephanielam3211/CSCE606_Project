@@ -198,6 +198,17 @@ The `Import Data` button takes in a zip file and will add all of the data from t
 ```sh
   heroku buildpacks:add heroku/python
 ```
+* Provision Bucketeer addon
+```sh
+  heroku addons:create bucketeer
+```
+  This will automatical set the env variables in heroku. These are not needed for local deployment.
+* Increase Dyno Timeout
+  This is just an extra precausion
+```sh
+  heroku config:set WEB_TIMEOUT=60
+```
+
 * Run migrations on Heroku
 ```sh
   heroku run rails db:migrate
