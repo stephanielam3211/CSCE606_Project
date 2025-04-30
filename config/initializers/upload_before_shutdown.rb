@@ -28,10 +28,17 @@ def upload_all_files_to_s3(directory_path)
     # Create the S3 key (path on S3)
     s3_key = "csv/#{File.basename(file_path)}"
 
-    # Upload the file
-    File.open(file_path, 'rb') do |file|
-      s3.put_object(bucket: bucket, key: s3_key, body: file)
+    # Check if the file exists in S3
+    existing_object = s3.head_object(bucket: bucket, key: s3_key) rescue nil
+
+    # Upload the file only if it doesn't exist, or the local file is newer
+    if existing_object.nil? || File.mtime(file_path) > Time.parse(existing_object.last_modified.to_s)
+      File.open(file_path, 'rb') do |file|
+        s3.put_object(bucket: bucket, key: s3_key, body: file)
+      end
+      puts "Uploaded #{file_path} to S3 as #{s3_key}"
+    else
+      puts "Skipping #{file_path} (S3 file is up-to-date)"
     end
-    puts "Uploaded #{file_path} to S3 as #{s3_key}"
   end
 end
