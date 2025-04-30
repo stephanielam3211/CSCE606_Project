@@ -29,6 +29,7 @@ class Applicant < ApplicationRecord
               message: "Must Only Include Course Numbers\ '123,345,456'"
             }
   validate :check_duplicates
+  validates :prev_uni, format: { with: /\A[a-zA-Z0-9,]+\z/, message: "can only contain letters, numbers, and commas" }
   validates :prev_uni, length: { maximum: 200, too_long: "%{count} characters is the maximum allowed" }
   validates :prev_ta, length: { maximum: 200, too_long: "%{count} characters is the maximum allowed" },
             format: { 
