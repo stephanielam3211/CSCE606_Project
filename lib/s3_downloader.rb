@@ -4,7 +4,7 @@ require 'fileutils'
 class S3Downloader
   def initialize(bucket_name:)
     @bucket_name = bucket_name
-    @directory_path = Rails.root.join("public/s3_output") 
+    @directory_path = Rails.root.join("app/Charizard/util/public/output") 
     @s3_client = Aws::S3::Client.new(
       region: ENV['BUCKETEER_AWS_REGION'],
     )
