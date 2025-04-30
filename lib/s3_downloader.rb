@@ -13,11 +13,15 @@ class S3Downloader
   def download_files
     s3 = Aws::S3::Resource.new(client: @s3_client)
     bucket = s3.bucket(@bucket_name)
+  
 
     bucket.objects.each do |obj|
       filename = File.join(@directory_path, obj.key)
+      puts "Downloading: #{obj.key} -> #{filename}"  # 🔹 Add log here
       FileUtils.mkdir_p(File.dirname(filename))
       obj.get(response_target: filename)
+    rescue => e
+      puts "Failed to download #{obj.key}: #{e.message}"  # 🔹 Log errors too
     end
   end
 end
