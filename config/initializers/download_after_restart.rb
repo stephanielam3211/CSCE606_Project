@@ -1,5 +1,4 @@
-require Rails.root.join('lib/s3_downloader')
-
+# frozen_string_literal: true
 Rails.application.config.to_prepare do
   if (Rails.env.production? || Rails.env.staging?) && ENV['BUCKETEER_AWS_REGION'].present?
     puts "Downloading CSV files from S3..."
