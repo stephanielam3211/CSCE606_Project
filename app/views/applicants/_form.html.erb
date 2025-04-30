@@ -12,16 +12,6 @@
 
   <div class="form-grid">
     <div>
-      <%= form.label :email, "Email" %>
-      <%= form.text_field :email, value: session[:email], readonly: true%>
-    </div>
-
-    <div>
-      <%= form.label :name, "First and Last Name" %>
-      <%= form.text_field :name, value: session[:user], readonly: true %>
-    </div>
-
-    <div>
       <%= form.label :degree, "Degree Type" %>
       <%= form.select :degree, [['PhD'], ['Masters (Thesis)'], ['Masters (Non-Thesis)']], prompt: "Select your Degree Type" %>
     </div>
@@ -77,9 +67,9 @@
     </div>
 
      <div class="full-width">
-      <%= form.label :advisor_id, "Who is Your Advisor?" %>
-      <%= form.select :advisor_id,
-        Advisor.all.map { |a| ["#{a.name} (#{a.email})", a.id] },
+      <%= form.label :advisor, "Who is Your Advisor?" %>
+      <%= form.select :advisor,
+        Advisor.all.map { |a| ["#{a.name} (#{a.email})", "#{a.name} (#{a.email})"] },
         { prompt: "Select an Advisor" },
         { id: "advisor-select", class: "form-control" } %>
     </div>

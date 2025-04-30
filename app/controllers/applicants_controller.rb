@@ -18,6 +18,8 @@ class ApplicantsController < ApplicationController
     @total_jobs = Course.sum(:ta) + Course.sum(:senior_grader) + Course.sum(:grader)
     @total_jobs = @total_jobs.to_i
 
+    @changes = !TaMatch.exists? && !SeniorGraderMatch.exists? && !GraderMatch.exists?
+
   end
 
   # Search for applicants by name
@@ -120,6 +122,8 @@ class ApplicantsController < ApplicationController
       modified_params = modified_params.merge(name: "*#{modified_params[:name]}") if Blacklist.exists?(student_email: modified_params[:email])
 
       @applicant = Applicant.new(modified_params)
+      @applicant.email = session[:email]
+      @applicant.name = session[:user]
       @applicant.confirm = user.id
 
       respond_to do |format|
@@ -197,6 +201,7 @@ class ApplicantsController < ApplicationController
   def my_application
     # this is a temporary value for debugging need to be fixed after login is finished
     @applicant = Applicant.find_by(email: session[:email])
+    @changes = !TaMatch.exists? && !SeniorGraderMatch.exists? && !GraderMatch.exists?
   end
 
   private
