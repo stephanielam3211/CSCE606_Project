@@ -93,7 +93,8 @@ class ApplicantsController < ApplicationController
         redirect_to user.applicant
       else
         @applicant = Applicant.new
-        @courses = Course.select(:course_number, :course_name).distinct.map { |c| "#{c.course_number} - #{c.course_name}" }
+        @courses = Course.select(:course_number, :course_name).distinct.map { |c| ["#{c.course_number} - #{c.course_name}", c.course_number] }
+
       end
     else
       redirect_to root_path, alert: "Please log in to submit an application."
@@ -106,7 +107,8 @@ class ApplicantsController < ApplicationController
   # GET /applicants/1/edit
   def edit
     @applicant = Applicant.find(params[:id])
-    @courses = Course.select(:course_number, :course_name).distinct.map { |c| "#{c.course_number} - #{c.course_name}" }
+    @courses = Course.select(:course_number, :course_name).distinct.map { |c| ["#{c.course_number} - #{c.course_name}", c.course_number] }
+
   end
 
   # POST /applicants or /applicants.json
@@ -160,7 +162,7 @@ class ApplicantsController < ApplicationController
         format.json { render :show, status: :ok, location: @applicant }
         flash[:notice] = "Applicant was successfully updated."
       else
-        @courses = Course.select(:course_number, :course_name).distinct.map { |c| "#{c.course_number} - #{c.course_name}" }
+        @courses = Course.select(:course_number, :course_name).distinct.map { |c| ["#{c.course_number} - #{c.course_name}", c.course_number] }
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @applicant.errors, status: :unprocessable_entity }
       end

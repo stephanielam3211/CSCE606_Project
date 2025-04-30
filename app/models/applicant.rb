@@ -3,6 +3,8 @@
 class Applicant < ApplicationRecord
   belongs_to :user, foreign_key: "confirm", optional: true
   before_validation :ensure_timestamp
+  before_validation :strip_trailing_comma_from_prev_course
+  before_validation :strip_trailing_comma_from_prev_ta
 
   validates :confirm, uniqueness: true
   has_many :recommendations
@@ -46,6 +48,14 @@ class Applicant < ApplicationRecord
     uin.to_s
   end
 
+  def strip_trailing_comma_from_prev_course
+    self.prev_course = prev_course.gsub(/,+\z/, '') if prev_course.present?
+  end
+
+  def strip_trailing_comma_from_prev_ta
+    self.prev_ta = prev_ta.gsub(/,+\z/, '') if prev_ta.present?
+  end
+
   ransacker :uin_text do
     Arel.sql("CAST(uin AS TEXT)")
   end
@@ -56,7 +66,7 @@ class Applicant < ApplicationRecord
 
   def check_duplicates
     return if prev_course.blank? || prev_ta.blank?
-    
+
     prev_numbers = prev_course.split(",")
     prev_ta_numbers = prev_ta.split(",")
 

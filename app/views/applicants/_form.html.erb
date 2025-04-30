@@ -77,7 +77,10 @@
     <% (1..10).each do |i| %>
       <div>
         <%= form.label "choice_#{i}".to_sym, "Course Choice #{i}" %>
-        <%= form.select "choice_#{i}".to_sym, options_for_select(@courses), { include_blank: true }, { class: "course-select" } %>
+        <%= form.select "choice_#{i}".to_sym,
+              options_for_select(@courses, form.object.send("choice_#{i}")),
+              { include_blank: true },
+              { class: "course-select" } %>
       </div>
     <% end %>
 
