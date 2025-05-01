@@ -5,7 +5,7 @@
 class TaAssignmentsController < ApplicationController
   require "csv"
 
-  before_action :authorize_admin_or_faculty!
+  before_action :authorize_admin!
 
   # This is the main function that handles the CSV processing for the first time
   def process_csvs
@@ -515,9 +515,9 @@ end
       end
     end
   end
-  def authorize_admin_or_faculty!
+  def authorize_admin!
     case session[:role].to_s
-    when "admin", "faculty"
+    when "admin"
     else
       redirect_to root_path, alert: "Unauthorized access."
     end

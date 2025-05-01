@@ -3,6 +3,7 @@
 # This controller manages the Course functions of the application
 class CoursesController < ApplicationController
   skip_before_action :require_login, if: -> { Rails.env.test? }
+  before_action :authorize_admin!
   require "csv"
 
   # will sort the courses by the thier columns
@@ -163,6 +164,13 @@ class CoursesController < ApplicationController
   end
 
   private
+  def authorize_admin!
+    case session[:role].to_s
+    when "admin"
+    else
+      redirect_to root_path, alert: "Unauthorized access."
+    end
+  end
 
   # Requires course params for creation
   def course_params

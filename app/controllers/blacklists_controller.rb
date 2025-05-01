@@ -2,6 +2,7 @@
 
 # This manages the blacklists of students
 class BlacklistsController < ApplicationController
+  before_action :authorize_admin!
   def index
     @blacklisted_students = Blacklist.all
   end
@@ -24,6 +25,14 @@ class BlacklistsController < ApplicationController
   end
 
   private
+
+  def authorize_admin!
+    case session[:role].to_s
+    when "admin"
+    else
+      redirect_to root_path, alert: "Unauthorized access."
+    end
+  end
 
   def blacklist_params
     params.require(:blacklist).permit(:student_name, :student_email)

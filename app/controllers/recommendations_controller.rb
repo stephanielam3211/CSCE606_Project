@@ -2,6 +2,8 @@
 
 # This controller manages the recommendations functions of the application
 class RecommendationsController < ApplicationController
+  before_action :authorize_admin!
+
   def index
     @recommendations = Recommendation.all
     respond_to do |format|
@@ -85,6 +87,13 @@ class RecommendationsController < ApplicationController
   end
 
   private
+  def authorize_admin!
+    case session[:role].to_s
+    when "admin" 
+    else
+      redirect_to root_path, alert: "Unauthorized access."
+    end
+  end
 
   # This method generates a CSV file from the recommendations
   def recommendation_params
