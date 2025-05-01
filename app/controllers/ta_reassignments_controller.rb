@@ -7,6 +7,7 @@
 # Left over to classes that still need to be filled out while saving the previous confirmed assignments
 class TaReassignmentsController < ApplicationController
   require "csv"
+  before_action :authorize_admin!
   # main function to process the reassignment functionality
   def process_csvs
     apps_csv_path = Rails.root.join("app/Charizard/util/public/output", "Unassigned_Applicants.csv")
@@ -112,6 +113,13 @@ class TaReassignmentsController < ApplicationController
   end
 
   private
+  def authorize_admin!
+    case session[:role].to_s
+    when "admin"
+    else
+      redirect_to root_path, alert: "Unauthorized access."
+    end
+  end
 
   def read_csv(file_path)
     csv_data = []
