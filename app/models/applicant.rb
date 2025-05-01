@@ -77,7 +77,7 @@ class Applicant < ApplicationRecord
     if prev_ta.present?
       prev_ta_numbers = prev_ta.split(",")
       if prev_ta_numbers.uniq.length != prev_ta_numbers.length
-        errors.add(:prev_course, "must not contain duplicate course numbers")
+        errors.add(:prev_ta, "must not contain duplicate course numbers")
       end
     end
   end
