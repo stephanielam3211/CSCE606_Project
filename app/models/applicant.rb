@@ -25,16 +25,18 @@ class Applicant < ApplicationRecord
   validate :min_course_choice
   validates :prev_course, length: { maximum: 200, too_long: "%{count} characters is the maximum allowed" },
             format: { 
-              with: /\A\d{3}(,\d{3})*\z/,
-              message: "Must Only Include Course Numbers\ '123,345,456'"
+              with: /\A\d{3}(?:,\s*\d{3})*\z/,
+              message: "Must Only Include Course Numbers\ '123,345,456'",
+              allow_blank: true
             }
   validate :check_duplicates
-  validates :prev_uni, format: { with: /\A[a-zA-Z0-9,]+\z/, message: "can only contain letters, numbers, and commas" }
+  validates :prev_uni, format: { with: /\A[a-zA-Z0-9,]+\z/, message: "can only contain letters, numbers, and commas" },allow_blank: true
   validates :prev_uni, length: { maximum: 200, too_long: "%{count} characters is the maximum allowed" }
   validates :prev_ta, length: { maximum: 200, too_long: "%{count} characters is the maximum allowed" },
             format: { 
-              with: /\A\d{3}(,\d{3})*\z/,
-              message: "Must Only Include Course Numbers Numbers\ '123,345,456'"
+              with: /\A\d{3}(?:,\s*\d{3})*\z/,
+              message: "Must Only Include Course Numbers Numbers\ '123,345,456'",
+              allow_blank: true
             }
   # type casting
   ransacker :uin do |parent|
@@ -66,16 +68,17 @@ class Applicant < ApplicationRecord
   end
 
   def check_duplicates
-    return if prev_course.blank? || prev_ta.blank?
-
-    prev_numbers = prev_course.split(",")
-    prev_ta_numbers = prev_ta.split(",")
-
-    if prev_numbers.uniq.length != prev_numbers.length
-      errors.add(:prev_course, "must not contain duplicate course numbers")
+    if prev_course.present?
+      prev_numbers = prev_course.split(",")
+      if prev_numbers.uniq.length != prev_numbers.length
+        errors.add(:prev_course, "must not contain duplicate course numbers")
+      end
     end
-    if prev_ta_numbers.uniq.length != prev_ta_numbers.length
-      errors.add(:prev_ta, "must not contain duplicate course numbers")
+    if prev_ta.present?
+      prev_ta_numbers = prev_ta.split(",")
+      if prev_ta_numbers.uniq.length != prev_ta_numbers.length
+        errors.add(:prev_course, "must not contain duplicate course numbers")
+      end
     end
   end
 
