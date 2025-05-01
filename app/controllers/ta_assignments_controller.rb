@@ -5,6 +5,8 @@
 class TaAssignmentsController < ApplicationController
   require "csv"
 
+  before_action :authorize_admin_or_faculty!
+
   # This is the main function that handles the CSV processing for the first time
   def process_csvs
     delete_all_csvs(skip_redirect: true) if File.exist?(Rails.root.join("app/Charizard/util/public/output/TA_Matches.csv"))
@@ -511,5 +513,12 @@ end
         record.positions
       ]
       end
+    end
+  end
+  def authorize_admin_or_faculty!
+    case session[:role].to_s
+    when "admin", "faculty"
+    else
+      redirect_to root_path, alert: "Unauthorized access."
     end
   end
