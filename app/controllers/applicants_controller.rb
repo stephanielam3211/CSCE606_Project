@@ -214,11 +214,15 @@ class ApplicantsController < ApplicationController
     def set_applicant
       @applicant = Applicant.find(params[:id])
     end
+
     def authorize_admin_or_faculty!
-      unless %w[admin faculty].include?(session[:role].to_s)
+      case session[:role].to_s
+      when "admin", "faculty"
+      else
         redirect_to root_path, alert: "Unauthorized access."
       end
     end
+    
 
     def backup_unassigned_applicant(uin)
       applicant = Applicant.find_by(uin: uin)
