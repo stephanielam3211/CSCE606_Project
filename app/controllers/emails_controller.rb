@@ -3,6 +3,7 @@
 # Used to send out emails from the App
 class EmailsController < ApplicationController
   before_action :authenticate_user!
+  before_action :authorize_admin!
 
   def new
   end
@@ -32,6 +33,13 @@ class EmailsController < ApplicationController
   end
 
   private
+  def authorize_admin!
+    case session[:role].to_s
+    when "admin" 
+    else
+      redirect_to root_path, alert: "Unauthorized access."
+    end
+  end
 
   def authenticate_user!
     redirect_to root_path, alert: "You must be logged in!" unless session[:user_id]

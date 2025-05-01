@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 class RecordsController < ApplicationController
-  before_action :authorize_admin_or_faculty!, only: [:new, :mine]
-  before_action :authorize_admin!, only: [:show]
+  before_action :authorize_admin!
   # Gets the records from the database
   def index
     @table_name = params[:table]
@@ -314,13 +313,6 @@ class RecordsController < ApplicationController
   end
 
   private
-  def authorize_admin_or_faculty!
-    case session[:role].to_s
-    when "admin", "faculty"
-    else
-      redirect_to root_path, alert: "Unauthorized access."
-    end
-  end
   def authorize_admin
     case session[:role].to_s
     when "admin"
