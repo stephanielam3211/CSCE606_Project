@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class RecordsController < ApplicationController
-  before_action :authorize_admin!
+  before_action :authorize_admin!, except: [:destroy]
   # Gets the records from the database
   def index
     @table_name = params[:table]
@@ -304,7 +304,15 @@ class RecordsController < ApplicationController
 
       respond_to do |format|
         format.js
-        format.html { redirect_to all_records_path(table: "ta_matches") }
+        format.html do
+          if session[:role] == "admin"
+            redirect_to all_records_path(table: "ta_matches")
+          elsif session[:role] == "student"
+            redirect_to new_withdrawal_request_path
+          else
+            redirect_to root_path
+          end
+        end
       end
       Rails.logger.debug "Record with UIN #{@role.uin} destroyed."
     else
@@ -313,7 +321,7 @@ class RecordsController < ApplicationController
   end
 
   private
-  def authorize_admin
+  def authorize_admin!
     case session[:role].to_s
     when "admin"
     else
@@ -385,6 +393,14 @@ class RecordsController < ApplicationController
     end
   end
 
+  def read_csv(file_name)
+    csv_data = []
+    file_path = Rails.root.join("app", "Charizard", "util", "public", "output", file_name)
+    CSV.foreach(file_path, headers: true) do |row|
+      csv_data << row.to_h
+    end
+    csv_data
+  end
   # This finds a record in the csv file based on the uin
   def find_record_in_csv(file_name, uin)
     records = read_csv(file_name)

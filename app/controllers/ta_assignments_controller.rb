@@ -316,9 +316,11 @@ class TaAssignmentsController < ApplicationController
 
   # Used to get a final csvs with all of the assignments with relevant applicant data
   def export_final_csv
+    confirmed_only = ActiveModel::Type::Boolean.new.cast(params[:confirmed_only])
+
     headers = [ "Assignment", "Course Number", "Section ID", "Instructor Name",
                 "Instructor Email", "Student Name", "Student Email", "UIN", "Phone Number",
-                "Enrollment hours", "Degree", "Country of Citizenship", "English Certification Level" ]
+                "Enrollment hours", "Degree", "Country of Citizenship", "English Certification Level","Advisor" ]
 
     final_csv_path = Rails.root.join("app", "Charizard", "util", "public", "output", "Assignments(#{Date.today}).csv")
 
@@ -343,7 +345,8 @@ class TaAssignmentsController < ApplicationController
     CSV.open(final_csv_path, "w") do |csv|
       csv << headers
       models.each do |assignment_type, model|
-        model.find_each do |assignment|
+        export_option = confirmed_only ? model.where(confirm: true) : model.all
+        export_option.find_each do |assignment|
           uin = assignment.uin.to_i
           applicant = applicants_by_uin[uin.to_s]
           Rails.logger.debug("Applicant: #{applicant.inspect}")
@@ -364,6 +367,8 @@ class TaAssignmentsController < ApplicationController
               applicant.citizenship
             when "English Certification Level"
               applicant.cert
+            when "Advisor"
+              applicant.advisor
             else
               ""
             end

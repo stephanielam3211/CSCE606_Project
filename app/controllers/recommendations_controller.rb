@@ -3,7 +3,7 @@
 # This controller manages the recommendations functions of the application
 class RecommendationsController < ApplicationController
   before_action :authorize_admin_or_faculty!, only: [:new,:edit,:my_recommendations]
-  before_action :authorize_admin!, only: [:show]
+  before_action :authorize_admin!, only: [:show, :index, :clear]
 
   def index
     @recommendations = Recommendation.all

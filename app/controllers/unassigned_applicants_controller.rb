@@ -3,6 +3,7 @@
 # This controller handles the search functionality for unassigned applicants.
 # used in the edit form in the assignment process
 class UnassignedApplicantsController < ApplicationController
+  before_action :authorize_admin!
   # searches by name
   def search
     applicants = UnassignedApplicant.where("name LIKE ?", "%#{params[:term]}%").limit(10)
@@ -50,5 +51,13 @@ class UnassignedApplicantsController < ApplicationController
       hours: applicant.hours,
       prev_ta: applicant.prev_ta,
       cert: applicant.cert } }
+  end
+  private
+  def authorize_admin!
+    case session[:role].to_s
+    when "admin"
+    else
+      redirect_to root_path, alert: "Unauthorized access."
+    end
   end
 end

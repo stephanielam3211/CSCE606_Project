@@ -5,7 +5,8 @@ class ApplicantsController < ApplicationController
   before_action :set_applicant, only: %i[ show edit update destroy ]
   skip_before_action :require_login, if: -> { Rails.env.test? }
 
-  before_action :authorize_admin_or_faculty!, only: [:index]
+  before_action :authorize_admin_or_faculty!, only: [:index, :wipe_applicants, :search, :search_email, :search_uin]
+
 
 
   # GET /applicants or /applicants.json

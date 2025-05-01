@@ -28,8 +28,11 @@
             </div>
 
             <span class="divider-hash gray-300 divider--mini aux-mt-2 aux-block"></span>
-
-            <%= button_to 'Export Final CSV', export_final_csv_path, class: 'btn btn--primary' %>
+            <%= form_with url: export_final_csv_path, method: :get, local: true do %>
+              <label>Export Options:</label>
+              <%= select_tag :confirmed_only, options_for_select([["Only Confirmed Assignments", true],["All Assignments", false]]) %>
+              <%= submit_tag "Export Assignments CSV" %>
+            <% end %>
           </div>
         </div>
 

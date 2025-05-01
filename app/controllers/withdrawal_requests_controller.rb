@@ -6,7 +6,7 @@ require "csv"
 require "fileutils"
 
 class WithdrawalRequestsController < ApplicationController
-  before_action :authorize_admin!
+  before_action :authorize_admin!,only: [:index,:clear]
   # This method is used to assign a role based on is the user has been assigned a role
   def new
     @withdrawal_request = WithdrawalRequest.new

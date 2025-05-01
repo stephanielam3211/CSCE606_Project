@@ -3,7 +3,7 @@
 # This controller manages the Course functions of the application
 class CoursesController < ApplicationController
   skip_before_action :require_login, if: -> { Rails.env.test? }
-  before_action :authorize_admin!, only: [:index]
+  before_action :authorize_admin!, only: [:index, :create, :update, :destroy, :import, :clear]
   require "csv"
 
   # will sort the courses by the thier columns
