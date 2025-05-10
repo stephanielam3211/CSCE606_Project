@@ -31,6 +31,9 @@ class TaAssignmentsController < ApplicationController
     #system("rake import:csv")
     import_csv
 
+    update_needs_from_assignments
+
+
     redirect_to view_csv_path
   end
   
@@ -109,6 +112,14 @@ class TaAssignmentsController < ApplicationController
 
     if params[:file].present? && @csv_files.include?(params[:file])
       @selected_csv = params[:file]
+
+      case @selected_csv
+      when "Unassigned_Applicants.csv"
+        unass_apps_csv = generate_csv_apps(UnassignedApplicant.all)
+        unass_apps_csv_path = Rails.root.join("app", "Charizard", "util", "public", "output","Unassigned_Applicants.csv")
+        File.write(unass_apps_csv_path, unass_apps_csv)
+      end
+  
       @csv_content = read_csv(File.join(csv_directory, @selected_csv))
     end
   end
@@ -128,12 +139,15 @@ class TaAssignmentsController < ApplicationController
     when "grader_matches.csv"
       file_name = "Grader_Matches.csv"
     end
+    csv_mappings = {
+      "TA_Matches.csv" => TaMatch,
+      "Grader_Matches.csv" => GraderMatch,
+      "Senior_Grader_Matches.csv" => SeniorGraderMatch
+    }
 
-    file_path = File.join(csv_directory, file_name)
-
-    @records = read_csv(file_name)
-    @record = @records.find { |r| r["UIN"] == params[:uin] }
-
+    model_class = csv_mappings[file_name]
+  
+    @record = model_class.find_by(uin: params[:uin])
     if @record.nil?
       redirect_to view_csv_path, alert: "Record not found."
     end
@@ -141,18 +155,18 @@ class TaAssignmentsController < ApplicationController
 
   # This method is used to update the assignments
   def update
-    csv_directory = Rails.root.join("app", "Charizard", "util", "public", "output")
-    file_key = params[:file].strip.downcase
+    file_key = params[:file]&.strip&.downcase
+    return redirect_back(fallback_location: root_path, alert: "Invalid file key.") if file_key.blank?
 
-    if file_key == "ta_matches"
-      file_name = "TA_Matches.csv"
-    elsif file_key == "senior_grader_matches"
-      file_name = "Senior_Grader_Matches.csv"
-    elsif file_key == "grader_matches"
-      file_name = "Grader_Matches.csv"
-    else
-      file_name = params[:file] + ".csv"
-    end
+    csv_directory = Rails.root.join("app", "Charizard", "util", "public", "output")
+
+    # Mapping file_key to actual file name
+    file_name = case file_key
+                when "ta_matches" then "TA_Matches.csv"
+                when "senior_grader_matches" then "Senior_Grader_Matches.csv"
+                when "grader_matches" then "Grader_Matches.csv"
+                else "#{params[:file]}.csv"
+                end
 
     csv_mappings = {
       "TA_Matches.csv" => TaMatch,
@@ -161,124 +175,55 @@ class TaAssignmentsController < ApplicationController
     }
 
     model_class = csv_mappings[file_name]
-    file_path = File.join(csv_directory, file_name)
-
-
-    records = read_csv(file_name)
-    record_index = records.index { |r| r["Course Number"] == params[:course_number] && r["Section ID"] == params[:section] }
-
-    Rails.logger.debug "Record index: #{record_index.inspect}"
-    Rails.logger.debug "Records: #{records.inspect}"
-    modified_class_csv_path = Rails.root.join("app", "Charizard", "util", "public", "output", "Modified_assignments.csv")
-
-    CSV.open(modified_class_csv_path, "a", headers: records.first.keys, write_headers: !File.exist?(modified_class_csv_path)) do |csv|
-      if record_index
-        csv << records[record_index].values
-      end
+    unless model_class
+      return redirect_back(fallback_location: root_path, alert: "Unsupported file type: #{file_name}")
     end
+    modified_class_csv_path = csv_directory.join("Modified_assignments.csv")
 
-    uin = records.first["UIN"]
+    # Find the current record
+    @record = model_class.find_by(course_number: params[:course_number], section: params[:section])
+    if @record.present?
+      attributes = @record.attributes.except("id", "created_at", "updated_at")
+      headers = attributes.keys
 
+      write_headers = !File.exist?(modified_class_csv_path) || File.zero?(modified_class_csv_path)
 
-    applicant_record = Applicant.find_by(uin: uin)
-    Rails.logger.debug "Applicant record: #{applicant_record.inspect}"
-
-    if applicant_record.nil?
-      Rails.logger.debug "No applicant record found with UIN: #{uin}"
+      CSV.open(modified_class_csv_path, "a", write_headers: write_headers, headers: headers) do |csv|
+        csv << attributes.values
+      end
     else
-      UnassignedApplicant.create(applicant_record.attributes.except("id", "created_at", "updated_at", "confirm"))
-      Rails.logger.debug "Unassigned applicant created: #{applicant_record.inspect}"
+      Rails.logger.debug "No matching @record found to write to CSV"
+      return redirect_back(fallback_location: root_path, alert: "Matching record not found.")
     end
 
-    if record_index
-      records[record_index]["Student Name"] = params[:stu_name]
-      records[record_index]["Student Email"] = params[:stu_email]
-      records[record_index]["UIN"] = params[:uin]
-      #     Rails.logger.debug "After update: #{records[record_index].inspect}"
-      CSV.open(file_path, "w", headers: records.first.keys, write_headers: true) do |csv|
-        records.each { |r| csv << r.values }
+  
+    # Backup applicant to UnassignedApplicant
+    if @record.uin.present?
+      applicant = Applicant.find_by(uin: @record.uin)
+      if applicant
+        UnassignedApplicant.create(applicant.attributes.except("id", "created_at", "updated_at", "confirm"))
       end
-      model_record = model_class.find_by(course_number: params[:course_number], section: params[:section])
-      model_record.update(
-        stu_name: params[:stu_name],
-        stu_email: params[:stu_email],
-        uin: params[:uin]
-      )
-
-
-      add_to_backup_csv = Rails.root.join("app", "Charizard", "util", "public", "output", "Unassigned_Applicants.csv")
-          column_order = [
-            "Timestamp", "Email Address", "First and Last Name", "UIN", "Phone Number", "How many hours do you plan to be enrolled in?",
-            "Degree Type?", "1st Choice Course", "2nd Choice Course", "3rd Choice Course", "4th Choice Course", "5th Choice Course",
-            "6th Choice Course", "7th Choice Course", "8th Choice Course", "9th Choice Course", "10th Choice Course", "GPA",
-            "Country of Citizenship?", "English language certification level?", "Which courses have you taken at TAMU?",
-            "Which courses have you taken at another university?", "Which courses have you TAd for?", "Who is your advisor (if applicable)?",
-            "What position are you applying for?"
-          ]
-          direct_mapping = {
-            "Timestamp" => "timestamp",
-            "Email Address" => "email",
-            "First and Last Name" => "name",
-            "UIN" => "uin",
-            "Phone Number" => "number",
-            "How many hours do you plan to be enrolled in?" => "hours",
-            "Degree Type?" => "degree",
-            "1st Choice Course" => "choice_1",
-            "2nd Choice Course" => "choice_2",
-            "3rd Choice Course" => "choice_3",
-            "4th Choice Course" => "choice_4",
-            "5th Choice Course" => "choice_5",
-            "6th Choice Course" => "choice_6",
-            "7th Choice Course" => "choice_7",
-            "8th Choice Course" => "choice_8",
-            "9th Choice Course" => "choice_9",
-            "10th Choice Course" => "choice_10",
-            "GPA" => "gpa",
-            "Country of Citizenship?" => "citizenship",
-            "English language certification level?" => "cert",
-            "Which courses have you taken at TAMU?" => "prev_course",
-            "Which courses have you taken at another university?" => "prev_uni",
-            "Which courses have you TAd for?" => "prev_ta",
-            "Who is your advisor (if applicable)?" => "advisor",
-            "What position are you applying for?" => "positions"
-          }
-
-          CSV.open(add_to_backup_csv, "a", headers: column_order, write_headers: !File.exist?(add_to_backup_csv)) do |csv|
-            if applicant_record.present? && applicant_record.respond_to?(:attributes)
-              # Create the row based on the direct mapping
-              row_values = column_order.map do |header|
-                attribute = direct_mapping[header]  # Get the model attribute for this header
-                applicant_record.send(attribute) || ""  # Use the value from the model, or fallback to an empty string if nil
-              end
-              csv << row_values
-            end
-          end
-      prev_app_record = UnassignedApplicant.find_by(uin: params[:uin])
-      if prev_app_record.nil?
-        Rails.logger.debug "No applicant record found with UIN: #{params[:uin]}"
-      else
-        csv_data = CSV.read(add_to_backup_csv, headers: true)
-        # Filter out the row with the UIN
-        filtered_data = csv_data.reject { |row| row["UIN"].to_i == params[:uin].to_i }
-        CSV.open(add_to_backup_csv, "w", write_headers: true, headers: csv_data.headers) do |csv|
-          filtered_data.each do |row|
-            csv << row
-          end
-        end
-        prev_app_record.destroy
-        Rails.logger.debug "Unassigned applicant destroyed: #{prev_app_record.inspect}"
+    end
+  
+    # Update record with new values
+    if @record.update(
+      stu_name: params[:stu_name],
+      stu_email: params[:stu_email],
+      uin: params[:uin]
+    )
+      # Remove new assignment from unassigned list
+      if (new_uin = params[:uin]).present?
+        prev_app = UnassignedApplicant.find_by(uin: new_uin)
+        prev_app&.destroy
       end
-
+  
       flash[:notice] = "Student information updated successfully."
-
     else
-      flash[:alert] = "Student record not found."
+      flash[:alert] = "Failed to update student info."
     end
-    Rails.logger.debug "Redirecting to fallback: #{view_csv_path}"
-
-    redirect_to all_records_path(table: "#{params[:file]}")
+  
+    redirect_to all_records_path(table: file_key)
   end
-
   def determine_assignment_type(record)
     case record
     when "TA_Matches.csv" then "TA"
@@ -381,7 +326,64 @@ class TaAssignmentsController < ApplicationController
     flash[:notice] = "Assignments.csv has been successfully created!"
     send_file final_csv_path, filename: "Assignments(#{Date.today}).csv", type: "text/csv", disposition: "attachment"
   end
-end
+
+  def update_needs_from_assignments
+    path = Rails.root.join("app", "Charizard", "util", "public", "output", "New_Needs.csv")
+    column_order = [ "Course_Name", "Course_Number", "Section", "Instructor", "Faculty_Email", "TA", "Senior_Grader", "Grader", "Professor Pre-Reqs" ]
+  
+    data = File.exist?(path) ? CSV.read(path, headers: true).map(&:to_h) : []
+  
+    Course.find_each do |course|
+
+      assigned_tas = TaMatch.where(
+  "LOWER(?) LIKE '%' || LOWER(course_number) || '%' AND LOWER(?) LIKE '%' || LOWER(section) || '%'",
+  course.course_number.to_s,
+  course.section.to_s
+).count
+      assigned_graders = GraderMatch.where(
+  "LOWER(?) LIKE '%' || LOWER(course_number) || '%' AND LOWER(?) LIKE '%' || LOWER(section) || '%'",
+  course.course_number.to_s,
+  course.section.to_s
+).count
+      assigned_senior_graders = SeniorGraderMatch.where(
+  "LOWER(?) LIKE '%' || LOWER(course_number) || '%' AND LOWER(?) LIKE '%' || LOWER(section) || '%'",
+  course.course_number.to_s,
+  course.section.to_s
+).count
+
+      remaining_tas = [(course.ta.to_f.round - assigned_tas), 0].max
+      remaining_senior_graders = [(course.senior_grader.to_f.round - assigned_senior_graders), 0].max
+      remaining_graders = [(course.grader.to_f.round - assigned_graders), 0].max
+  
+      # Skip this course if no more help is needed
+      next if remaining_tas == 0 && remaining_senior_graders == 0 && remaining_graders == 0
+  
+      entry = data.find { |row| row["Course_Number"] == course.course_number && row["Section"] == course.section }
+  
+      if entry
+        entry["TA"] = remaining_tas.to_s
+        entry["Senior_Grader"] = remaining_senior_graders.to_s
+        entry["Grader"] = remaining_graders.to_s
+      else
+        data << {
+          "Course_Name" => course.course_name,
+          "Course_Number" => course.course_number,
+          "Section" => course.section,
+          "Instructor" => course.instructor,
+          "Faculty_Email" => course.faculty_email,
+          "TA" => remaining_tas.to_s,
+          "Senior_Grader" => remaining_senior_graders.to_s,
+          "Grader" => remaining_graders.to_s,
+          "Professor Pre-Reqs" => course.pre_reqs.presence || "N/A"
+        }
+      end
+    end
+  
+    # Write once after processing all courses
+    CSV.open(path, "w", headers: column_order, write_headers: true) do |csv|
+      data.each { |row| csv << row.values_at(*column_order) }
+    end
+  end
 
   private
   # These are the methods used to import the csvs into the models from the algorithm
@@ -520,6 +522,48 @@ end
       end
     end
   end
+  
+
+  def generate_csv_apps(records)
+    CSV.generate(headers: true) do |csv|
+    csv << [ "Timestamp", "Email Address", "First and Last Name", "UIN", "Phone Number", "How many hours do you plan to be enrolled in?", "Degree Type?", "1st Choice Course", "2nd Choice Course", "3rd Choice Course", "4th Choice Course", "5th Choice Course", "6th Choice Course", "7th Choice Course", "8th Choice Course", "9th Choice Course", "10th Choice Course", "GPA", "Country of Citizenship?", "English language certification level?", "Which courses have you taken at TAMU?", "Which courses have you taken at another university?", "Which courses have you TAd for?", "Who is your advisor (if applicable)?", "What position are you applying for?" ]
+    records.each do |record|
+      blacklist_entry = Blacklist.find_by(
+        "LOWER(student_name) = ? AND LOWER(student_email) = ?",
+        record.name.downcase,
+        record.email.downcase
+      )
+      next if record.name.strip.downcase.start_with?("*")
+      csv << [
+        record.timestamp,
+        record.email,
+        record.name,
+        record.uin.to_i,
+        record.number,
+        record.hours.to_i,
+        record.degree,
+        record.choice_1.to_i,
+        record.choice_2.to_i,
+        record.choice_3.to_i,
+        record.choice_4.to_i,
+        record.choice_5.to_i,
+        record.choice_6.to_i,
+        record.choice_7.to_i,
+        record.choice_8.to_i,
+        record.choice_9.to_i,
+        record.choice_10.to_i,
+        record.gpa.to_f,
+        record.citizenship,
+        record.cert.to_i,
+        record.prev_course,
+        record.prev_uni,
+        record.prev_ta,
+        record.advisor,
+        record.positions
+      ]
+      end
+    end
+  end
   def authorize_admin!
     case session[:role].to_s
     when "admin"
@@ -527,3 +571,4 @@ end
       redirect_to root_path, alert: "Unauthorized access."
     end
   end
+end

@@ -36,13 +36,13 @@ Timestamp,Email Address,First and Last Name,UIN,Phone Number,How many hours do y
 10/4/2022 12:00,akhilchilumuru@tamu.edu,Akhil Reddy Chilumuru,633002192,123-456-7924,11,Masters (Thesis),110,121,206,221,314,110,121,206,221,314,,Pineapple State,3,121,,,,"TA, Senior Grader, Grader"
 10/4/2022 15:09,insoo.chung@tamu.edu,Insoo Chung,232004620,123-456-7925,9,Masters (Non-Thesis),110,120,121,206,310,110,120,121,206,310,4.0,Pineapple State,2,121,,"633,",,"TA, Senior Grader, Grader"
 10/12/2022 8:29,tcousins00@tamu.edu,Thomas Cousins,927004846,123-456-7926,12,Masters (Non-Thesis),221,313,315,411,420,221,313,315,411,420,3.89,United States,1,121,,,,TA
-10/8/2022 9:12,evelyn.crowe@tamu.edu,Evelyn Crowe,428002693,123-456-7927,12,Masters (Non-Thesis),312,331,411,431,312,331,411,431,,,,United States,1,121,,"482, 221, 221, 221, 312,",,TA
+10/8/2022 9:12,evelyn.crowe@tamu.edu,Evelyn Crowe,428002693,123-456-7927,12,Masters (Non-Thesis),312,331,411,431,312,331,411,431,,,,United States,1,121,,"482, 312,",,TA
 10/13/2022 7:32,jac822@tamu.edu,Jackson Cummins,830004232,123-456-7928,10,Masters (Non-Thesis),110,206,222,313,421,110,206,222,313,421,,United States,1,121,,,,"TA, Senior Grader, Grader"
 10/4/2022 11:46,pravija123@tamu.edu,PRAVIJA DANDA,733000615,123-456-7929,10,Masters (Thesis),206,310,312,411,421,206,310,312,411,421,,Pineapple State,3,121,,,,"TA, Senior Grader, Grader"
 10/4/2022 13:16,jdara@tamu.edu,Jyothi Swaroop Dara,331008541,123-456-7930,1,Masters (Non-Thesis),310,312,314,331,411,310,312,314,331,411,4.0,Pineapple State,3,121,,,,Grader
 10/4/2022 11:20,anudevara@tamu.edu,Anu Deepika Devara,633002217,123-456-7931,12,Masters (Non-Thesis),120,121,310,435,629,120,121,310,435,629,4.0,Pineapple State,2,121,,,,"TA, Senior Grader, Grader"
 10/14/2022 17:13,siddharthd@tamu.edu,Siddharth Devulapalli,733000640,123-456-7932,12,Masters (Non-Thesis),110,432,625,633,735,110,432,625,633,735,,Pineapple State,2,121,,,,"TA, Senior Grader, Grader"
-10/10/2022 15:40,sheelabhadra@tamu.edu,Sheelabhadra Dey,625000040,123-456-7933,9,PhD,411,448,629,635,670,411,448,629,635,670,3.7,Pineapple State,2,121,,"625, 689, 421, 421,",Guni Sharon (guni@tamu.edu),TA
+10/10/2022 15:40,sheelabhadra@tamu.edu,Sheelabhadra Dey,625000040,123-456-7933,9,PhD,411,448,629,635,670,411,448,629,635,670,3.7,Pineapple State,2,121,,"625, 689, 421,",Guni Sharon (guni@tamu.edu),TA
 10/4/2022 13:01,manisha1@tamu.edu,Manisha Dixit,232004056,123-456-7934,5,Masters (Non-Thesis),221,310,411,431,438,221,310,411,431,438,4.0,Pineapple State,3,121,,,,"Senior Grader, Grader"
 10/14/2022 11:22,esd@tamu.edu,Edmund Do,232003721,123-456-7935,12,PhD,411,436,411,436,,,,,,,3.33,United States,1,121,,"489, 465, 110,",Bobak Mortazavi (bobakm@tamu.edu),TA
 10/12/2022 13:13,xj.dong@tamu.edu,Xiangjue Dong,932002220,123-456-7936,9,PhD,681,681,,,,,,,,,4.0,Pineapple State,3,121,,,James Caverlee (caverlee@cse.tamu.edu),TA
@@ -50,7 +50,7 @@ Timestamp,Email Address,First and Last Name,UIN,Phone Number,How many hours do y
 10/5/2022 2:47,gokulsai@tamu.edu,Gokul Sai Doppalapudi,833003056,123-456-7938,12,Masters (Non-Thesis),310,313,315,430,431,310,313,315,430,431,,Pineapple State,2,121,,"111,",,"TA, Senior Grader, Grader"
 10/4/2022 11:25,alekhya.duba@tamu.edu,Alekhya Duba,932002479,123-456-7939,9,Masters (Non-Thesis),121,206,221,331,421,121,206,221,331,421,3.8,Pineapple State,3,121,,,,"TA, Senior Grader, Grader"
 10/5/2022 0:09,yijinfang@tamu.edu,Yijin Fang,727001435,123-456-7940,10,Masters (Thesis),222,222,,,,,,,,,,Pineapple State,2,121,,,,Grader
-10/14/2022 15:49,pouyan.forghani@tamu.edu,Pouyan Forghani,729007625,123-456-7941,10,PhD,221,411,440,629,221,411,440,629,,,4.0,Pineapple State,3,121,,"222, 222, 465,",Juan Garay (garay@cse.tamu.edu),TA
+10/14/2022 15:49,pouyan.forghani@tamu.edu,Pouyan Forghani,729007625,123-456-7941,10,PhD,221,411,440,629,221,411,440,629,,,4.0,Pineapple State,3,121,,"222, 465,",Juan Garay (garay@cse.tamu.edu),TA
 10/15/2022 13:26,chunkaifu@tamu.edu,Chunkai  Fu,232008820,123-456-7942,10,PhD,310,420,481,608,310,420,481,608,,,4.0,Pineapple State,2,121,,,Jiang Hu (jianghu@tamu.edu),TA
 10/12/2022 18:01,anushkagarg@tamu.edu,Anushka Garg,532008694,123-456-7943,10,Masters (Non-Thesis),206,221,331,430,431,206,221,331,430,431,,Pineapple State,3,121,,,,"Senior Grader, Grader"
 10/5/2022 14:24,aayushgautam@tamu.edu,Aayush Gautam,633002193,123-456-7944,11,Masters (Thesis),110,120,121,315,431,110,120,121,315,431,,Pineapple State,2,121,,,,"TA, Senior Grader"
@@ -58,23 +58,23 @@ Timestamp,Email Address,First and Last Name,UIN,Phone Number,How many hours do y
 10/4/2022 23:40,sravyagopireddy@tamu.edu,Sravya Gopireddy,433003798,123-456-7946,10,Masters (Non-Thesis),181,310,314,315,331,181,310,314,315,331,,Pineapple State,2,121,,,,"TA, Senior Grader, Grader"
 10/6/2022 10:17,sreeja_govardhana@tamu.edu,Sreeja Govardhana,531006281,123-456-7947,7,Masters (Non-Thesis),221,431,435,481,636,221,431,435,481,636,4.0,Pineapple State,2,121,,,,"Senior Grader, Grader"
 11/7/2022 18:19,varun.govinda@tamu.edu,Varun Govinda,831000305,123-456-7948,9,Masters (Non-Thesis),606,629,633,636,670,606,629,633,636,670,4.0,Pineapple State,3,121,,,,"TA, Senior Grader, Grader"
-10/3/2022 15:29,hgumudav@tamu.edu,Harika Gumudavally,931002165,123-456-7949,11,Masters (Non-Thesis),121,206,314,421,606,121,206,314,421,606,4.0,Pineapple State,3,121,,"222,",,"TA, Senior Grader, Grader"
+10/3/2022 15:29,hgumudav@tamu.edu,Harika Gumudavally,931002165,123-456-7949,11,Masters (Non-Thesis),121,206,314,421,606,121,206,314,421,606,4.0,Pineapple State,3,121,,"222",,"TA, Senior Grader, Grader"
 10/18/2022 11:13,zhishguo@tamu.edu,Zhishuai Guo,933007470,123-456-7950,9,PhD,629,636,629,636,,,,,,,,Pineapple State,3,121,,,Tianbao Yang (tianbao-yang@tamu.edu),TA
 10/4/2022 15:48,g_udhav1@tamu.edu,Udhav  Gupta,133007838,123-456-7951,11,Masters (Thesis),110,314,315,331,431,110,314,315,331,431,,Pineapple State,3,121,,,,"TA, Senior Grader, Grader"
 10/4/2022 11:11,yatingupta@tamu.edu,Yatin Gupta,530006656,123-456-7952,12,Masters (Non-Thesis),110,120,121,206,221,110,120,121,206,221,,Pineapple State,2,121,,,,"TA, Senior Grader, Grader"
-10/16/2022 12:40,chingy1510@tamu.edu,Carson Hanel,826003149,123-456-7953,9,PhD,463,463,,,,,,,,,4.0,United States,1,121,,"463, 463, 463,",Dmitri Loguinov (dmitri@cse.tamu.edu),TA
-10/4/2022 15:07,amran.haroon@tamu.edu,Amran Haroon,112003603,123-456-7954,10,PhD,121,206,402,445,463,121,206,402,445,463,3.75,Pineapple State,2,121,,"464, 412,",Radu Stoleru (stoleru@cse.tamu.edu),"TA, Senior Grader"
+10/16/2022 12:40,chingy1510@tamu.edu,Carson Hanel,826003149,123-456-7953,9,PhD,463,463,,,,,,,,,4.0,United States,1,121,,"463",Dmitri Loguinov (dmitri@cse.tamu.edu),TA
+10/4/2022 15:07,amran.haroon@tamu.edu,Amran Haroon,112003603,123-456-7954,10,PhD,121,206,402,445,463,121,206,402,445,463,3.75,Pineapple State,2,121,,"464, 412",Radu Stoleru (stoleru@cse.tamu.edu),"TA, Senior Grader"
 10/12/2022 16:00,abhiyashhodge@tamu.edu,Abhiyash Hodge,932003293,123-456-7955,12,Masters (Thesis),206,221,313,314,315,206,221,313,314,315,4.0,Pineapple State,2,121,,"110,",,"TA, Senior Grader, Grader"
 10/5/2022 14:15,xsw220150071@tamu.edu,Li Yuan Hsu,832001433,123-456-7956,8,Masters (Non-Thesis),110,221,411,421,633,110,221,411,421,633,3.66,Pineapple State,3,121,,,,"Senior Grader, Grader"
 10/4/2022 11:10,imanulhuq@tamu.edu,Md Imanul Huq,432006920,123-456-7957,12,PhD,110,312,110,312,,,,,,,4.0,Pineapple State,3,121,,"110, 312,",Nitesh Saxena (nsaxena@tamu.edu),TA
-10/5/2022 18:48,jeff.hykin@tamu.edu,Jeffrey Hykin,326001802,123-456-7958,11,PhD,110,121,181,222,481,110,121,181,222,481,4.0,United States,1,121,,"420, 420, 629, 314,",Guni Sharon (guni@tamu.edu),TA
+10/5/2022 18:48,jeff.hykin@tamu.edu,Jeffrey Hykin,326001802,123-456-7958,11,PhD,110,121,181,222,481,110,121,181,222,481,4.0,United States,1,121,,"420, 629, 314,",Guni Sharon (guni@tamu.edu),TA
 10/6/2022 19:42,vivekvamsi@tamu.edu,Vivek Vamsi Inala,733000642,123-456-7959,11,Masters (Non-Thesis),110,206,221,222,314,110,206,221,222,314,,Pineapple State,3,121,,,,"TA, Senior Grader, Grader"
 10/12/2022 10:00,aniingle@tamu.edu,Ani Ingle,330007268,123-456-7960,12,Masters (Non-Thesis),445,606,633,636,735,445,606,633,636,735,4.0,Pineapple State,2,121,,,,"TA, Senior Grader, Grader"
 10/14/2022 17:04,prajwaliyer@tamu.edu,Prajwal Iyer,727004485,123-456-7961,11,Masters (Thesis),310,315,331,432,481,310,315,331,432,481,,Pineapple State,2,121,,,,"TA, Senior Grader, Grader"
 10/13/2022 10:20,kushagra.jain07@tamu.edu,Kushagra Jain,532008695,123-456-7962,9,Masters (Thesis),110,411,431,629,633,110,411,431,629,633,,Pineapple State,3,121,,,,"TA, Senior Grader"
-10/12/2022 15:23,vahidjanfaza@tamu.edu,Vahid Janfaza,430000694,123-456-7963,12,PhD,636,636,,,,,,,,,4.0,Pineapple State,3,121,,"350, 350, 614,",Abdullah Muzahid (abdullah.muzahid@cse.tamu.edu),TA
-10/4/2022 16:19,entao@tamu.edu,Yingtao Jiang,727005069,123-456-7964,11,Masters (Thesis),221,331,411,431,436,221,331,411,431,436,4.0,Pineapple State,3,121,,"483, 482, 482,",,"TA, Senior Grader, Grader"
-10/12/2022 11:18,mjulian@tamu.edu,Mary Julian,622004026,123-456-7965,8,Masters (Non-Thesis),431,464,606,431,464,606,,,,,3.83,United States,1,121,,"313, 313, 313, 313,",,"TA, Senior Grader, Grader"
+10/12/2022 15:23,vahidjanfaza@tamu.edu,Vahid Janfaza,430000694,123-456-7963,12,PhD,636,636,,,,,,,,,4.0,Pineapple State,3,121,,"350, 614,",Abdullah Muzahid (abdullah.muzahid@cse.tamu.edu),TA
+10/4/2022 16:19,entao@tamu.edu,Yingtao Jiang,727005069,123-456-7964,11,Masters (Thesis),221,331,411,431,436,221,331,411,431,436,4.0,Pineapple State,3,121,,"483",,"TA, Senior Grader, Grader"
+10/12/2022 11:18,mjulian@tamu.edu,Mary Julian,622004026,123-456-7965,8,Masters (Non-Thesis),431,464,606,431,464,606,,,,,3.83,United States,1,121,,"313,",,"TA, Senior Grader, Grader"
 10/4/2022 11:38,moshimor91@tamu.edu,Seo Jung Hoon,827009126,123-456-7966,11,Masters (Non-Thesis),120,121,206,221,435,120,121,206,221,435,3.67,Pineapple State,3,121,,,,"TA, Senior Grader, Grader"
 10/7/2022 11:15,rohith7@tamu.edu,Rohith Kadivendi,631009781,123-456-7967,12,Masters (Non-Thesis),315,331,421,436,451,315,331,421,436,451,4.0,Pineapple State,3,121,,,,"TA, Senior Grader, Grader"
 10/7/2022 10:38,hkalakot@tamu.edu,Harshitha Reddy Kalakota,831000306,123-456-7968,12,Masters (Non-Thesis),310,312,315,331,421,310,312,315,331,421,4.0,Pineapple State,2,121,,"313,",,"TA, Senior Grader, Grader"
@@ -116,7 +116,7 @@ Timestamp,Email Address,First and Last Name,UIN,Phone Number,How many hours do y
 10/12/2022 19:37,namatthews@tamu.edu,Nicholas Matthews,926004186,123-456-8004,5,Masters (Non-Thesis),110,120,206,222,464,110,120,206,222,464,3.5,United States,1,121,,,,Grader
 10/6/2022 20:24,tamuabhi-123@tamu.edu,Abhishek Maurya,133007884,123-456-8005,10,Masters (Thesis),221,445,448,451,452,221,445,448,451,452,,Pineapple State,2,121,,,,"TA, Senior Grader, Grader"
 10/19/2022 13:18,anshulmendiratta@tamu.edu,Anshul Mendiratta,133007283,123-456-8006,12,PhD,110,120,221,421,110,120,221,421,,,,United States,1,121,,,"Dr Wenping Wang, Dr Scott Schaefer",Grader
-10/14/2022 9:48,nicholas.milef@tamu.edu,Nicholas Milef,430000788,123-456-8007,12,PhD,633,633,,,,,,,,,4.0,United States,1,121,,"315, 315, 315,",Nima Khademi Kalantari (nimak@tamu.edu),TA
+10/14/2022 9:48,nicholas.milef@tamu.edu,Nicholas Milef,430000788,123-456-8007,12,PhD,633,633,,,,,,,,,4.0,United States,1,121,,"315",Nima Khademi Kalantari (nimak@tamu.edu),TA
 10/4/2022 12:02,minsibo0420@tamu.edu,Sibo Min,326004167,123-456-8008,9,Masters (Non-Thesis),121,312,314,315,441,121,312,314,315,441,3.8,Pineapple State,3,121,,"482, 315,",,TA
 10/4/2022 13:51,umishra24@tamu.edu,Upasana Mishra,831000872,123-456-8009,7,Masters (Non-Thesis),120,420,477,606,608,120,420,477,606,608,4.0,Pineapple State,2,121,,,,"Senior Grader, Grader"
 10/14/2022 20:40,peiman.mohseni@tamu.edu,Peiman Mohseni,930002338,123-456-8010,10,PhD,625,633,625,633,,,,,,,4.0,Pineapple State,3,121,,"625, 633, 221,",Nick Duffield (duffieldng@tamu.edu),TA

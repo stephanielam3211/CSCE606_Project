@@ -15,11 +15,11 @@
   </div>
   <%= javascript_include_tag 'edit_assignment', 'data-turbo-track': 'reload' %>
 
-  <%= form_with url: ta_assignment_path(@record["Student Email"]), method: :patch, local: true do |f| %>
+  <%= form_with url: ta_assignment_path(@record.id), method: :patch, local: true do |f| %>
     <%= f.hidden_field :redirect_url, value: request.original_url %>
     <%= f.hidden_field :file, value: @table_name%> 
-    <%= f.hidden_field :course_number, value: @record["Course Number"]%> 
-    <%= f.hidden_field :section, value: @record["Section ID"]%> 
+    <%= f.hidden_field :course_number, value: @record.course_number %>
+    <%= f.hidden_field :section, value: @record.section %>
     <label>Student Name:</label>
     <%= f.select :stu_name, [], { prompt: "Search for a TA" }, class: "form-control", id: "ta-search", required: true  %>
 

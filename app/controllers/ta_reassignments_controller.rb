@@ -73,6 +73,10 @@ class TaReassignmentsController < ApplicationController
           end
 
           model.create(mapped_row)
+          if Unassigned_Applicants.exists?(uin: filtered_row["uin"])
+            Rails.logger.debug "Deleting Unassigned_Applicants record for UIN: #{filtered_row['uin']}"
+            Unassigned_Applicants.where(uin: filtered_row["uin"]).delete_all
+          end
         end
       end
       # Append to the original CSV files while ensuring headers are written correctly

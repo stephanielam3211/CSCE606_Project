@@ -139,10 +139,10 @@ class ApplicantsController < ApplicationController
             @applicant.name.downcase,
             @applicant.email.downcase
           )
-          if !TaMatch.nil? || !SeniorGraderMatch.nil? || !GraderMatch.nil?
-            if blacklist_entry.present? &&  !@applicant.name.strip.downcase.start_with?("*")
+          if TaMatch.exists? || SeniorGraderMatch.exists? || GraderMatch.exists?
+            if !blacklist_entry.present? &&  !@applicant.name.strip.downcase.start_with?("*")
               # Backup the applicant to the unassigned applicants CSV and model
-              backup_unassigned_applicant(@applicant.uin)
+              UnassignedApplicant.create(@applicant.attributes.except("id", "created_at", "updated_at", "confirm"))
             end
           end
           format.html { redirect_to @applicant, notice: "Application submitted successfully." }
@@ -225,20 +225,7 @@ class ApplicantsController < ApplicationController
     end
     
 
-    def backup_unassigned_applicant(uin)
-      applicant = Applicant.find_by(uin: uin)
-      return unless applicant
 
-      UnassignedApplicant.create(applicant.attributes.except("id", "created_at", "updated_at", "confirm"))
-
-      column_order, mapping = backup_applicant_column_mapping
-      backup_path = Rails.root.join("app", "Charizard", "util", "public", "output", "Unassigned_Applicants.csv")
-
-      CSV.open(backup_path, "a", headers: column_order, write_headers: !File.exist?(backup_path)) do |csv|
-        row = column_order.map { |h| applicant.send(mapping[h]) || "" }
-        csv << row
-      end
-    end
 
     # This is the column mappiing for adding a student to the unassigned applicants csv
     # This is needed beacuse the table and the csv have different column names
