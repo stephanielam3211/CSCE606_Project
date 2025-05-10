@@ -47,9 +47,10 @@ class RecommendationsController < ApplicationController
   # This method is used to create a new recommendation
   def create
     @recommendation = Recommendation.new(recommendation_params)
-
+    #existing = Recommendation.find_by(selectionsTA: @recommendation.selectionsTA, course: @recommendation.course)
     # Check for duplicate (name + course)
-    if Recommendation.exists?(name: @recommendation.name, course: @recommendation.course)
+    if Recommendation.exists?(selectionsTA: @recommendation.selectionsTA, name: @recommendation.name, course: @recommendation.course)
+    #if existing
       @recommendation.errors.add(:base, "A recommendation already exists for this student and course.")
       render :new, status: :unprocessable_entity and return
     end
