@@ -222,6 +222,17 @@ class RecordsController < ApplicationController
       data.each { |row| csv << row.values_at(*column_order) }
     end
   end
+
+  # This updates the new needs file accordingly
+  # The new_needs file needs to be updated based on the open position it has for each job
+  # So it updates the TA, Senior Grader, and Grader columns with the correct number based on the file name
+  def determine_assignment_type(file_name)
+    {
+      "TA_Matches.csv" => "TA",
+      "Senior_Grader_Matches.csv" => "Senior_Grader",
+      "Grader_Matches.csv" => "Grader"
+    }[file_name]
+  end
 end
 
 
@@ -370,14 +381,6 @@ end
   # So it updates the TA, Senior Grader and Grader columns with the correct number based on the file name
   private
   # THis is for the new needs file that will get the file and respond with the corresponding column
-  def determine_assignment_type(file_name)
-    {
-      "TA_Matches.csv" => "TA",
-      "Senior_Grader_Matches.csv" => "Senior_Grader",
-      "Grader_Matches.csv" => "Grader"
-    }[file_name]
-  end
-
   def determine_assignment_type1(record)
     case record
     when "TA_Matches.csv" then "TA"

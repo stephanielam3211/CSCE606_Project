@@ -33,7 +33,7 @@ class TaAssignmentsController < ApplicationController
     File.delete(Rails.root.join("app/Charizard/util/public/output/TA_Matches.csv"))
     File.delete(Rails.root.join("app/Charizard/util/public/output/Senior_Grader_Matches.csv"))
     File.delete(Rails.root.join("app/Charizard/util/public/output/Grader_Matches.csv"))
-
+    File.delete(Rails.root.join("app/Charizard/util/public/output/Modified_assignments.csv"))
     update_needs_from_assignments
 
 
