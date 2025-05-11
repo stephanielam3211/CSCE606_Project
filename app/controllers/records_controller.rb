@@ -233,6 +233,20 @@ class RecordsController < ApplicationController
       "Grader_Matches.csv" => "Grader"
     }[file_name]
   end
+
+  def add_to_modified_assignments(file_name, model_record)
+    path = Rails.root.join("app", "Charizard", "util", "public", "output", "Modified_assignments.csv")
+    if model_record.present?
+      attributes = model_record.attributes.except("id", "created_at", "updated_at")
+      headers = attributes.keys
+
+      write_headers = !File.exist?(path) || File.zero?(path)
+
+      CSV.open(path, "a", write_headers: write_headers, headers: headers) do |csv|
+        csv << attributes.values
+      end
+    end
+  end
 end
 
 
@@ -322,21 +336,6 @@ end
     end
   end
 
-  def add_to_modified_assignments(file_name, model_record)
-    path = Rails.root.join("app", "Charizard", "util", "public", "output", "Modified_assignments.csv")
-    if model_record.present?
-      attributes = model_record.attributes.except("id", "created_at", "updated_at")
-      headers = attributes.keys
-
-      write_headers = !File.exist?(path) || File.zero?(path)
-
-      CSV.open(path, "a", write_headers: write_headers, headers: headers) do |csv|
-        csv << attributes.values
-    end
-      
-  end
-
-  # This removes the recoord form the previous cvs file
   def update_csv(file_name, uin)
     records = read_csv(file_name).reject { |r| r["UIN"] == uin }
     file_path = Rails.root.join("app", "Charizard", "util", "public", "output", file_name)
@@ -389,4 +388,4 @@ end
     end
   end
   
-end
+
