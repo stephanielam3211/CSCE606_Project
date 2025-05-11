@@ -187,6 +187,12 @@ class RecordsController < ApplicationController
       Rails.logger.debug "No record found with UIN #{@role.uin}"
     end
   end
+  def backup_unassigned_applicant(uin)
+    applicant = Applicant.find_by(uin: uin)
+    return unless applicant
+
+    UnassignedApplicant.create(applicant.attributes.except("id", "created_at", "updated_at", "confirm"))
+  end
 end
 
   private
@@ -309,13 +315,7 @@ end
   end
 
   # This adds the student in the unassigned applicants table and cvs
-  def backup_unassigned_applicant(uin)
-    applicant = Applicant.find_by(uin: uin)
-    return unless applicant
-
-    UnassignedApplicant.create(applicant.attributes.except("id", "created_at", "updated_at", "confirm"))
-
-  end
+ 
 
   # This is the column mappiing for adding a student to the unassigned applicants csv
   # This is needed beacuse the table and the csv have different column names
