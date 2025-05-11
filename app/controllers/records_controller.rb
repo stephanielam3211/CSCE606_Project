@@ -368,7 +368,7 @@ end
   # This updates the new needs file accordingly
   # THe new_needs file need to be updated base on the open position it has for each job
   # So it updates the TA, Senior Grader and Grader columns with the correct number based on the file name
-
+  private
   # THis is for the new needs file that will get the file and respond with the corresponding column
   def determine_assignment_type(file_name)
     {
