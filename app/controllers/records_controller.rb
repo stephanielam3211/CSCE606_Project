@@ -315,13 +315,6 @@ end
 
     UnassignedApplicant.create(applicant.attributes.except("id", "created_at", "updated_at", "confirm"))
 
-    column_order, mapping = backup_applicant_column_mapping
-    backup_path = Rails.root.join("app", "Charizard", "util", "public", "output", "Unassigned_Applicants.csv")
-
-    CSV.open(backup_path, "a", headers: column_order, write_headers: !File.exist?(backup_path)) do |csv|
-      row = column_order.map { |h| applicant.send(mapping[h]) || "" }
-      csv << row
-    end
   end
 
   # This is the column mappiing for adding a student to the unassigned applicants csv
