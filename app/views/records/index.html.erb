@@ -14,7 +14,6 @@
       align-items: center; /* Align text and arrow vertically */
       gap: 4px; /* Space between text and arrow */
     }
-
   </style>
 </head>
 <body style="min-width: 1000px;">
@@ -88,19 +87,20 @@
           <td><%= record.stu_name %></td>
           <td><%= record.stu_email %></td>
           <td><%= record.uin %></td>
-          <td>
-           <% if record.assigned %>
-              <%= button_to "Unsend", 
-                  toggle_assignment_path(id: record.id, table: @table_name), 
-                  method: :post, 
-                  class: "btn btn-warning" %>
-            <% else %>
-              <%= button_to "Send", 
-                  toggle_assignment_path(id: record.id, table: @table_name), 
-                  method: :post, 
-                  class: "btn btn-success" %>
-            <% end %>
-          </td>
+       <td style="background-color: <%= record.assigned ?  'rgb(162, 246, 156)' : 'rgb(243, 169, 162)'  %>;">
+
+  <% if record.assigned %>
+    <%= button_to "Unsend", 
+        toggle_assignment_path(id: record.id, table: @table_name), 
+        method: :post, 
+        class: "btn btn-warning" %>
+  <% else %>
+    <%= button_to "Send", 
+        toggle_assignment_path(id: record.id, table: @table_name), 
+        method: :post, 
+        class: "btn btn-success" %>
+  <% end %>
+</td>
           <td>
             <% if record.confirm %>
               <span class="status-confirmed">✅ Confirmed</span>

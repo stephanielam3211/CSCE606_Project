@@ -30,6 +30,9 @@ class TaAssignmentsController < ApplicationController
     flash[:notice] = "CSV processing complete"
     #system("rake import:csv")
     import_csv
+    File.delete(Rails.root.join("app/Charizard/util/public/output/TA_Matches.csv"))
+    File.delete(Rails.root.join("app/Charizard/util/public/output/Senior_Grader_Matches.csv"))
+    File.delete(Rails.root.join("app/Charizard/util/public/output/Grader_Matches.csv"))
 
     update_needs_from_assignments
 
@@ -126,7 +129,6 @@ class TaAssignmentsController < ApplicationController
 
   # This is to edit the assignments and get the data from the model
   def edit
-    csv_directory = Rails.root.join("app", "Charizard", "util", "public", "output")
 
     file_name = params[:file] + ".csv"
     @table_name = params[:file]

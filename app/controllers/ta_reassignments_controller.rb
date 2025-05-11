@@ -48,17 +48,13 @@ class TaReassignmentsController < ApplicationController
     import_standard_csv(ta_csv_path, TaMatch, ta_header_mapping)
     import_standard_csv(senior_grader_csv_path, SeniorGraderMatch, ta_header_mapping)
     import_standard_csv(grader_csv_path, GraderMatch, ta_header_mapping)
-
-    # This will combine the data from the tmp files and the original csv files
-    # This will also check for duplicates and skip them
-    # Then create the new records in the database
-    
+    File.delete(Rails.root.join("app/Charizard/util/public/output/New_Needs.csv"))
 
     update_needs_from_assignments
 
     redirect_to view_csv_path
   end
-  
+
   def update_needs_from_assignments
     path = Rails.root.join("app", "Charizard", "util", "public", "output", "New_Needs.csv")
     column_order = [ "Course_Name", "Course_Number", "Section", "Instructor", "Faculty_Email", "TA", "Senior_Grader", "Grader", "Professor Pre-Reqs" ]

@@ -162,6 +162,11 @@ class ApplicantsController < ApplicationController
   def update
     respond_to do |format|
       if @applicant.update(applicant_params)
+        if UnassignedApplicant.exists?(email: @applicant.email)
+          unassigned_applicant = UnassignedApplicant.find_by(email: @applicant.email)
+          unassigned_applicant.update(applicant_params)
+          unassigned_applicant.save
+        end
         format.html { redirect_to @applicant, notice: "Applicant was successfully updated." }
         format.json { render :show, status: :ok, location: @applicant }
         flash[:notice] = "Applicant was successfully updated."
@@ -223,9 +228,7 @@ class ApplicantsController < ApplicationController
         redirect_to root_path, alert: "Unauthorized access."
       end
     end
-    
-
-
+  
 
     # This is the column mappiing for adding a student to the unassigned applicants csv
     # This is needed beacuse the table and the csv have different column names
