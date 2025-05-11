@@ -87,20 +87,19 @@
           <td><%= record.stu_name %></td>
           <td><%= record.stu_email %></td>
           <td><%= record.uin %></td>
-       <td style="background-color: <%= record.assigned ?  'rgb(162, 246, 156)' : 'rgb(243, 169, 162)'  %>;">
-
-  <% if record.assigned %>
-    <%= button_to "Unsend", 
-        toggle_assignment_path(id: record.id, table: @table_name), 
-        method: :post, 
-        class: "btn btn-warning" %>
-  <% else %>
-    <%= button_to "Send", 
-        toggle_assignment_path(id: record.id, table: @table_name), 
-        method: :post, 
-        class: "btn btn-success" %>
-  <% end %>
-</td>
+          <td style="background-color: <%= record.assigned ?  'rgb(162, 246, 156)' : 'rgb(243, 169, 162)'  %>;">
+           <% if record.assigned %>
+              <%= button_to "Unsend", 
+                  toggle_assignment_path(id: record.id, table: @table_name), 
+                  method: :post, 
+                  class: "btn btn-warning" %>
+            <% else %>
+              <%= button_to "Send", 
+                  toggle_assignment_path(id: record.id, table: @table_name), 
+                  method: :post, 
+                  class: "btn btn-success" %>
+            <% end %>
+          </td>   
           <td>
             <% if record.confirm %>
               <span class="status-confirmed">✅ Confirmed</span>
