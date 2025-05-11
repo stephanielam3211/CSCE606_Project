@@ -32,6 +32,13 @@ class ApplicationController < ActionController::Base
   end
 
   private
+  def authorize_admin!
+    case session[:role].to_s
+    when "admin"
+    else
+      redirect_to root_path, alert: "Unauthorized access."
+    end
+  end
 
   def set_cache_buster
     response.headers["Cache-Control"] ="no-store, no-cache, must-revalidate, max-age=0"

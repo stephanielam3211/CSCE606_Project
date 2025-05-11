@@ -81,9 +81,6 @@ class RecordsController < ApplicationController
    
     path = Rails.root.join("app", "Charizard", "util", "public", "output", "Modified_assignments.csv")
    
-    new_needs_csv = Rails.root.join("app", "Charizard", "util", "public", "output", "New_Needs.csv")
-
-
     unconfirmed = model_class.where(confirm: false)
 
     if unconfirmed.empty?
@@ -92,7 +89,6 @@ class RecordsController < ApplicationController
       redirect_back fallback_location: view_csv_path and return
     end
 
-    
     uins = unconfirmed.pluck(:uin)
 
       uins.each do |uin|
@@ -115,9 +111,8 @@ class RecordsController < ApplicationController
         model_record.destroy
         Rails.logger.debug "Record with UIN #{model_record.uin} destroyed."
 
-
       end
-      model_class.where(uin: uins).destroy_all
+
 
       flash[:notice] = "All unconfirmed assignments were deleted and processed."
       redirect_back fallback_location: view_csv_path
@@ -391,14 +386,4 @@ end
     end
   end
   
-  private
-  def authorize_admin!
-    case session[:role].to_s
-    when "admin"
-    else
-      redirect_to root_path, alert: "Unauthorized access."
-    end
-  end
-
-
 end
