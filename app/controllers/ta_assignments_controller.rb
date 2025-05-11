@@ -30,10 +30,17 @@ class TaAssignmentsController < ApplicationController
     flash[:notice] = "CSV processing complete"
     #system("rake import:csv")
     import_csv
-    File.delete(Rails.root.join("app/Charizard/util/public/output/TA_Matches.csv"))
-    File.delete(Rails.root.join("app/Charizard/util/public/output/Senior_Grader_Matches.csv"))
-    File.delete(Rails.root.join("app/Charizard/util/public/output/Grader_Matches.csv"))
-    File.delete(Rails.root.join("app/Charizard/util/public/output/Modified_assignments.csv"))
+    file_paths = [
+      "app/Charizard/util/public/output/TA_Matches.csv",
+      "app/Charizard/util/public/output/Senior_Grader_Matches.csv",
+      "app/Charizard/util/public/output/Grader_Matches.csv",
+      "app/Charizard/util/public/output/Modified_assignments.csv"
+    ]
+
+    file_paths.each do |path|
+      full_path = Rails.root.join(path)
+      File.delete(full_path) if File.exist?(full_path)
+    end
     update_needs_from_assignments
 
 
