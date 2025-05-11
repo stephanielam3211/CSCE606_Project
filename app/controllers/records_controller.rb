@@ -193,6 +193,40 @@ class RecordsController < ApplicationController
 
     UnassignedApplicant.create(applicant.attributes.except("id", "created_at", "updated_at", "confirm"))
   end
+
+  def update_new_needs_csv(file_name, course_number, section)
+    course = Course.where("course_number LIKE ?", "%#{course_number}%")
+                   .where("section LIKE ?", "%#{section}%")
+                   .first
+    return unless course
+
+    assignment_type = determine_assignment_type(file_name)
+    path = Rails.root.join("app", "Charizard", "util", "public", "output", "New_Needs.csv")
+    column_order = [ "Course_Name", "Course_Number", "Section", "Instructor", "Faculty_Email", "TA", "Senior_Grader", "Grader", "Professor Pre-Reqs" ]
+
+    data = File.exist?(path) ? CSV.read(path, headers: true).map(&:to_h) : []
+    entry = data.find { |row| row["Course_Number"] == course.course_number && row["Section"] == course.section }
+
+    if entry
+      entry[assignment_type] = (entry[assignment_type].to_i + 1).to_s
+    else
+      new_entry = {
+        "Course_Name" => course.course_name,
+        "Course_Number" => course.course_number,
+        "Section" => course.section,
+        "Instructor" => course.instructor,
+        "Faculty_Email" => course.faculty_email,
+        "TA" => "0", "Senior_Grader" => "0", "Grader" => "0",
+        "Professor Pre-Reqs" => course.pre_reqs.presence || "N/A"
+      }
+      new_entry[assignment_type] = "1"
+      data << new_entry
+    end
+
+    CSV.open(path, "w", headers: column_order, write_headers: true) do |csv|
+      data.each { |row| csv << row.values_at(*column_order) }
+    end
+  end
 end
 
   private
@@ -347,40 +381,6 @@ end
   # This updates the new needs file accordingly
   # THe new_needs file need to be updated base on the open position it has for each job
   # So it updates the TA, Senior Grader and Grader columns with the correct number based on the file name
-  def update_new_needs_csv(file_name, course_number, section)
-    course = Course.where("course_number LIKE ?", "%#{course_number}%")
-                   .where("section LIKE ?", "%#{section}%")
-                   .first
-    return unless course
-
-    assignment_type = determine_assignment_type(file_name)
-    path = Rails.root.join("app", "Charizard", "util", "public", "output", "New_Needs.csv")
-    column_order = [ "Course_Name", "Course_Number", "Section", "Instructor", "Faculty_Email", "TA", "Senior_Grader", "Grader", "Professor Pre-Reqs" ]
-
-    data = File.exist?(path) ? CSV.read(path, headers: true).map(&:to_h) : []
-    entry = data.find { |row| row["Course_Number"] == course.course_number && row["Section"] == course.section }
-
-    if entry
-      entry[assignment_type] = (entry[assignment_type].to_i + 1).to_s
-    else
-      new_entry = {
-        "Course_Name" => course.course_name,
-        "Course_Number" => course.course_number,
-        "Section" => course.section,
-        "Instructor" => course.instructor,
-        "Faculty_Email" => course.faculty_email,
-        "TA" => "0", "Senior_Grader" => "0", "Grader" => "0",
-        "Professor Pre-Reqs" => course.pre_reqs.presence || "N/A"
-      }
-      new_entry[assignment_type] = "1"
-      data << new_entry
-    end
-
-    CSV.open(path, "w", headers: column_order, write_headers: true) do |csv|
-      data.each { |row| csv << row.values_at(*column_order) }
-    end
-  end
-
 
   # THis is for the new needs file that will get the file and respond with the corresponding column
   def determine_assignment_type(file_name)
