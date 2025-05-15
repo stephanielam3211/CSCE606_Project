@@ -125,11 +125,18 @@ class ApplicantsController < ApplicationController
       end
 
       modified_params = applicant_params
-      modified_params = modified_params.merge(name: "*#{modified_params[:name]}") if Blacklist.exists?(student_email: modified_params[:email])
+      session_email = session[:email]
+      session_user = session[:user]
 
+      is_blacklisted = Blacklist.exists?(
+        ["LOWER(student_email) = ?", session_email.to_s.downcase]
+      )
+
+      final_name = is_blacklisted ? "*#{session_user}" : session_user
+       
       @applicant = Applicant.new(modified_params)
-      @applicant.email = session[:email]
-      @applicant.name = session[:user]
+      @applicant.email = session_email
+      @applicant.name = final_name
       @applicant.confirm = user.id
 
       respond_to do |format|

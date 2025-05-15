@@ -491,15 +491,15 @@ class TaAssignmentsController < ApplicationController
 
   # This method is used to generate the CSV files for the applications
   def generate_csv_apps(records)
+    blacklist_keys = Blacklist.all.map { |b| [b.student_name.downcase.strip, b.student_email.downcase.strip] }.to_set
+
     CSV.generate(headers: true) do |csv|
     csv << [ "Timestamp", "Email Address", "First and Last Name", "UIN", "Phone Number", "How many hours do you plan to be enrolled in?", "Degree Type?", "1st Choice Course", "2nd Choice Course", "3rd Choice Course", "4th Choice Course", "5th Choice Course", "6th Choice Course", "7th Choice Course", "8th Choice Course", "9th Choice Course", "10th Choice Course", "GPA", "Country of Citizenship?", "English language certification level?", "Which courses have you taken at TAMU?", "Which courses have you taken at another university?", "Which courses have you TAd for?", "Who is your advisor (if applicable)?", "What position are you applying for?" ]
     records.each do |record|
-      blacklist_entry = Blacklist.find_by(
-        "LOWER(student_name) = ? AND LOWER(student_email) = ?",
-        record.name.downcase,
-        record.email.downcase
-      )
-      next if record.name.strip.downcase.start_with?("*")
+      name_key = record.name.to_s.strip.downcase
+      email_key = record.email.to_s.strip.downcase
+
+      next if name_key.start_with?("*") || blacklist_keys.include?([name_key, email_key])
       csv << [
         record.timestamp,
         record.email,
