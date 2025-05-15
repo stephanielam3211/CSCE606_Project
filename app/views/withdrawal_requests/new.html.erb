@@ -18,7 +18,9 @@
 
     <% if @role && @role != "Not Found" %>
     <div class="record-details">
-      <h3>Found Record Details</h3>
+      <% if @job.present? %>
+        <h3><%= @job %> Position</h3>
+      <% end %>
       <% key_mapping = {
         "stu_email" => "Student Email",
         "stu_name" => "Student Name",
@@ -53,6 +55,7 @@
         <p class="status-confirmed">✅ You have confirmed your assignment.</p>
       <% end %>
     <% elsif @role == "Not Found" %>
+      <% @job = nil %> <!-- Ensure @job is reset -->
       <p><strong>Your Application is being processed or rejected.</strong></p>
     <% end %>
     </div>

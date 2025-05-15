@@ -15,14 +15,18 @@ class WithdrawalRequestsController < ApplicationController
     if (ta_matches = TaMatch.find_by(stu_email: session[:email], assigned: true))
       @role = ta_matches
       @class = "ta_matches"
+      @job = "TA"
     elsif (senior_grader_matches = SeniorGraderMatch.find_by(stu_email: session[:email], assigned: true))
       @role = senior_grader_matches
       @class = "senior_grader_matches"
+      @job = "Senior Grader"
     elsif (grader_matches = GraderMatch.find_by(stu_email: session[:email], assigned: true))
       @role = grader_matches
       @class = "grader_matches"
+      @job = "Grader"
     else
       @role = "Not Found"
+      @job = nil
     end
   end
 
