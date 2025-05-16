@@ -57,7 +57,7 @@
     </div>
 
     <div class="full-width">
-      <%= form.label :prev_uni, "Previously Taken Courses at Other Universities" %>
+       <%= form.label :prev_uni, "Previously Taken Courses at Other Universities (Ex: 121, 629, 410, etc)" %>
       <%= form.text_field :prev_uni %>
     </div>
 
@@ -69,16 +69,18 @@
      <div class="full-width">
       <%= form.label :advisor, "Who is Your Advisor?" %>
       <%= form.select :advisor,
-        Advisor.all.map { |a| ["#{a.name} (#{a.email})", "#{a.name} (#{a.email})"] },
+        Advisor.order(:name).map { |a| ["#{a.name} (#{a.email})", "#{a.name} (#{a.email})"] }+
+        [["None of the above", "None of the above"]],
         { prompt: "Select an Advisor" },
         { id: "advisor-select", class: "form-control" } %>
     </div>
 
+    <% sorted_courses = @courses.sort %>
     <% (1..10).each do |i| %>
       <div>
         <%= form.label "choice_#{i}".to_sym, "Course Choice #{i}" %>
         <%= form.select "choice_#{i}".to_sym,
-              options_for_select(@courses, form.object.send("choice_#{i}")),
+              options_for_select(sorted_courses, form.object.send("choice_#{i}")),
               { include_blank: true },
               { class: "course-select" } %>
       </div>

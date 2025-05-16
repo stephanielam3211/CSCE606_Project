@@ -3,8 +3,7 @@
 class Applicant < ApplicationRecord
   belongs_to :user, foreign_key: "confirm", optional: true
   before_validation :ensure_timestamp
-  before_validation :strip_trailing_comma_from_prev_course
-  before_validation :strip_trailing_comma_from_prev_ta
+  before_save :normalize_courses
 
   validates :confirm, uniqueness: true
   has_many :recommendations
@@ -23,21 +22,28 @@ class Applicant < ApplicationRecord
   validates :cert, presence: true
   validates :gpa, presence: true, numericality: { greater_than_or_equal_to: 0.0, less_than_or_equal_to: 4.0 }
   validate :min_course_choice
+  validate :check_duplicates
   validates :prev_course, length: { maximum: 200, too_long: "%{count} characters is the maximum allowed" },
             format: { 
-              with: /\A\d{3}(?:,\s*\d{3})*\z/,
+              with: /\A\s*\d{3}(\s*,\s*\d{3})*\s*\z/,
               message: "Must Only Include Course Numbers\ '123,345,456'",
               allow_blank: true
             }
-  validate :check_duplicates
-  validates :prev_uni, format: { with: /\A[a-zA-Z0-9,]+\z/, message: "can only contain letters, numbers, and commas" },allow_blank: true
-  validates :prev_uni, length: { maximum: 200, too_long: "%{count} characters is the maximum allowed" }
-  validates :prev_ta, length: { maximum: 200, too_long: "%{count} characters is the maximum allowed" },
+  validates :prev_uni, length: { maximum: 200, too_long: "%{count} characters is the maximum allowed" },
             format: { 
-              with: /\A\d{3}(?:,\s*\d{3})*\z/,
+              with: /\A\s*\d{3}(\s*,\s*\d{3})*\s*\z/,
               message: "Must Only Include Course Numbers Numbers\ '123,345,456'",
               allow_blank: true
             }
+  validates :prev_ta, length: { maximum: 200, too_long: "%{count} characters is the maximum allowed" },
+            format: { 
+              with: /\A\s*\d{3}(\s*,\s*\d{3})*\s*\z/,
+              message: "Must Only Include Course Numbers Numbers\ '123,345,456'",
+              allow_blank: true
+            }
+
+  validates :advisor, presence: true, if: :requires_advisor?
+
   # type casting
   ransacker :uin do |parent|
     Arel.sql("CAST(#{parent.table.name}.uin AS TEXT)")
@@ -51,13 +57,6 @@ class Applicant < ApplicationRecord
     uin.to_s
   end
 
-  def strip_trailing_comma_from_prev_course
-    self.prev_course = prev_course.gsub(/,+\z/, '') if prev_course.present?
-  end
-
-  def strip_trailing_comma_from_prev_ta
-    self.prev_ta = prev_ta.gsub(/,+\z/, '') if prev_ta.present?
-  end
 
   ransacker :uin_text do
     Arel.sql("CAST(uin AS TEXT)")
@@ -66,18 +65,24 @@ class Applicant < ApplicationRecord
   def self.ransackable_associations(auth_object = nil)
     []
   end
+  def requires_advisor?
+    degree.to_s.strip.casecmp("phd").zero?
+  end
+
+  def normalize_courses
+    self.prev_uni = prev_uni.gsub(/\s+/, '') if prev_uni.present?
+    self.prev_course = prev_course.gsub(/\s+/, '') if prev_course.present?
+    self.prev_ta = prev_ta.gsub(/\s+/, '') if prev_ta.present?
+  end
 
   def check_duplicates
-    if prev_course.present?
-      prev_numbers = prev_course.split(",")
-      if prev_numbers.uniq.length != prev_numbers.length
-        errors.add(:prev_course, "must not contain duplicate course numbers")
-      end
-    end
-    if prev_ta.present?
-      prev_ta_numbers = prev_ta.split(",")
-      if prev_ta_numbers.uniq.length != prev_ta_numbers.length
-        errors.add(:prev_ta, "must not contain duplicate course numbers")
+    %i[prev_course prev_ta prev_uni].each do |field|
+      value = send(field)
+      if value.present?
+        numbers = value.gsub(/\s+/, '').split(',')
+        if numbers.uniq.length != numbers.length
+          errors.add(field, "must not contain duplicate course numbers")
+        end
       end
     end
   end
