@@ -110,6 +110,28 @@ class CoursesController < ApplicationController
   # Will delete a course
   def destroy
     @course = Course.find(params[:id])
+    course_number = @course.course_number
+    section = @course.section
+
+    TaMatch.where(course_number: course_number, section: section).find_each do |ta_match|
+      add_to_modified_assignments(ta_match)
+      backup_unassigned_applicant(ta_match.uin)
+      remove_course_from_new_needs_csv(course_number, section)
+      ta_match.destroy
+    end
+
+    GraderMatch.where(course_number: course_number, section: section).find_each do |grader_match|
+      add_to_modified_assignments(grader_match)
+      backup_unassigned_applicant(grader_match.uin)
+      remove_course_from_new_needs_csv(course_number, section)
+      grader_match.destroy
+    end
+    SeniorGraderMatch.where(course_number: course_number, section: section).find_each do |senior_grader_match|
+      add_to_modified_assignments(senior_grader_match)
+      backup_unassigned_applicant(senior_grader_match.uin)
+      remove_course_from_new_needs_csv(course_number, section)
+      senior_grader_match.destroy
+    end
     @course.destroy
     respond_to do |format|
       format.js
@@ -160,6 +182,48 @@ class CoursesController < ApplicationController
       redirect_to root_path, notice: "All courses have been deleted."
     else
       puts "All courses have been deleted."
+    end
+  end
+
+  def add_to_modified_assignments(model_record)
+    path = Rails.root.join("app", "Charizard", "util", "public", "output", "Modified_assignments.csv")
+    if model_record.present?
+      attributes = model_record.attributes.except("id", "created_at", "updated_at")
+      headers = attributes.keys
+
+      write_headers = !File.exist?(path) || File.zero?(path)
+
+      CSV.open(path, "a", write_headers: write_headers, headers: headers) do |csv|
+        csv << attributes.values
+      end
+    end
+  end
+
+  def backup_unassigned_applicant(uin)
+    applicant = Applicant.find_by(uin: uin)
+    return unless applicant
+
+    UnassignedApplicant.create(applicant.attributes.except("id", "created_at", "updated_at", "confirm"))
+  end
+
+  def remove_course_from_new_needs_csv(course_number, section)
+    path = Rails.root.join("app", "Charizard", "util", "public", "output", "New_Needs.csv")
+    return unless File.exist?(path)
+
+    column_order = [ "Course_Name", "Course_Number", "Section", "Instructor", "Faculty_Email", "TA", "Senior_Grader", "Grader", "Professor Pre-Reqs" ]
+
+    data = CSV.read(path, headers: true).map(&:to_h)
+
+    # Filter out matching rows
+    filtered_data = data.reject do |row|
+      row["Course_Number"] == course_number && row["Section"] == section
+    end
+
+    # Rewrite the CSV with remaining rows
+    CSV.open(path, "w", headers: column_order, write_headers: true) do |csv|
+      filtered_data.each do |row|
+        csv << row.values_at(*column_order)
+      end
     end
   end
 
