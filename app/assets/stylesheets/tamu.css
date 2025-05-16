@@ -413,13 +413,22 @@ textarea {
   text-align: left;
 }
 
-.styled-table1 tr.non-admin td {
+.styled-table1 tr.yes-recommendation td {
+  background-color: rgb(78, 248, 66); /* Specific background for non-admin rows */
+  color: #211e1e; /* Text color */
+}
+
+.styled-table1 tr.bad-recommendation td {
+  background-color: rgb(243, 169, 162); /* Specific background for admin rows */
+  color: #211e1e; /* Text color */
+}
+.styled-table1 tr.ok-recommendation td {
   background-color: rgb(162, 246, 156); /* Specific background for non-admin rows */
   color: #211e1e; /* Text color */
 }
 
-.styled-table1 tr.admin td {
-  background-color: rgb(243, 169, 162); /* Specific background for admin rows */
+.styled-table1 tr.no-recommendation td {
+  background-color: rgb(243, 88, 74); /* Specific background for admin rows */
   color: #211e1e; /* Text color */
 }
 

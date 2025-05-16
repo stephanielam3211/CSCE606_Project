@@ -16,49 +16,33 @@
   <h1>All Recommendations </h1>
 
 <div style="max-height: 800px; max-width:1500px;  overflow-y: auto;">
-<table class="styled-table1">
+<table class="styled-table1", id="recommendation-table">
   <thead style="position: sticky; top: 0; background-color: white; z-index: 100;">
     <tr>
-      <th>Email</th>
-      <th>Name</th>
-      <th>Course</th>
-      <th>TA/Grader</th>
-      <th>Feedback</th>
-      <th>Additional Feedback</th>
+      <th onclick="sortTable(0)">Email</th>
+      <th onclick="sortTable(1)">Name</th>
+      <th onclick="sortTable(2)">Course</th>
+      <th onclick="sortTable(3)">TA/Grader</th>
+      <th onclick="sortTable(4)">Feedback</th>
+      <th onclick="sortTable(5)">Additional Feedback</th>
       <th>Delete</th>
     </tr>
   </thead>
   <tbody>
     <% @recommendations.each do |recommendation| %>
-      <% if recommendation.admin == false %>
-        <tr class="non-admin">
-          <td><%= recommendation.email %></td>
-          <td><%= recommendation.name %></td>
-          <td><%= recommendation.course %></td>
-          <td><%= recommendation.selectionsTA %></td>
-          <td><%= recommendation.feedback %></td>
-          <td><%= recommendation.additionalfeedback %></td>
-          <td>
-            <%= form_with url: recommendation_path(recommendation), method: :delete, local: true do %>
-              <%= submit_tag "Delete", data: { confirm: "Are you sure?" }, class: "action-button" %>
-            <% end %>
-          </td>
-        </tr>
-      <% else %>
-        <tr class="admin">
-          <td><%= recommendation.email %></td>
-          <td><%= recommendation.name %></td>
-          <td><%= recommendation.course %></td>
-          <td><%= recommendation.selectionsTA %></td>
-          <td><%= recommendation.feedback %></td>
-          <td><%= recommendation.additionalfeedback %></td>
-          <td>
-            <%= form_with url: recommendation_path(recommendation), method: :delete, local: true do %>
-              <%= submit_tag "Delete", data: { confirm: "Are you sure?" }, class: "action-button" %>
-            <% end %>
-          </td>
-        </tr>
-      <% end %>
+      <tr class="<%= recommendation_class(recommendation.feedback) %>">
+        <td><%= recommendation.email %></td>
+        <td><%= recommendation.name %></td>
+        <td><%= recommendation.course %></td>
+        <td><%= recommendation.selectionsTA %></td>
+        <td><%= recommendation.feedback %></td>
+        <td><%= recommendation.additionalfeedback %></td>
+        <td>
+          <%= form_with url: recommendation_path(recommendation), method: :delete, local: true do %>
+            <%= submit_tag "Delete", data: { confirm: "Are you sure?" }, class: "action-button" %>
+          <% end %>
+        </td>
+      </tr>
     <% end %>
   </tbody>
 </table>
@@ -70,4 +54,19 @@
     &copy; 2025 Texas A&M University. All Rights Reserved.
   </div>
 </body>
+<script>
+function sortTable(colIndex) {
+  const table = document.getElementById("recommendation-table");
+  const tbody = table.tBodies[0];
+  const rows = Array.from(tbody.querySelectorAll("tr"));
+  const isAscending = table.getAttribute("data-sort-dir") !== "asc";
+  rows.sort((a, b) => {
+    const aText = a.children[colIndex].textContent.trim();
+    const bText = b.children[colIndex].textContent.trim();
+    return isAscending ? aText.localeCompare(bText) : bText.localeCompare(aText);
+  });
+  rows.forEach(row => tbody.appendChild(row));
+  table.setAttribute("data-sort-dir", isAscending ? "asc" : "desc");
+}
+</script>
 </html>
