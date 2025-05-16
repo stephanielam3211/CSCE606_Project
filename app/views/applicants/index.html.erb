@@ -21,13 +21,13 @@
     }
   </style>
 </head>
-<body>
+<body style="min-width: 1000px;">
   <div class="header">
     <%= image_tag "logo.png", alt: "CSCE Logo", class: "logo" %>
     <%= link_to "logout", logout_path, method: :delete, class: "logout-button" %>
   </div>
 
-  <div class="main-content">
+  <div class="main-content-applicants">
     <p class="notice-text"><%= notice %></p>
     <div style="display: flex; align-items: center; justify-content: space-between;">
       <h1><%= link_to "Applicants", root_path, class: "action-button" %></h1>
@@ -186,8 +186,12 @@
               <td><%= applicant.prev_course %></td>
               <td><%= applicant.prev_uni %></td>
               <td><%= applicant.advisor %></td>
-              <td><%= link_to "Show this applicant", applicant_path(applicant), class: "table-link" %></td>
-              
+              <td> 
+                <% if session[:role].to_s == "admin" %>
+                  <%= link_to "Edit this applicant", edit_applicant_path(applicant), class: "action-button" %>
+                  <%= link_to "Show this applicant", applicant_path(applicant), class: "table-link" %>
+                <%end%>
+              </td>
             </tr>
           <% end %>
         </tbody>
