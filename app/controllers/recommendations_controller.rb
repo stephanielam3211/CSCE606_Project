@@ -27,7 +27,11 @@ class RecommendationsController < ApplicationController
   def update
     @recommendation = Recommendation.find(params[:id])
     if @recommendation.update(recommendation_params)
-      redirect_to my_recommendations_view_path, notice: "Recommendation updated successfully."
+      if session[:role].to_s == "admin"
+        redirect_to recommendation_view_path, notice: "Recommendation updated successfully."
+      else
+        redirect_to my_recommendations_view_path, notice: "Recommendation updated successfully."
+      end
     else
       render :edit, status: :unprocessable_entity
     end
@@ -73,7 +77,7 @@ class RecommendationsController < ApplicationController
 
   # This method is used to display the recommendations made by the logged-in user
   def my_recommendations
-    @recommendations = Recommendation.where(email: session[:email])
+    @recommendations = Recommendation.where(email: session[:email], admin: [false, nil])
   end
 
   # This method is used to clear all recommendations

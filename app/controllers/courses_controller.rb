@@ -112,26 +112,26 @@ class CoursesController < ApplicationController
     @course = Course.find(params[:id])
     course_number = @course.course_number
     section = @course.section
+    input_courses = course_number.to_s.scan(/\d{3}/).map(&:strip)
+    input_sections = section.to_s.scan(/\d+/).map(&:strip)
 
-    TaMatch.where(course_number: course_number, section: section).find_each do |ta_match|
+    TaMatch.where(course_number: input_courses, section: input_sections).find_each do |ta_match|
       add_to_modified_assignments(ta_match)
       backup_unassigned_applicant(ta_match.uin)
-      remove_course_from_new_needs_csv(course_number, section)
       ta_match.destroy
     end
 
-    GraderMatch.where(course_number: course_number, section: section).find_each do |grader_match|
+    GraderMatch.where(course_number: input_courses, section: input_sections).find_each do |grader_match|
       add_to_modified_assignments(grader_match)
       backup_unassigned_applicant(grader_match.uin)
-      remove_course_from_new_needs_csv(course_number, section)
       grader_match.destroy
     end
-    SeniorGraderMatch.where(course_number: course_number, section: section).find_each do |senior_grader_match|
+    SeniorGraderMatch.where(course_number: input_courses, section: input_sections).find_each do |senior_grader_match|
       add_to_modified_assignments(senior_grader_match)
       backup_unassigned_applicant(senior_grader_match.uin)
-      remove_course_from_new_needs_csv(course_number, section)
       senior_grader_match.destroy
     end
+    remove_course_from_new_needs_csv(course_number, section)
     @course.destroy
     respond_to do |format|
       format.js
@@ -213,10 +213,18 @@ class CoursesController < ApplicationController
     column_order = [ "Course_Name", "Course_Number", "Section", "Instructor", "Faculty_Email", "TA", "Senior_Grader", "Grader", "Professor Pre-Reqs" ]
 
     data = CSV.read(path, headers: true).map(&:to_h)
+    Rails.logger.debug "Course Number: #{course_number}, Section: #{section}"
 
     # Filter out matching rows
     filtered_data = data.reject do |row|
-      row["Course_Number"] == course_number && row["Section"] == section
+      row_course_number = row["Course_Number"].to_s.strip
+      row_section = row["Section"].to_s.strip
+      if row_course_number == course_number.strip && row_section == section.strip
+        Rails.logger.debug "Removing row: #{row.inspect}"
+        true
+      else
+        false
+      end
     end
 
     # Rewrite the CSV with remaining rows

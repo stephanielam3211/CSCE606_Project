@@ -17,8 +17,9 @@ class RecordsController < ApplicationController
     else
       @records = []
     end
-    @records = @records.sort_by { |r| [r.confirm ? 0 : 1, r.assigned ? 0 : 1] } if @records.present?
-
+    @records = @records.sort_by do |r|
+      [r.confirm ? 0 : 1,r.assigned ? 0 : 1,r.course_number.to_i]
+    end 
     @ta = Course.sum(:ta).to_i
     @senior_grader = Course.sum(:senior_grader).to_i
     @grader = Course.sum(:grader).to_i
@@ -182,6 +183,7 @@ class RecordsController < ApplicationController
       Rails.logger.debug "No record found with UIN #{@role.uin}"
     end
   end
+  
   def backup_unassigned_applicant(uin)
     applicant = Applicant.find_by(uin: uin)
     return unless applicant

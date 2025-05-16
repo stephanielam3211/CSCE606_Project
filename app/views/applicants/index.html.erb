@@ -189,8 +189,8 @@
               <td> 
                 <% if session[:role].to_s == "admin" %>
                   <%= link_to "Edit this applicant", edit_applicant_path(applicant), class: "action-button" %>
-                  <%= link_to "Show this applicant", applicant_path(applicant), class: "table-link" %>
                 <%end%>
+                <%= link_to "Show this applicant", applicant_path(applicant), class: "table-link" %>
               </td>
             </tr>
           <% end %>

@@ -40,6 +40,7 @@
         <td><%= recommendation.feedback %></td>
         <td><%= recommendation.additionalfeedback %></td>
         <td>
+          <%= link_to "Edit", edit_recommendation_path(recommendation),  class: "action-button" %>
           <%= form_with url: recommendation_path(recommendation), method: :delete, local: true do %>
             <%= submit_tag "Delete", data: { confirm: "Are you sure?" }, class: "action-button" %>
           <% end %>

@@ -9,7 +9,7 @@ class TaAssignmentsController < ApplicationController
 
   # This is the main function that handles the CSV processing for the first time
   def process_csvs
-    delete_all_csvs(skip_redirect: true) if File.exist?(Rails.root.join("app/Charizard/util/public/output/TA_Matches.csv"))
+    delete_all_csvs
 
     apps_csv = generate_csv_apps(Applicant.all)
     apps_csv_path = Rails.root.join("tmp", "TA_Applicants.csv")
@@ -255,17 +255,18 @@ class TaAssignmentsController < ApplicationController
   # Deletes all of the relevant assignment csvs and models excluding withdrawls
   def delete_all_csvs(skip_redirect: false)
     Dir[Rails.root.join("app/Charizard/util/public/output/*.csv")].each do |file|
-      File.delete(file)
-    File.delete(Rails.root.join("tmp", "TA_Matches.csv")) if File.exist?(Rails.root.join("tmp", "TA_Matches.csv"))
-    File.delete(Rails.root.join("tmp", "Grader_Matches.csv")) if File.exist?(Rails.root.join("tmp", "Grader_Matches.csv"))
-    File.delete(Rails.root.join("tmp", "Senior_Grader_Matches.csv")) if File.exist?(Rails.root.join("tmp", "Senior_Grader_Matches.csv"))
+      File.delete(file) if File.exist?(file)
+    end
+
+    ["TA_Matches.csv", "Grader_Matches.csv", "Senior_Grader_Matches.csv"].each do |fname|
+      tmp_path = Rails.root.join("tmp", fname)
+      File.delete(tmp_path) if File.exist?(tmp_path)
     end
     GraderMatch.delete_all
     SeniorGraderMatch.delete_all
     TaMatch.delete_all
     UnassignedApplicant.delete_all
 
-    redirect_to ta_assignments_new_path, notice: "All CSV files and models have been deleted." unless skip_redirect
   end
 
   # Used to get a final csvs with all of the assignments with relevant applicant data

@@ -17,13 +17,13 @@
     <h1>Edit Recommendation</h1>
     <%= form_with model: @recommendation, local: true do |f| %>
       <div>
-          <%= f.hidden_field :email, value: session[:email] %>
-          <label>Email: <%= session[:email] %></label>
+          <%= f.hidden_field :email, value: @recommendation.email %>
+          <label>Email: <%= @recommendation.email %></label>
         </div>
 
         <div>
-          <%= f.hidden_field :name, value: session[:user] %>
-          <label>Name: <%= session[:user] %></label>
+          <%= f.hidden_field :name, value: @recommendation.name %>
+          <label>Name: <%= @recommendation.name %></label>
         </div>
 
         <div class="full-width">
@@ -55,7 +55,12 @@
         <%= f.submit "Update Recommendation", class: "action-button" %>
       </div>
     <% end %>
-    <%= link_to "Back to Recommendations",my_recommendations_view_path, class: "action-button" %>
+    <% if session[:role].to_s == "admin" %>
+      <%= link_to "Back to Home", (request.referer || recommendation_view_path), class: "action-button" %>
+    <% else %>
+      <%= link_to "Back to Recommendations",my_recommendations_view_path, class: "action-button" %>
+    <% end %>
+    
   </div>
   <div class="footer">
     &copy; 2025 Texas A&M University. All Rights Reserved.

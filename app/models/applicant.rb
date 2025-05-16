@@ -25,19 +25,19 @@ class Applicant < ApplicationRecord
   validate :check_duplicates
   validates :prev_course, length: { maximum: 200, too_long: "%{count} characters is the maximum allowed" },
             format: { 
-              with: /\A\s*\d{3}(\s*,\s*\d{3})*\s*\z/,
+              with: /\A\s*(\d{3}\s*,\s*)*\d{3}?\s*,?\s*\z/,
               message: "Must Only Include Course Numbers\ '123,345,456'",
               allow_blank: true
             }
   validates :prev_uni, length: { maximum: 200, too_long: "%{count} characters is the maximum allowed" },
             format: { 
-              with: /\A\s*\d{3}(\s*,\s*\d{3})*\s*\z/,
+              with: /\A\s*(\d{3}\s*,\s*)*\d{3}?\s*,?\s*\z/,
               message: "Must Only Include Course Numbers Numbers\ '123,345,456'",
               allow_blank: true
             }
   validates :prev_ta, length: { maximum: 200, too_long: "%{count} characters is the maximum allowed" },
             format: { 
-              with: /\A\s*\d{3}(\s*,\s*\d{3})*\s*\z/,
+              with: /\A\s*(\d{3}\s*,\s*)*\d{3}?\s*,?\s*\z/,
               message: "Must Only Include Course Numbers Numbers\ '123,345,456'",
               allow_blank: true
             }
@@ -70,9 +70,14 @@ class Applicant < ApplicationRecord
   end
 
   def normalize_courses
-    self.prev_uni = prev_uni.gsub(/\s+/, '') if prev_uni.present?
-    self.prev_course = prev_course.gsub(/\s+/, '') if prev_course.present?
-    self.prev_ta = prev_ta.gsub(/\s+/, '') if prev_ta.present?
+    [:prev_uni, :prev_course, :prev_ta].each do |field|
+      value = self.send(field)
+      if value.present?
+        cleaned = value.gsub(/\s+/, '')
+                      .sub(/,+\z/, '')
+        self.send("#{field}=", cleaned)
+      end
+    end
   end
 
   def check_duplicates
