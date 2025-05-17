@@ -115,22 +115,37 @@ class CoursesController < ApplicationController
     input_courses = course_number.to_s.scan(/\d{3}/).map(&:strip)
     input_sections = section.to_s.scan(/\d+/).map(&:strip)
 
-    TaMatch.where(course_number: input_courses, section: input_sections).find_each do |ta_match|
-      add_to_modified_assignments(ta_match)
-      backup_unassigned_applicant(ta_match.uin)
-      ta_match.destroy
+    TaMatch.find_each do |ta_match|
+      course_match = input_courses.any? { |cn| ta_match.course_number.to_s.include?(cn) }
+      section_match = input_sections.any? { |sn| ta_match.section.to_s.include?(sn) }
+
+      if course_match && section_match
+        add_to_modified_assignments(ta_match)
+        backup_unassigned_applicant(ta_match.uin)
+        ta_match.destroy
+      end
     end
 
     GraderMatch.where(course_number: input_courses, section: input_sections).find_each do |grader_match|
-      add_to_modified_assignments(grader_match)
-      backup_unassigned_applicant(grader_match.uin)
-      grader_match.destroy
+      course_match = input_courses.any? { |cn| grader_match.course_number.to_s.include?(cn) }
+      section_match = input_sections.any? { |sn| grader_match.section.to_s.include?(sn) }
+      if course_match && section_match
+        add_to_modified_assignments(grader_match)
+        backup_unassigned_applicant(grader_match.uin)
+        grader_match.destroy
+      end
     end
+    
     SeniorGraderMatch.where(course_number: input_courses, section: input_sections).find_each do |senior_grader_match|
-      add_to_modified_assignments(senior_grader_match)
-      backup_unassigned_applicant(senior_grader_match.uin)
-      senior_grader_match.destroy
+      course_match = input_courses.any? { |cn| senior_grader_match.course_number.to_s.include?(cn) }
+      section_match = input_sections.any? { |sn| senior_grader_match.section.to_s.include?(sn) }
+      if course_match && section_match
+        add_to_modified_assignments(senior_grader_match)
+        backup_unassigned_applicant(senior_grader_match.uin)
+        senior_grader_match.destroy
+      end
     end
+
     remove_course_from_new_needs_csv(course_number, section)
     @course.destroy
     respond_to do |format|
