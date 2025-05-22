@@ -50,7 +50,7 @@ class AdminsController < ApplicationController
       senior_grader_matches: SeniorGraderMatch.all,
       grader_matches: GraderMatch.all,
       advisors: Advisor.all,
-      admins: Admin.all
+      #admins: Admin.all
     }
 
     output_folder_path = Rails.root.join("app", "Charizard", "util", "public", "output")
@@ -134,19 +134,25 @@ class AdminsController < ApplicationController
       Zip::File.open(uploaded_file.path) do |zip_file|
         zip_file.each do |entry|
           next unless entry.name.ends_with?(".csv")
+        
+          file_name = File.basename(entry.name, ".csv")
+          Rails.logger.info("Processing file: #{file_name}")
 
           table_name = File.basename(entry.name, ".csv").downcase.to_sym
+          Rails.logger.info("Table name: #{table_name}")
           csv_content = entry.get_input_stream.read
 
           case table_name
           when :courses
             import_courses(csv_content)
-          when :modified_assignments, :new_needs, :assignments
-            save_csv_to_file(table_name, csv_content)
+          when :modified_assignments, :new_needs
+            save_csv_to_file(file_name, csv_content)
           when :unassigned_applicants
-            import_applicants(csv_content)
-          when :new_needs
-            save_csv_to_file(table_name, csv_content)
+            import_generic(table_name, csv_content)
+            headers = ["First Name", "Last Name", "Email", "UIN"]
+            empty_csv = CSV.generate(write_headers: true, headers: headers) {}
+            name = "Unassigned_Applicants"
+            save_csv_to_file(name, empty_csv)
           else
             import_generic(table_name, csv_content)
           end
@@ -227,44 +233,6 @@ class AdminsController < ApplicationController
 
     CSV.parse(csv_data, headers: true) do |row|
       model.create!(row.to_hash)
-    end
-    if [ TaMatch, SeniorGraderMatch, GraderMatch ].include?(model)
-      Rails.logger.debug "model: #{model}"
-      Rails.logger.debug "csv_data: #{csv_data}"
-
-      records = model.all
-
-      filename =
-        case model.name
-        when "TaMatch"
-          "TA_Matches.csv"
-        when "GraderMatch"
-          "Grader_Matches.csv"
-        when "SeniorGraderMatch"
-          "Senior_Grader_Matches.csv"
-        else
-          "Matches.csv"
-        end
-
-      output_path = Rails.root.join("app", "Charizard", "util", "public", "output", filename)
-
-      CSV.open(output_path, "w", write_headers: true, headers: [
-        "Course Number", "Section ID", "Instructor Name", "Instructor Email",
-         "Student Name", "Student Email", "UIN", "Calculated Score"
-         ]) do |csv|
-        records.each do |record|
-          csv << [
-            record.course_number,
-            record.section,
-            record.ins_name,
-            record.ins_email,
-            record.stu_name,
-            record.stu_email,
-            record.uin,
-            record.score
-          ]
-        end
-      end
     end
   end
 
