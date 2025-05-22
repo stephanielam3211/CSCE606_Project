@@ -178,13 +178,14 @@ class AdminsController < ApplicationController
   # This method imports courses from a CSV string
   def import_courses(csv_data)
     CSV.parse(csv_data, headers: true) do |row|
+      ta_value = row["TA?"] || row["TA"]
       Course.create!(
         course_name: row["Course_Name"],
         course_number: row["Course_Number"],
         section: row["Section"],
         instructor: row["Instructor"],
         faculty_email: row["Faculty_Email"],
-        ta: row["TA?"],
+        ta: ta_value,
         senior_grader: row["Senior_Grader"],
         grader: row["Grader"],
         pre_reqs: row["Professor Pre-Reqs"]
