@@ -28,6 +28,7 @@ Rails.application.routes.draw do
   post "records/destroy_unconfirmed", to: "records#destroy_unconfirmed", as: "destroy_unconfirmed_assignments"
   post "toggle_assignment", to: "records#toggle_assignment", as: :toggle_assignment
   post "revoke_assignment", to: "records#revoke_assignment", as: :revoke_assignment
+  post "manual_confirm", to: "records#manual_confirm", as: :manual_confirm
   post "mass_confirm", to: "records#mass_confirm", as: :mass_confirm
   post "mass_toggle_assignment", to: "records#mass_toggle_assignment", as: :mass_toggle_assignment
 

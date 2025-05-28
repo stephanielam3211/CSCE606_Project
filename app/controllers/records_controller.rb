@@ -44,6 +44,13 @@ class RecordsController < ApplicationController
     redirect_back(fallback_location: request.referer || root_path)
   end
 
+  def manual_confirm
+    model = params[:table].classify.constantize
+    record = model.find(params[:id])
+    record.update(confirm: true)
+    redirect_back(fallback_location: request.referer || root_path)
+  end
+
   # Admin function to mass unconfirm assignment
   def mass_confirm
     model = params[:table].classify.constantize
@@ -143,24 +150,17 @@ class RecordsController < ApplicationController
     # This is created if the student denys the position
     create_withdrawal_request(@role) if params[:deny].present?
 
-    # get the record from the csv file
-    #record = find_record_in_csv(file_name, @role.uin)
-    #record = find_record(model_class, @role.uin)
-    #if record.nil?
-    #  flash[:alert] = "Student record with UIN #{@role.uin} not found."
-    #  Rails.logger.error "Record not found with UIN #{@role.uin}"
-    #  return
-   # end
-    # move the record to the modified assignments csv and remove it from the original csv
-    #move_to_modified_assignments(file_name, record)
-    #update_csv(file_name, @role.uin)
-
     # Find the record in the DB
     model_record = model_class.find_by(uin: @role.uin)
     if model_record
       # This creates a backup of the unassigned applicant in DB and csv
       # Then the new course needs file is updated and the record is deleted
-      add_to_modified_assignments(file_name, model_record)
+      if params[:deny].present?
+        add_deny_to_modified_assignments(file_name, model_record)
+      else
+        add_to_modified_assignments(file_name, model_record)
+      end
+
       backup_unassigned_applicant(@role.uin)
       update_new_needs_csv(file_name, @role.course_number, @role.section)
       model_record.destroy
@@ -247,6 +247,22 @@ class RecordsController < ApplicationController
       CSV.open(path, "a", write_headers: write_headers, headers: headers) do |csv|
         csv << attributes.values
       end
+    end
+  end
+
+  def add_deny_to_modified_assignments(file_name, model_record)
+    path = Rails.root.join("app", "Charizard", "util", "public", "output", "Modified_assignments.csv")
+    return unless model_record.present?
+
+    # Extract attributes and add the 'deny' field
+    attributes = model_record.attributes.except("id", "created_at", "updated_at")
+    attributes["deny"] = "applicant declined the position"
+
+    headers = attributes.keys
+    write_headers = !File.exist?(path) || File.zero?(path)
+
+    CSV.open(path, "a", write_headers: write_headers, headers: headers) do |csv|
+      csv << attributes.values
     end
   end
 end

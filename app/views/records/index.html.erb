@@ -109,6 +109,10 @@
                   class: "btn btn-warning" %>
             <% else %>
               <span class="status-pending">🔄 Pending</span>
+              <%= button_to "Confirm", 
+                  manual_confirm_path(id: record.id, table: @table_name), 
+                  method: :post, 
+                  class: "btn btn-warning" %>
             <% end %>
           </td>
           <td>
