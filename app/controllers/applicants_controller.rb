@@ -88,6 +88,21 @@ class ApplicantsController < ApplicationController
   def show
   end
 
+  def toggle_blacklist
+    @applicant = Applicant.find(params[:id])
+    if @applicant.blacklisted?
+      # Remove from blacklist
+      Blacklist.where("LOWER(student_email) = ?", @applicant.email.downcase).destroy_all
+    else
+      # Add to blacklist
+      Blacklist.create!(
+        student_name: @applicant.name,
+        student_email: @applicant.email
+      )
+    end
+    redirect_back(fallback_location: applicants_path)
+  end
+
   # GET /applicants/new
   def new
     if session[:user_id].present?

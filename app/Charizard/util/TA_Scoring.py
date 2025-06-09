@@ -18,6 +18,9 @@ def compute_ta_matching_weight(student: Student, course: Course) -> int:
     # needs to be taking at least this many hours
     if student.hours_enrolled < Scoring.MINIMUM_REQUIRED_HOURS or Scoring.is_instructor_and_ta_same(student, course):
         return Weights.NINFINITY
+    
+    if student.email.lower().strip() in [email.lower().strip() for email in course.ta_deny_list]:
+        return Weights.NINFINITY
 
     weight += Scoring.score_ranked_ta_preference(student, course)
     weight += Scoring.score_gpa(student)
@@ -26,6 +29,7 @@ def compute_ta_matching_weight(student: Student, course: Course) -> int:
     weight += Scoring.score_previous_ta_for_course(student, course)
     weight += Scoring.score_courses_taken_at_tamu(student, course)
     weight += Scoring.score_based_on_priority_and_deny_list(student, course)
+    
     weight += Scoring.score_prereqs(student, course)
         
     return weight

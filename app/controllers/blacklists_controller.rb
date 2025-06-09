@@ -21,7 +21,11 @@ class BlacklistsController < ApplicationController
   def destroy
     @blacklist = Blacklist.find(params[:id])
     @blacklist.destroy
-    redirect_to blacklists_path, notice: "Student removed from blacklist."
+    #redirect_to blacklists_path, notice: "Student removed from blacklist."
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to blacklists_path, notice: 'Removed from blacklist.' }
+    end
   end
 
   private

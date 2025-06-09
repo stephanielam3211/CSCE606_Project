@@ -54,6 +54,8 @@ Rails.application.routes.draw do
       get :search_uin
     end
   end
+ 
+  post 'toggle_blacklist', to: 'applicants#toggle_blacklist', as: 'toggle_blacklist'
 
   resources :unassigned_applicantsapplicants do
     collection do

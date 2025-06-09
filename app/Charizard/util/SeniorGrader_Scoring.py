@@ -15,6 +15,9 @@ def compute_senior_grader_matching_weight(student: Student, course: Course):
 
     if course.is_writing_or_comm_course and student.english_certification_level > 1:
         return Weights.NINFINITY
+    
+    if student.email.lower().strip() in [email.lower().strip() for email in course.ta_deny_list]:
+        return Weights.NINFINITY
 
     weight += Scoring.score_ranked_ta_preference(student, course)
     weight += Scoring.score_gpa(student)

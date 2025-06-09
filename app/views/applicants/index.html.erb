@@ -1,4 +1,4 @@
-
+<%# frozen_string_literal: true %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -51,6 +51,11 @@
       <table class="styled-table" style="min-width: 2000px;">
         <thead>
           <tr>
+           <% if session[:role].to_s == "admin" %>
+            <th>
+              Blacklisted?
+            </th>
+            <% end %>
             <th>
               <%= link_to applicants_path(sort: "name", direction: toggle_direction("name")) do %>
                 Name
@@ -169,30 +174,47 @@
         </thead>
         <tbody>
           <% @applicants.each do |applicant| %>
-            <tr id="<%= dom_id applicant %>">
-              <td class="<%= 'highlight-name' if applicant.name.start_with?('*') %>">
-                <%= applicant.name %>
-              </td>
-              <td><%= applicant.email %></td>
-              <td><%= applicant.degree %></td>
-              <td><%= applicant.gpa %></td>
-              <td><%= applicant.positions %></td>
-              <td><%= applicant.number %></td>
-              <td><%= applicant.uin %></td>
-              <td><%= applicant.hours %></td>
-              <td><%= applicant.citizenship %></td>
-              <td><%= applicant.cert %></td>
-              <td><%= applicant.prev_ta %></td>
-              <td><%= applicant.prev_course %></td>
-              <td><%= applicant.prev_uni %></td>
-              <td><%= applicant.advisor %></td>
-              <td> 
+            <%= turbo_frame_tag dom_id(applicant) do %>
+              <tr id="<%= dom_id applicant %>">
                 <% if session[:role].to_s == "admin" %>
-                  <%= link_to "Edit this applicant", edit_applicant_path(applicant), class: "action-button" %>
-                <%end%>
-                <%= link_to "Show this applicant", applicant_path(applicant), class: "table-link" %>
-              </td>
-            </tr>
+                  <td style="background-color: <%= applicant.blacklisted? ?   'rgb(243, 169, 162)' : 'rgb(162, 246, 156)' %>;">
+                    <% if applicant.blacklisted? %>
+                        <%= button_to "Unblacklist", 
+                            toggle_blacklist_path(id: applicant.id), 
+                            method: :post, remote: true,
+                            class: "btn btn-warning" %>
+                      <% else %>
+                        <%= button_to "Blacklist", 
+                            toggle_blacklist_path(id: applicant.id), 
+                            method: :post, remote: true,
+                            class: "btn btn-success" %>
+                      <% end %>
+                    </td>   
+                  <% end %>
+                  <td class="<%= 'highlight-name' if applicant.name.start_with?('*') %>">
+                    <%= applicant.name %>
+                  </td>
+                  <td><%= applicant.email %></td>
+                  <td><%= applicant.degree %></td>
+                  <td><%= applicant.gpa %></td>
+                  <td><%= applicant.positions %></td>
+                  <td><%= applicant.number %></td>
+                  <td><%= applicant.uin %></td>
+                  <td><%= applicant.hours %></td>
+                  <td><%= applicant.citizenship %></td>
+                  <td><%= applicant.cert %></td>
+                  <td><%= applicant.prev_ta %></td>
+                  <td><%= applicant.prev_course %></td>
+                  <td><%= applicant.prev_uni %></td>
+                  <td><%= applicant.advisor %></td>
+                  <td> 
+                    <% if session[:role].to_s == "admin" %>
+                      <%= link_to "Edit this applicant", edit_applicant_path(applicant), class: "action-button" %>
+                    <%end%>
+                    <%= link_to "Show this applicant", applicant_path(applicant), class: "table-link" %>
+                  </td>
+                </tr>
+            <% end %>
           <% end %>
         </tbody>
       </table>

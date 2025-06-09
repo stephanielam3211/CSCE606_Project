@@ -41,7 +41,7 @@
         </thead>
         <tbody>
           <% @blacklisted_students.each do |student| %>
-            <tr>
+            <tr id="<%= dom_id(student) %>">
               <td><%= student.student_name %></td>
               <td><%= student.student_email %></td>
               <td>

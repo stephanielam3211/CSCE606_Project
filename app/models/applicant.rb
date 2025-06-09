@@ -79,6 +79,10 @@ class Applicant < ApplicationRecord
       end
     end
   end
+  
+  def blacklisted?
+    Blacklist.exists?(["LOWER(student_email) = ?", email.downcase])
+  end
 
   def check_duplicates
     %i[prev_course prev_ta prev_uni].each do |field|
