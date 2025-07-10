@@ -9,7 +9,7 @@
     if ($(selector).length) {
       $(selector).select2({
         placeholder: placeholder,
-        minimumInputLength: 1,
+        minimumInputLength: 0,
         ajax: {
           url: ajaxUrl,
           dataType: 'json',
