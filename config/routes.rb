@@ -92,6 +92,8 @@ Rails.application.routes.draw do
   get "ta_assignments/view_csv", to: "ta_assignments#view_csv", as: "view_csv"
   post "import_csv", to: "csv_imports#import", as: "import_csv"
   delete "delete_all_csvs", to: "ta_assignments#delete_all_csvs", as: "delete_all_csvs"
+
+  get "ta_assignments/calibrate_unassigned_applicants", to: "ta_assignments#calibrate_unassigned_applicants", as: "calibrate_unassigned_applicants"
   # post "/ta_assignments/destroy_unconfirmed", to: "ta_assignments#destroy_unconfirmed", as: "destroy_unconfirmed_assignments"
 
 

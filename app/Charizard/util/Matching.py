@@ -7,6 +7,9 @@ import scipy.optimize
 
 from rich import print
 
+import subprocess
+import json
+
 import util.Config as Config
 import util.TA_Scoring as TA_Scoring
 from util import SeniorGrader_Scoring
@@ -107,89 +110,162 @@ def compute_matching_weight(student: Student, course: Course, config: MatchConfi
 
 
 def compute_ta_matches(students_np, courses_np):
-    # Ensure the output directory exists!
     Path(Config.OUTPUT_DIR).mkdir(parents=True, exist_ok=True)
-    with open(f'{Config.OUTPUT_DIR}/TA_Matches.csv', 'w') as ta_matches:
-        # which courses do I want
-        # the courses where .tas_needed >= 1
 
-        # boolean mask for courses that need TAs
-        students_that_want_ta = np.array([student.ta_applied for student in students_np])
-        courses_that_need_ta = np.array([True if course.tas_needed >= 1 else False for course in courses_np])
-        ta_weights_matrix = TA_Scoring.compute_ta_weight_matrix(students_np[students_that_want_ta], courses_np[courses_that_need_ta])
+    students_that_want_ta = np.array([student.ta_applied for student in students_np])
+    filtered_students = students_np[students_that_want_ta]
 
-        matched_rows, matched_cols = scipy.optimize.linear_sum_assignment(ta_weights_matrix, maximize=True)
-        header = 'Course Number,Section ID,Instructor Name,Instructor Email,Student Name,Student Email,UIN,Calculated Score\n'
-        ta_matches.write(header)
-        for student_idx, course_idx in zip(matched_rows, matched_cols):
-            student = students_np[students_that_want_ta][student_idx]
-            student.matched = True
-            course = courses_np[courses_that_need_ta][course_idx]
-            row = course.course_numbers[0] + ',' + course.section_ids[0] + ',' + course.instructor + ',' + course.faculty_email + ',' + (student.first_name + ' ' + student.last_name) + ',' + student.email + ',' + student.uin + ',' + str(ta_weights_matrix[student_idx][course_idx]) + '\n'
-            ta_matches.write(row)
+    expanded_courses = []
+    for course in courses_np:
+        if course.tas_needed >= 1:
+            for _ in range(int(course.tas_needed)):
+                expanded_courses.append(course)
 
-        print('total cost for TAs: ', np.array(ta_weights_matrix)[matched_rows, matched_cols].sum())
+    if not filtered_students.size:
+        print(f"[WARNING] No students available for TA matching. Total students: {len(students_np)}, Filtered: 0")
+        return
+    if not expanded_courses:
+        print(f"[WARNING] No courses need TAs. Total courses: {len(courses_np)}, Expanded: 0")
+        return
+
+    expanded_courses_np = np.array(expanded_courses)
+
+    weight_matrix = TA_Scoring.compute_ta_weight_matrix(filtered_students, expanded_courses_np)
+
+    weight_matrix = np.where(np.isneginf(weight_matrix), -1e6, weight_matrix)
+
+    num_students, num_slots = weight_matrix.shape
+
+    if num_students > num_slots:
+        pad_width = num_students - num_slots
+        weight_matrix = np.hstack((weight_matrix, np.full((num_students, pad_width), -1e6)))
+        expanded_courses_np = np.concatenate([expanded_courses_np, [None] * pad_width])
+    elif num_slots > num_students:
+        pad_height = num_slots - num_students
+        weight_matrix = np.vstack((weight_matrix, np.full((pad_height, num_slots), -1e6)))
+        filtered_students = np.concatenate([filtered_students, [None] * pad_height])
+
+    matched_rows, matched_cols = scipy.optimize.linear_sum_assignment(weight_matrix, maximize=True)
+
+    json_rows = []
+    for student_idx, course_idx in zip(matched_rows, matched_cols):
+        student = filtered_students[student_idx]
+        course = expanded_courses_np[course_idx]
+
+        if student is None or course is None:
+            continue
+
+        student.matched = True
+
+        row = {
+            "Course Number": course.course_numbers[0],
+            "Section ID": course.section_ids[0],
+            "Instructor Name": course.instructor,
+            "Instructor Email": course.faculty_email,
+            "Student Name": f"{student.first_name} {student.last_name}",
+            "Student Email": student.email,
+            "UIN": student.uin,
+            "Calculated Score": weight_matrix[student_idx][course_idx]
+        }
+        json_rows.append(row)
+
+    json_path = f"{Config.OUTPUT_DIR}/TA_Matches.json"
+    with open(json_path, "w") as f:
+        json.dump(json_rows, f, indent=2)
+
+    print(f"TA Matches JSON written to {json_path}")
+    print('Total cost for TAs:', np.array(weight_matrix)[matched_rows, matched_cols].sum())
 
 
 def compute_senior_grader_matches(students_np, courses_np):
-    with open(f'{Config.OUTPUT_DIR}/Senior_Grader_Matches.csv', 'w') as senior_grader_matches:
+    Path(Config.OUTPUT_DIR).mkdir(parents=True, exist_ok=True)
+   
         # students that want senior grader role
-        students_that_want_senior_grader = np.array([student.senior_grader_applied for student in students_np])
-        students_that_have_been_matched = np.array([student.matched for student in students_np])
-        students_mask = np.logical_and(students_that_want_senior_grader, np.logical_not(students_that_have_been_matched))
+    students_that_want_senior_grader = np.array([student.senior_grader_applied for student in students_np])
+    students_that_have_been_matched = np.array([student.matched for student in students_np])
+    students_mask = np.logical_and(students_that_want_senior_grader, np.logical_not(students_that_have_been_matched))
 
         # courses that need senior graders
-        courses_that_need_senior_grader = np.array([True if course.senior_grader_needed >= 1 else False for course in courses_np])
+    courses_that_need_senior_grader = np.array([True if course.senior_grader_needed >= 1 else False for course in courses_np])
 
         # Assumption is that there will only be 2 senior graders at most - TODO: make this generalized
-        courses_with_multiple_senior_graders = np.array([True if course.senior_grader_needed > 1 else False for course in courses_np])
-        courses_with_duplicated_courses_np = np.concatenate((courses_np[courses_that_need_senior_grader], courses_np[courses_with_multiple_senior_graders]))
+    courses_with_multiple_senior_graders = np.array([True if course.senior_grader_needed > 1 else False for course in courses_np])
+    courses_with_duplicated_courses_np = np.concatenate((courses_np[courses_that_need_senior_grader], courses_np[courses_with_multiple_senior_graders]))
 
-        senior_grader_weights_matrix = SeniorGrader_Scoring.compute_senior_grader_weight_matrix(students_np[students_mask], courses_with_duplicated_courses_np)
+    senior_grader_weights_matrix = SeniorGrader_Scoring.compute_senior_grader_weight_matrix(students_np[students_mask], courses_with_duplicated_courses_np)
 
-        matched_rows, matched_cols = scipy.optimize.linear_sum_assignment(senior_grader_weights_matrix, maximize=True)
-        header = 'Course Number,Section ID,Instructor Name,Instructor Email,Student Name,Student Email,UIN,Calculated Score\n'
-        senior_grader_matches.write(header)
-        for student_idx, course_idx in zip(matched_rows, matched_cols):
-            student = students_np[students_mask][student_idx]
-            assert not student.matched
-            student.matched = True
-            course = courses_with_duplicated_courses_np[course_idx]
-            row = course.course_numbers[0] + ',' + course.section_ids[0] + ',' + course.instructor + ',' + course.faculty_email + ',' + (student.first_name + ' ' + student.last_name) + ',' + student.email+ ',' + student.uin + ',' + str(senior_grader_weights_matrix[student_idx][course_idx]) + '\n'
-            senior_grader_matches.write(row)
+    json_rows = []
+    
+    matched_rows, matched_cols = scipy.optimize.linear_sum_assignment(senior_grader_weights_matrix, maximize=True)
+       
+    for student_idx, course_idx in zip(matched_rows, matched_cols):
+        student = students_np[students_mask][student_idx]
+        assert not student.matched
+        student.matched = True
+        course = courses_with_duplicated_courses_np[course_idx]
+        row = {
+            "Course Number": course.course_numbers[0],
+            "Section ID": course.section_ids[0],
+            "Instructor Name": course.instructor,
+            "Instructor Email": course.faculty_email,
+            "Student Name": f"{student.first_name} {student.last_name}",
+            "Student Email": student.email,
+            "UIN": student.uin,
+            "Calculated Score": senior_grader_weights_matrix[student_idx][course_idx]
+        }
 
-        print('total cost for Senior Graders: ', np.array(senior_grader_weights_matrix)[matched_rows, matched_cols].sum())
+        json_rows.append(row)
+        
+    json_path = f"{Config.OUTPUT_DIR}/Senior_Grader_Matches.json"
+    with open(json_path, "w") as f:
+        json.dump(json_rows, f, indent=2)
 
+    print(f"Senior Grader Matches JSON written to {json_path}")
+    print('Total cost for Senior Graders:', np.array(senior_grader_weights_matrix)[matched_rows, matched_cols].sum())
 
 def compute_grader_matches(students_np, courses_np):
-    with open(f'{Config.OUTPUT_DIR}/Grader_Matches.csv', 'w') as grader_matches:
+    Path(Config.OUTPUT_DIR).mkdir(parents=True, exist_ok=True)
         # students that want grader role
-        students_that_want_grader = np.array([student.grader_applied for student in students_np])
-        students_that_have_been_matched = np.array([student.matched for student in students_np])
-        students_mask = np.logical_and(students_that_want_grader, np.logical_not(students_that_have_been_matched))
+    students_that_want_grader = np.array([student.grader_applied for student in students_np])
+    students_that_have_been_matched = np.array([student.matched for student in students_np])
+    students_mask = np.logical_and(students_that_want_grader, np.logical_not(students_that_have_been_matched))
 
         # courses that need graders
-        courses_that_need_grader = np.array([True if course.graders_needed >= 1 else False for course in courses_np])
+    courses_that_need_grader = np.array([True if course.graders_needed >= 1 else False for course in courses_np])
 
         # Assumption is that there will only be 2 graders at most
-        courses_with_multiple_graders = np.array([True if course.graders_needed > 1 else False for course in courses_np])
-        courses_with_duplicated_courses_np = np.concatenate((courses_np[courses_that_need_grader], courses_np[courses_with_multiple_graders]))
+    courses_with_multiple_graders = np.array([True if course.graders_needed > 1 else False for course in courses_np])
+    courses_with_duplicated_courses_np = np.concatenate((courses_np[courses_that_need_grader], courses_np[courses_with_multiple_graders]))
+    grader_weights_matrix = Grader_Scoring.compute_grader_weight_matrix(students_np[students_mask], courses_with_duplicated_courses_np)
 
-        grader_weights_matrix = Grader_Scoring.compute_grader_weight_matrix(students_np[students_mask], courses_with_duplicated_courses_np)
+    json_rows = []
+        
+    matched_rows, matched_cols = scipy.optimize.linear_sum_assignment(grader_weights_matrix, maximize=True)
 
-        matched_rows, matched_cols = scipy.optimize.linear_sum_assignment(grader_weights_matrix, maximize=True)
-        header = 'Course Number,Section ID,Instructor Name,Instructor Email,Student Name,Student Email,UIN,Calculated Score\n'
-        grader_matches.write(header)
-        for student_idx, course_idx in zip(matched_rows, matched_cols):
-            student = students_np[students_mask][student_idx]
-            assert not student.matched
-            student.matched = True
-            course = courses_with_duplicated_courses_np[course_idx]
-            row = course.course_numbers[0] + ',' + course.section_ids[0] + ',' + course.instructor + ',' + course.faculty_email + ',' + (student.first_name + ' ' + student.last_name) + ',' + student.email + ',' + student.uin + ',' + str(grader_weights_matrix[student_idx][course_idx]) + '\n'
-            grader_matches.write(row)
+    for student_idx, course_idx in zip(matched_rows, matched_cols):
+        student = students_np[students_mask][student_idx]
+        assert not student.matched
+        student.matched = True
+        course = courses_with_duplicated_courses_np[course_idx]
+        row = {
+            "Course Number": course.course_numbers[0],
+            "Section ID": course.section_ids[0],
+            "Instructor Name": course.instructor,
+            "Instructor Email": course.faculty_email,
+            "Student Name": f"{student.first_name} {student.last_name}",
+            "Student Email": student.email,
+            "UIN": student.uin,
+            "Calculated Score": grader_weights_matrix[student_idx][course_idx]
+        }
 
-        print('total cost for Graders: ', np.array(grader_weights_matrix)[matched_rows, matched_cols].sum())
+        json_rows.append(row)
+        
+    json_path = f"{Config.OUTPUT_DIR}/Grader_Matches.json"
+    with open(json_path, "w") as f:
+        json.dump(json_rows, f, indent=2)
 
+    print(f"Grader Matches JSON written to {json_path}")
+    print('Total cost for Graders:', np.array(grader_weights_matrix)[matched_rows, matched_cols].sum())
 
 def compute_backups(students: List[Student], courses: List[Course], config: MatchConfig):
 
@@ -301,3 +377,4 @@ def export_unassigned_applicants(students_np: np.array):
     unassigned_df: pd.DataFrame = pd.DataFrame(df_dict)
     Path(Config.OUTPUT_DIR).mkdir(parents=True, exist_ok=True)
     unassigned_df.to_csv(f"{Config.OUTPUT_DIR}/Unassigned_Applicants.csv", index=False)
+ 

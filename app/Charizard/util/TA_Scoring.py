@@ -14,13 +14,19 @@ def compute_ta_matching_weight(student: Student, course: Course) -> int:
     :return: Appropriate weight for an edge between a student and a course section,
     Is negative infinity if the student is under the minimum required hours
     """
+    #print("[DEBUG] Entered TA matching logic.")
     weight = 0
     # needs to be taking at least this many hours
     if student.hours_enrolled < Scoring.MINIMUM_REQUIRED_HOURS or Scoring.is_instructor_and_ta_same(student, course):
+        print(f"[SKIP] {student.email} below hour requirement")
         return Weights.NINFINITY
     
     if student.email.lower().strip() in [email.lower().strip() for email in course.ta_deny_list]:
+        print(f"[SKIP] {student.email} is in TA deny list for {course.course_numbers}")
         return Weights.NINFINITY
+    
+    #print(f"Checking if student '{student.email}' is in deny list: {course.ta_deny_list}")
+
 
     weight += Scoring.score_ranked_ta_preference(student, course)
     weight += Scoring.score_gpa(student)

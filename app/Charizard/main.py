@@ -4,6 +4,7 @@ import sys
 import numpy as np
 
 from util import Matching
+import subprocess
 
 from rich import print
 from rich.panel import Panel
@@ -78,7 +79,20 @@ def main():
         Matching.compute_grader_matches(students_np, courses_np)
     except Exception as e:
         print(f"[ERROR] Grader matching failed: {e}")
+        
+    json_tasks = [
+        ("import:ta_json", "TA matches"),
+        ("import:senior_grader_json", "Senior Grader matches"),
+        ("import:grader_json", "Grader matches")
 
+    ]
+    for task, description in json_tasks:
+        try:
+            subprocess.run(["bundle", "exec", "rake", task], check=True)
+            print(f"Imported {description} into Rails via rake.")
+        except subprocess.CalledProcessError as e:
+            print(f"Failed to run import rake task '{task}': {e}")
+        
     Matching.export_backups(students_np, courses_np)
 
 

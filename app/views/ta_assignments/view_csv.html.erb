@@ -81,8 +81,9 @@
       <p style="display: flex; flex-direction: column; align-items: center; margin-top: 20px;">No CSV files found. Please process CSVs first.</p>
     <% end %>
       <div style="display: flex; flex-direction: column; align-items: center; margin-top: 20px;">
-        <div style="margin-bottom: 10px;">
+         <div class="button-container-tables">
           <%= button_to 'Delete All CSV Files and Models', delete_all_csvs_path, method: :delete, class: 'btn btn--danger', onclick: "return confirm('Are you sure? This will reset all assignments.');" %>
+          <%= button_to 'Calibrate Unassigned Applicants', calibrate_unassigned_applicants_path, method: :get, class: 'btn btn--danger', onclick: "return confirm('Are you sure? This will re-calibrate the unassigned students.');" %>
         </div>
         <div>
           <%= link_to "Back", ta_assignments_new_path || root_path, class: "action-button" %>

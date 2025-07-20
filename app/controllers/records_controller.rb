@@ -113,7 +113,7 @@ class RecordsController < ApplicationController
         end
 
         backup_unassigned_applicant(model_record.uin)
-        update_new_needs_csv(file_name, model_record.course_number, model_record.section)
+        update_new_needs_csv(file_name, model_record.course_number, model_record.section, model_record.ins_email)
 
         create_recommendation(model_record)
         model_record.destroy
@@ -162,7 +162,7 @@ class RecordsController < ApplicationController
       end
 
       backup_unassigned_applicant(@role.uin)
-      update_new_needs_csv(file_name, @role.course_number, @role.section)
+      update_new_needs_csv(file_name, @role.course_number, @role.section, @role.ins_email)
       model_record.destroy
       flash[:notice] = "Student record deleted. Class details saved separately."
 
@@ -191,10 +191,9 @@ class RecordsController < ApplicationController
     UnassignedApplicant.create(applicant.attributes.except("id", "created_at", "updated_at", "confirm"))
   end
 
-  def update_new_needs_csv(file_name, course_number, section)
+  def update_new_needs_csv(file_name, course_number, section, instructor_email)
     course = Course.where("course_number LIKE ?", "%#{course_number}%")
-                   .where("section LIKE ?", "%#{section}%")
-                   .first
+                   .where("section LIKE ?", "%#{section}%").where("faculty_email LIKE ?", "%#{instructor_email}%").first
     return unless course
 
     assignment_type = determine_assignment_type(file_name)

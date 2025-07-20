@@ -27,9 +27,9 @@ class TaAssignmentsController < ApplicationController
     puts "Python Path: #{python_path}"  # Check if this is correct
     system("#{python_path} app/Charizard/main.py '#{apps_csv_path}' '#{needs_csv_path}' '#{recs_csv_path}'")
 
-    flash[:notice] = "CSV processing complete"
-    #system("rake import:csv")
-    import_csv
+    flash[:notice] = "Json processing complete"
+
+    system("bundle exec rake import:standard_json")
     file_paths = [
       "app/Charizard/util/public/output/TA_Matches.csv",
       "app/Charizard/util/public/output/Senior_Grader_Matches.csv",
@@ -42,79 +42,16 @@ class TaAssignmentsController < ApplicationController
       File.delete(full_path) if File.exist?(full_path)
     end
     update_needs_from_assignments
+    
 
+    # created for viewing
+    unapps_csv = generate_csv_apps(UnassignedApplicant.all)
+    unapps_csv_path = Rails.root.join("app", "Charizard", "util", "public", "output", "Unassigned_Applicants.csv")
+    File.write(unapps_csv_path, unapps_csv)
 
-    redirect_to view_csv_path
+    calibrate_unassigned_applicants
   end
   
-  def import_csv
-
-    csv_mappings = {
-      "TA_Matches.csv" => TaMatch,
-      "Grader_Matches.csv" => GraderMatch,
-      "Senior_Grader_Matches.csv" => SeniorGraderMatch,
-      "Unassigned_Applicants.csv" => UnassignedApplicant
-    }
-
-    ta_header_mapping = {
-      "Course Number" => "course_number",
-      "Section ID" => "section",
-      "Instructor Name" => "ins_name",
-      "Instructor Email" => "ins_email",
-      "Student Name" => "stu_name",
-      "Student Email" => "stu_email",
-      "UIN" => "uin",
-      "Calculated Score" => "score"
-    }
-
-    unassigned_applicants_mapping = {
-      "timestamp" => "timestamp",
-      "email address" => "email",
-      "first and last name" => "name",
-      "uin" => "uin",
-      "phone number" => "number",
-      "how many hours do you plan to be enrolled in?" => "hours",
-      "degree type?" => "degree",
-      "1st choice course" => "choice_1",
-      "2nd choice course" => "choice_2",
-      "3rd choice course" => "choice_3",
-      "4th choice course" => "choice_4",
-      "5th choice course" => "choice_5",
-      "6th choice course" => "choice_6",
-      "7th choice course" => "choice_7",
-      "8th choice course" => "choice_8",
-      "9th choice course" => "choice_9",
-      "10th choice course" => "choice_10",
-      "gpa" => "gpa",
-      "country of citizenship?" => "citizenship",
-      "english language certification level?" => "cert",
-      "which courses have you taken at tamu?" => "prev_course",
-      "which courses have you taken at another university?" => "prev_uni",
-      "which courses have you tad for?" => "prev_ta",
-      "who is your advisor (if applicable)?" => "advisor",
-      "what position are you applying for?" => "positions"
-    }
-
-    csv_mappings.each do |file_name, model|
-      file_path = Rails.root.join("app", "Charizard", "util", "public", "output", file_name)
-
-      if File.exist?(file_path)
-        model.destroy_all
-        Rails.logger.debug "Importing #{file_name} into #{model.table_name}..."
-
-        if file_name == "Unassigned_Applicants.csv"
-          import_unassigned_applicants(file_path, model, unassigned_applicants_mapping)
-        else
-          import_standard_csv(file_path, model, ta_header_mapping)
-        end
-        puts "#{file_name} imported successfully!"
-      else
-        puts "File #{file_name} not found, skipping..."
-      end
-    end
-  end
-
-
   # This method is used to view the CSV files
   def view_csv
     csv_directory = Rails.root.join("app", "Charizard", "util", "public", "output")
@@ -394,48 +331,66 @@ class TaAssignmentsController < ApplicationController
     end
   end
 
+  def calibrate_unassigned_applicants
+    UnassignedApplicant.destroy_all
+
+    grader_uins = GraderMatch.pluck(:uin).map(&:to_i)
+    senior_grader_uins = SeniorGraderMatch.pluck(:uin).map(&:to_i)
+    ta_uins = TaMatch.pluck(:uin).map(&:to_i)
+
+    blacklist_keys = Blacklist.all.map { |b| [b.student_name.downcase.strip, b.student_email.downcase.strip] }.to_set
+
+    seen_keys = Set.new
+
+    Applicant.find_each do |applicant|
+      name_key = applicant.name.to_s.strip.downcase
+      email_key = applicant.email.to_s.strip.downcase
+      uin_key = applicant.uin.to_i
+    next if grader_uins.include?(applicant.uin) ||
+              senior_grader_uins.include?(applicant.uin) ||
+              ta_uins.include?(applicant.uin) || name_key.start_with?("*") ||
+              blacklist_keys.include?([name_key, email_key])
+
+    dup_key = uin_key  
+
+    next if seen_keys.include?(dup_key)
+
+    seen_keys.add(dup_key)
+
+      UnassignedApplicant.create!(
+        timestamp: applicant.timestamp,
+        email: applicant.email,
+        name: applicant.name,
+        uin: applicant.uin,
+        number: applicant.number,
+        hours: applicant.hours,
+        degree: applicant.degree,
+        choice_1: applicant.choice_1,
+        choice_2: applicant.choice_2,
+        choice_3: applicant.choice_3,
+        choice_4: applicant.choice_4,
+        choice_5: applicant.choice_5,
+        choice_6: applicant.choice_6,
+        choice_7: applicant.choice_7,
+        choice_8: applicant.choice_8,
+        choice_9: applicant.choice_9,
+        choice_10: applicant.choice_10,
+        gpa: applicant.gpa,
+        citizenship: applicant.citizenship,
+        cert: applicant.cert,
+        prev_course: applicant.prev_course,
+        prev_uni: applicant.prev_uni,
+        prev_ta: applicant.prev_ta,
+        advisor: applicant.advisor,
+        positions: applicant.positions
+      )
+    end
+    redirect_to view_csv_path and return
+  end
+
   private
   # These are the methods used to import the csvs into the models from the algorithm
   # This method is used to import the unassigned applicants
-  def import_unassigned_applicants(file_path, model, mapping)
-    Rails.logger.debug "Processing Unassigned_Applicants.csv..."
-    CSV.foreach(file_path, headers: true) do |row|
-      raw_row = row.to_h
-      mapped_row = {}
-      raw_row.each do |key, value|
-        normalized_key = key.strip.downcase
-        model_key = mapping[normalized_key]
-
-        if model_key
-          mapped_row[model_key] = value
-        else
-          Rails.logger.debug "Unmapped key: #{key} => Skipping"
-        end
-      end
-      filtered_row = mapped_row.slice(*model.column_names)
-
-      existing = model.where(email: filtered_row["email"]).or(model.where(uin: filtered_row["uin"])).first
-      if existing
-        Rails.logger.debug "Skipping duplicate for email: #{filtered_row['email']} or UIN: #{filtered_row['uin']}"
-        next
-      end
-      model.create!(filtered_row)
-    end
-  end
-  # This method is used to import the model csvs
-  def import_standard_csv(file_path, model, mapping)
-    CSV.foreach(file_path, headers: true) do |row|
-      mapped_row = row.to_h.transform_keys { |key| mapping[key] || key }
-      filtered_row = mapped_row.slice(*model.column_names)
-
-      if filtered_row["uin"] && model.exists?(uin: filtered_row["uin"])
-        Rails.logger.debug "Skipping duplicate record for UIN: #{filtered_row['uin']}"
-        next
-      end
-
-      model.create(mapped_row)
-    end
-  end
 
   def save_uploaded_file(file)
     path = Rails.root.join("tmp", file.original_filename)
@@ -500,7 +455,7 @@ class TaAssignmentsController < ApplicationController
       name_key = record.name.to_s.strip.downcase
       email_key = record.email.to_s.strip.downcase
 
-      next if name_key.start_with?("*") || blacklist_keys.include?([name_key, email_key])
+      next if name_key.start_with?("*") || blacklist_keys.include?([name_key, email_key]) 
       csv << [
         record.timestamp,
         record.email,

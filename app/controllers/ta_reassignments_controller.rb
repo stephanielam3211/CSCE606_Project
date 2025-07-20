@@ -14,13 +14,13 @@ class TaReassignmentsController < ApplicationController
     unass_apps_csv_path = Rails.root.join("app", "Charizard", "util", "public", "output","Unassigned_Applicants.csv")
     File.write(unass_apps_csv_path, unass_apps_csv)
 
+    update_needs_from_assignments
+
     needs_csv_path = Rails.root.join("app/Charizard/util/public/output", "New_Needs.csv")
+
     recs_csv = generate_csv_recommendations(Recommendation.all)
     recs_csv_path = Rails.root.join("tmp", "Prof_Prefs.csv")
     File.write(recs_csv_path, recs_csv)
-    ta_csv_path = Rails.root.join("app/Charizard/util/public/output", "TA_Matches.csv")
-    senior_grader_csv_path = Rails.root.join("app/Charizard/util/public/output", "Senior_Grader_Matches.csv")
-    grader_csv_path = Rails.root.join("app/Charizard/util/public/output", "Grader_Matches.csv")
 
     python_path = `which python3`.strip  # Find Python path dynamically
     # calls the python script to process the csv files
@@ -28,29 +28,11 @@ class TaReassignmentsController < ApplicationController
 
     flash[:notice] = "CSV processing complete"
 
-    ta_header_mapping = {
-        "Course Number" => "course_number",
-        "Section ID" => "section",
-        "Instructor Name" => "ins_name",
-        "Instructor Email" => "ins_email",
-        "Student Name" => "stu_name",
-        "Student Email" => "stu_email",
-        "UIN"=> "uin",
-        "Calculated Score" => "score"
-      }
-
-    csv_mappings = {
-      ta: TaMatch,
-      grader: GraderMatch,
-      senior_grader: SeniorGraderMatch
-    }
-
-    import_standard_csv(ta_csv_path, TaMatch, ta_header_mapping)
-    import_standard_csv(senior_grader_csv_path, SeniorGraderMatch, ta_header_mapping)
-    import_standard_csv(grader_csv_path, GraderMatch, ta_header_mapping)
     File.delete(Rails.root.join("app/Charizard/util/public/output/New_Needs.csv"))
 
     update_needs_from_assignments
+
+    calibrate_unassigned_applicants
 
     redirect_to view_csv_path
   end
@@ -59,7 +41,7 @@ class TaReassignmentsController < ApplicationController
     path = Rails.root.join("app", "Charizard", "util", "public", "output", "New_Needs.csv")
     column_order = [ "Course_Name", "Course_Number", "Section", "Instructor", "Faculty_Email", "TA", "Senior_Grader", "Grader", "Professor Pre-Reqs" ]
 
-    data = File.exist?(path) ? CSV.read(path, headers: true).map(&:to_h) : []
+    data = []
 
     Course.find_each do |course|
       assigned_tas = TaMatch.where(
@@ -67,11 +49,13 @@ class TaReassignmentsController < ApplicationController
         course.course_number.to_s,
         course.section.to_s
       ).count
+
       assigned_graders = GraderMatch.where(
         "LOWER(?) LIKE '%' || LOWER(course_number) || '%' AND LOWER(?) LIKE '%' || LOWER(section) || '%'",
         course.course_number.to_s,
         course.section.to_s
       ).count
+
       assigned_senior_graders = SeniorGraderMatch.where(
         "LOWER(?) LIKE '%' || LOWER(course_number) || '%' AND LOWER(?) LIKE '%' || LOWER(section) || '%'",
         course.course_number.to_s,
@@ -81,55 +65,26 @@ class TaReassignmentsController < ApplicationController
       remaining_tas = [(course.ta.to_f.round - assigned_tas), 0].max
       remaining_senior_graders = [(course.senior_grader.to_f.round - assigned_senior_graders), 0].max
       remaining_graders = [(course.grader.to_f.round - assigned_graders), 0].max
-  
-      # Skip this course if no more help is needed
+
       next if remaining_tas == 0 && remaining_senior_graders == 0 && remaining_graders == 0
-  
-      entry = data.find { |row| row["Course_Number"] == course.course_number && row["Section"] == course.section }
-  
-      if entry
-        entry["TA"] = remaining_tas.to_s
-        entry["Senior_Grader"] = remaining_senior_graders.to_s
-        entry["Grader"] = remaining_graders.to_s
-      else
-        data << {
-          "Course_Name" => course.course_name,
-          "Course_Number" => course.course_number,
-          "Section" => course.section,
-          "Instructor" => course.instructor,
-          "Faculty_Email" => course.faculty_email,
-          "TA" => remaining_tas.to_s,
-          "Senior_Grader" => remaining_senior_graders.to_s,
-          "Grader" => remaining_graders.to_s,
-          "Professor Pre-Reqs" => course.pre_reqs.presence || "N/A"
-        }
-      end
+
+      data << {
+        "Course_Name" => course.course_name,
+        "Course_Number" => course.course_number,
+        "Section" => course.section,
+        "Instructor" => course.instructor,
+        "Faculty_Email" => course.faculty_email,
+        "TA" => remaining_tas.to_s,
+        "Senior_Grader" => remaining_senior_graders.to_s,
+        "Grader" => remaining_graders.to_s,
+        "Professor Pre-Reqs" => course.pre_reqs.presence || "N/A"
+      }
     end
-  
-    # Write once after processing all courses
+
     CSV.open(path, "w", headers: column_order, write_headers: true) do |csv|
       data.each { |row| csv << row.values_at(*column_order) }
     end
   end
-
-  def import_standard_csv(file_path, model, mapping)
-    CSV.foreach(file_path, headers: true) do |row|
-      mapped_row = row.to_h.transform_keys { |key| mapping[key] || key }
-      filtered_row = mapped_row.slice(*model.column_names)
-
-      if filtered_row["uin"] && model.exists?(uin: filtered_row["uin"])
-        Rails.logger.debug "Skipping duplicate record for UIN: #{filtered_row['uin']}"
-        next
-      end
-
-      model.create(mapped_row)
-      if UnassignedApplicant.exists?(uin: filtered_row["uin"])
-        Rails.logger.debug "Deleting Unassigned_Applicants record for UIN: #{filtered_row['uin']}"
-        UnassignedApplicant.where(uin: filtered_row["uin"]).delete_all
-      end
-    end
-  end
-
   def generate_csv_recommendations(records)
     CSV.generate(headers: true) do |csv|
       csv << [ "Timestamp", "Email Address", "Your Name (first and last)", "Select a TA/Grader", "Course (e.g. CSCE 421)", "Feedback", "Additional Feedback about this student" ]
@@ -150,13 +105,22 @@ class TaReassignmentsController < ApplicationController
   def generate_csv_apps(records)
     blacklist_keys = Blacklist.all.map { |b| [b.student_name.downcase.strip, b.student_email.downcase.strip] }.to_set
 
+    seen_keys = Set.new
+
     CSV.generate(headers: true) do |csv|
     csv << [ "Timestamp", "Email Address", "First and Last Name", "UIN", "Phone Number", "How many hours do you plan to be enrolled in?", "Degree Type?", "1st Choice Course", "2nd Choice Course", "3rd Choice Course", "4th Choice Course", "5th Choice Course", "6th Choice Course", "7th Choice Course", "8th Choice Course", "9th Choice Course", "10th Choice Course", "GPA", "Country of Citizenship?", "English language certification level?", "Which courses have you taken at TAMU?", "Which courses have you taken at another university?", "Which courses have you TAd for?", "Who is your advisor (if applicable)?", "What position are you applying for?" ]
     records.each do |record|
       name_key = record.name.to_s.strip.downcase
       email_key = record.email.to_s.strip.downcase
+      uin_key = record.uin.to_i
 
       next if name_key.start_with?("*") || blacklist_keys.include?([name_key, email_key])
+
+      dup_key = uin_key  # or [name_key, email_key]
+
+      next if seen_keys.include?(dup_key)
+
+      seen_keys.add(dup_key)
       csv << [
         record.timestamp,
         record.email,
@@ -187,6 +151,63 @@ class TaReassignmentsController < ApplicationController
       end
     end
   end
+
+  def calibrate_unassigned_applicants(*)
+    UnassignedApplicant.destroy_all
+
+    grader_uins = GraderMatch.pluck(:uin).map(&:to_i)
+    senior_grader_uins = SeniorGraderMatch.pluck(:uin).map(&:to_i)
+    ta_uins = TaMatch.pluck(:uin).map(&:to_i)
+
+    blacklist_keys = Blacklist.all.map { |b| [b.student_name.downcase.strip, b.student_email.downcase.strip] }.to_set
+
+    seen_keys = Set.new
+
+    Applicant.find_each do |applicant|
+      name_key = applicant.name.to_s.strip.downcase
+      email_key = applicant.email.to_s.strip.downcase
+      uin_key = applicant.uin.to_i
+    next if grader_uins.include?(applicant.uin) ||
+              senior_grader_uins.include?(applicant.uin) ||
+              ta_uins.include?(applicant.uin) || name_key.start_with?("*") ||
+              blacklist_keys.include?([name_key, email_key])
+
+    dup_key = uin_key  # or [name_key, email_key]
+
+    next if seen_keys.include?(dup_key)
+
+    seen_keys.add(dup_key)
+
+      UnassignedApplicant.create!(
+        timestamp: applicant.timestamp,
+        email: applicant.email,
+        name: applicant.name,
+        uin: applicant.uin,
+        number: applicant.number,
+        hours: applicant.hours,
+        degree: applicant.degree,
+        choice_1: applicant.choice_1,
+        choice_2: applicant.choice_2,
+        choice_3: applicant.choice_3,
+        choice_4: applicant.choice_4,
+        choice_5: applicant.choice_5,
+        choice_6: applicant.choice_6,
+        choice_7: applicant.choice_7,
+        choice_8: applicant.choice_8,
+        choice_9: applicant.choice_9,
+        choice_10: applicant.choice_10,
+        gpa: applicant.gpa,
+        citizenship: applicant.citizenship,
+        cert: applicant.cert,
+        prev_course: applicant.prev_course,
+        prev_uni: applicant.prev_uni,
+        prev_ta: applicant.prev_ta,
+        advisor: applicant.advisor,
+        positions: applicant.positions
+      )
+    end
+  end
+
   def view_csv
     csv_directory = Rails.root.join("app", "Charizard", "util", "public", "output")
     @csv_files = Dir.entries(csv_directory).select { |f| f.end_with?(".csv") }
