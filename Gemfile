@@ -8,7 +8,7 @@ gem "rubyzip", "~> 2.3"
 gem "ransack"
 ruby "3.4.1"
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "~> 7.2.2", ">= 7.2.2.1"
+gem "rails", "~> 8.0.2"
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
 # Use sqlite3 as the database for Active Record
